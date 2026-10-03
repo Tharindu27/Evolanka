@@ -1,0 +1,26 @@
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - ../.env
+    volumes:
+      - ..:/app
+      - /app/node_modules
+      - /app/apps/web/node_modules
+
+  api:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - '4000:4000'
+    env_file:
+      - ../.env
+    volumes:
+      - ..:/app
+      - /app/node_modules
+      - /app/apps/api/node_modules
