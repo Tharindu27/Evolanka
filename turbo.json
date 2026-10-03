@@ -1,5 +1,4 @@
-@'
-{
+﻿{
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "build": {
@@ -11,4 +10,3 @@
     "dev": { "cache": false, "persistent": true }
   }
 }
-'@ | Out-File -Encoding utf8 turbo.json
