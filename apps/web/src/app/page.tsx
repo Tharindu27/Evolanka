@@ -1,8 +1,23 @@
-export default function Home() {
+import TopNavBar from "@/components/layout/TopNavBar";
+import Footer from "@/components/layout/Footer";
+import HeroSection from "@/components/sections/HeroSection";
+import TrustRibbon from "@/components/sections/TrustRibbon";
+import DiscoverySection from "@/components/sections/DiscoverySection";
+import TravelerStories from "@/components/sections/TravelerStories";
+import ServiceCategories from "@/components/sections/ServiceCategories";
+
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">Welcome to Evolanka! 🚀</h1>
-      <p className="mt-4 text-lg">Your Tourism Platform is running smoothly.</p>
-    </main>
+    <div className="min-h-screen bg-background text-on-surface selection:bg-primary-container selection:text-on-primary">
+      <TopNavBar />
+      <main>
+        <HeroSection />
+        <TrustRibbon />
+        <DiscoverySection />
+        <TravelerStories />
+        <ServiceCategories />
+      </main>
+      <Footer />
+    </div>
   );
 }
