@@ -6,6 +6,7 @@ import PageHeader from "@/components/dashboards/hotel-owner/PageHeader";
 import ListingsToolbar from "@/components/dashboards/hotel-owner/ListingsToolbar";
 import ListingCard from "@/components/dashboards/hotel-owner/ListingCard";
 import AddPropertyCard from "@/components/dashboards/hotel-owner/AddPropertyCard";
+import ListingOnboardingForm from "@/components/dashboards/hotel-owner/ListingOnboardingForm";
 
 const CATEGORY_MAP: Record<string, string[]> = {
   hotels: ["Resort & Spa", "Heritage Hotel"],
@@ -18,6 +19,7 @@ export default function MyListingsClient({ listings }: { listings: Listing[] }) 
   const [category, setCategory] = useState("all");
   const [status, setStatus] = useState("all");
   const [sort, setSort] = useState("recent");
+  const [isOnboarding, setIsOnboarding] = useState(false);
 
   const publishedCount = listings.filter((l) => l.status === "published").length;
   const draftCount = listings.filter((l) => l.status === "draft").length;
@@ -51,6 +53,10 @@ export default function MyListingsClient({ listings }: { listings: Listing[] }) 
     });
   }, [listings, query, category, status, sort]);
 
+  if (isOnboarding) {
+    return <ListingOnboardingForm onCancel={() => setIsOnboarding(false)} />;
+  }
+
   return (
     <div className="pt-20 px-6 pb-12 max-w-7xl mx-auto w-full">
       <div className="flex flex-col w-full">
@@ -64,6 +70,7 @@ export default function MyListingsClient({ listings }: { listings: Listing[] }) 
           <div className="flex items-center gap-sm shrink-0">
             <button
               type="button"
+              onClick={() => setIsOnboarding(true)}
               className="inline-flex items-center gap-xs bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md px-4 py-2.5 rounded-lg transition-colors"
             >
               <span className="material-symbols-outlined text-body-lg">
@@ -103,7 +110,7 @@ export default function MyListingsClient({ listings }: { listings: Listing[] }) 
           {filtered.map((listing) => (
             <ListingCard key={listing.id} listing={listing} />
           ))}
-          <AddPropertyCard />
+          <AddPropertyCard onStart={() => setIsOnboarding(true)} />
         </div>
 
         {filtered.length === 0 && (

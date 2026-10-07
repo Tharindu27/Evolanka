@@ -1,4 +1,4 @@
-export default function AddPropertyCard() {
+export default function AddPropertyCard({ onStart }: { onStart: () => void }) {
   return (
     <div className="bg-surface-container-low/70 hover:bg-surface-container-high/80 rounded-xl p-md flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 min-h-[420px] group shadow-sm hover:shadow-md">
       <div className="w-16 h-16 rounded-full bg-primary/10 group-hover:bg-primary group-hover:text-on-primary text-primary flex items-center justify-center transition-all duration-300 mb-md shadow-sm">
@@ -11,13 +11,14 @@ export default function AddPropertyCard() {
         Create Another Property
       </h3>
 
-      <p className="font-body-md text-body-md text-on-surface-variant max-w-xs mb-lg">
+      <p className="font-body-md text-body-md text-on-surface-variant max-w-4xl mb-lg">
         List a new hotel, villa, retreat, or campsite to reach thousands of
         international travelers.
       </p>
 
       <button
         type="button"
+        onClick={onStart}
         className="inline-flex items-center gap-xs bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md px-5 py-2.5 rounded-lg transition-transform active:scale-95 shadow-sm shadow-primary/20"
       >
         <span className="material-symbols-outlined text-body-md">
