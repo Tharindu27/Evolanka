@@ -14,6 +14,28 @@ export type Category = {
   image: string;
 };
 
+export type TicketPricing = {
+  localAdults: string;
+  localChildren: string;
+  foreignAdults: string;
+  foreignChildren: string;
+  note?: string;
+};
+
+export type VisitTime = {
+  days: string;
+  openTime: string;
+  closeTime: string;
+  access: 'Seasonal' | 'Normal';
+  timePeriod?: string;
+  note?: string;
+};
+
+export type NearbyHotel = {
+  name: string;
+  image: string;
+};
+
 export type Place = {
   id: string;
   name: string;
@@ -27,11 +49,9 @@ export type Place = {
   highlights: string[];
   image: string;
   gallery: string[];
-  visitingHours: string;
-  openingTimes: string;
-  ticketFees: string;
-  bestTimeToVisit: string;
-  nearbyHotels: string[];
+  visitTime: VisitTime;
+  ticketPricing: TicketPricing;
+  nearbyHotels: NearbyHotel[];
   travelTips: string[];
   mapLabel: string;
   coordinates: {
@@ -147,11 +167,24 @@ export const places: Place[] = [
     ],
     image: '/images/landing-page/sigiriya.png',
     gallery: ['/images/landing-page/sigiriya.png', '/images/landing-page/gallefort.png', '/images/landing-page/mirissabeach.png'],
-    visitingHours: 'Open Daily (Mon - Sun)',
-    openingTimes: '6:30 AM - 5:30 PM',
-    ticketFees: 'Foreigners: USD 30 | Locals: LKR 1000',
-    bestTimeToVisit: 'Early morning or late afternoon',
-    nearbyHotels: ['Aliya Resort and Spa', 'Hotel Sigiriya', 'EKHO Sigiriya'],
+    visitTime: {
+      days: 'Monday - Sunday',
+      openTime: '6:30 AM',
+      closeTime: '5:30 PM',
+      access: 'Normal',
+      note: 'Best visited in the early morning or late afternoon.',
+    },
+    ticketPricing: {
+      localAdults: 'LKR 1,000',
+      localChildren: 'LKR 500',
+      foreignAdults: 'USD 30',
+      foreignChildren: 'USD 15',
+    },
+    nearbyHotels: [
+      { name: 'Aliya Resort and Spa', image: '/images/landing-page/sigiriya.png' },
+      { name: 'Hotel Sigiriya', image: '/images/landing-page/sigiriya.png' },
+      { name: 'EKHO Sigiriya', image: '/images/landing-page/sigiriya.png' },
+    ],
     travelTips: [
       'Start early to avoid midday heat on the climb.',
       'Carry water and comfortable walking shoes.',
@@ -182,11 +215,25 @@ export const places: Place[] = [
     ],
     image: '/images/landing-page/gallefort.png',
     gallery: ['/images/landing-page/gallefort.png', '/images/landing-page/mirissabeach.png', '/images/landing-page/sigiriya.png'],
-    visitingHours: 'Open Daily',
-    openingTimes: 'Anytime (best in morning/evening)',
-    ticketFees: 'No entry fee',
-    bestTimeToVisit: 'Sunset',
-    nearbyHotels: ['The Fort Printers', 'Amangalla', 'Le Grand Galle'],
+    visitTime: {
+      days: 'Monday - Sunday',
+      openTime: 'Open access',
+      closeTime: 'Open access',
+      access: 'Normal',
+      note: 'Morning and sunset hours are the most comfortable for walking.',
+    },
+    ticketPricing: {
+      localAdults: 'Free',
+      localChildren: 'Free',
+      foreignAdults: 'Free',
+      foreignChildren: 'Free',
+      note: 'No entry fee',
+    },
+    nearbyHotels: [
+      { name: 'The Fort Printers', image: '/images/landing-page/gallefort.png' },
+      { name: 'Amangalla', image: '/images/landing-page/gallefort.png' },
+      { name: 'Le Grand Galle', image: '/images/landing-page/gallefort.png' },
+    ],
     travelTips: [
       'Visit in the late afternoon for cooler weather and sunset.',
       'Wear light clothing because the fort area can get warm.',
@@ -217,11 +264,26 @@ export const places: Place[] = [
     ],
     image: '/images/landing-page/mirissabeach.png',
     gallery: ['/images/landing-page/mirissabeach.png', '/images/landing-page/gallefort.png', '/images/landing-page/sigiriya.png'],
-    visitingHours: 'Open Daily',
-    openingTimes: 'Anytime',
-    ticketFees: 'No entry fee',
-    bestTimeToVisit: 'November to April',
-    nearbyHotels: ['Triple O Six', 'Paradise Beach Club', 'Lantern Boutique Hotel'],
+    visitTime: {
+      days: 'Monday - Sunday',
+      openTime: 'Anytime',
+      closeTime: 'Anytime',
+      access: 'Seasonal',
+      timePeriod: 'November - April',
+      note: 'Sea conditions are usually best during the main beach season.',
+    },
+    ticketPricing: {
+      localAdults: 'Free',
+      localChildren: 'Free',
+      foreignAdults: 'Free',
+      foreignChildren: 'Free',
+      note: 'No entry fee',
+    },
+    nearbyHotels: [
+      { name: 'Triple O Six', image: '/images/landing-page/mirissabeach.png' },
+      { name: 'Paradise Beach Club', image: '/images/landing-page/mirissabeach.png' },
+      { name: 'Lantern Boutique Hotel', image: '/images/landing-page/mirissabeach.png' },
+    ],
     travelTips: [
       'Check sea conditions before swimming during monsoon periods.',
       'Book whale-watching early in peak season.',
@@ -252,11 +314,25 @@ export const places: Place[] = [
     ],
     image: '/images/landing-page/mirissabeach.png',
     gallery: ['/images/landing-page/mirissabeach.png', '/images/landing-page/sigiriya.png', '/images/landing-page/gallefort.png'],
-    visitingHours: 'Open Daily',
-    openingTimes: '6:00 AM - 6:00 PM',
-    ticketFees: 'Vehicle and park permit required',
-    bestTimeToVisit: 'Early morning',
-    nearbyHotels: ['Jetwing Yala', 'Cinnamon Wild Yala', 'EKHO Safari Tissa'],
+    visitTime: {
+      days: 'Monday - Sunday',
+      openTime: '6:00 AM',
+      closeTime: '6:00 PM',
+      access: 'Normal',
+      note: 'Early morning drives usually give the best wildlife sightings.',
+    },
+    ticketPricing: {
+      localAdults: 'LKR 540',
+      localChildren: 'LKR 270',
+      foreignAdults: 'USD 35',
+      foreignChildren: 'USD 20',
+      note: 'Jeep hire and service charges are usually separate.',
+    },
+    nearbyHotels: [
+      { name: 'Jetwing Yala', image: '/images/landing-page/mirissabeach.png' },
+      { name: 'Cinnamon Wild Yala', image: '/images/landing-page/mirissabeach.png' },
+      { name: 'EKHO Safari Tissa', image: '/images/landing-page/mirissabeach.png' },
+    ],
     travelTips: [
       'Choose early morning safaris for better wildlife movement.',
       'Carry sun protection and binoculars.',
@@ -287,11 +363,25 @@ export const places: Place[] = [
     ],
     image: '/images/landing-page/sigiriya.png',
     gallery: ['/images/landing-page/sigiriya.png', '/images/landing-page/mirissabeach.png', '/images/landing-page/gallefort.png'],
-    visitingHours: 'Open Daily',
-    openingTimes: 'Anytime',
-    ticketFees: 'No entry fee',
-    bestTimeToVisit: 'Morning',
-    nearbyHotels: ['98 Acres Resort', 'EKHO Ella', 'Hotel Onrock'],
+    visitTime: {
+      days: 'Monday - Sunday',
+      openTime: 'Anytime',
+      closeTime: 'Anytime',
+      access: 'Normal',
+      note: 'Morning light is best if you want train-crossing photos.',
+    },
+    ticketPricing: {
+      localAdults: 'Free',
+      localChildren: 'Free',
+      foreignAdults: 'Free',
+      foreignChildren: 'Free',
+      note: 'No entry fee',
+    },
+    nearbyHotels: [
+      { name: '98 Acres Resort', image: '/images/landing-page/sigiriya.png' },
+      { name: 'EKHO Ella', image: '/images/landing-page/sigiriya.png' },
+      { name: 'Hotel Onrock', image: '/images/landing-page/sigiriya.png' },
+    ],
     travelTips: [
       'Check train times before heading to the viewpoint.',
       'The trail can be muddy after rain, so wear good shoes.',
@@ -322,11 +412,24 @@ export const places: Place[] = [
     ],
     image: '/images/landing-page/gallefort.png',
     gallery: ['/images/landing-page/gallefort.png', '/images/landing-page/sigiriya.png', '/images/landing-page/mirissabeach.png'],
-    visitingHours: 'Open Daily',
-    openingTimes: '5:30 AM - 8:00 PM',
-    ticketFees: 'Entry tickets required',
-    bestTimeToVisit: 'Evening ceremony',
-    nearbyHotels: ['The Grand Kandyan', 'Queens Hotel Kandy', 'Radisson Hotel Kandy'],
+    visitTime: {
+      days: 'Monday - Sunday',
+      openTime: '5:30 AM',
+      closeTime: '8:00 PM',
+      access: 'Normal',
+      note: 'Evening ceremony hours are especially popular.',
+    },
+    ticketPricing: {
+      localAdults: 'LKR 250',
+      localChildren: 'LKR 125',
+      foreignAdults: 'USD 10',
+      foreignChildren: 'USD 5',
+    },
+    nearbyHotels: [
+      { name: 'The Grand Kandyan', image: '/images/landing-page/gallefort.png' },
+      { name: 'Queens Hotel Kandy', image: '/images/landing-page/gallefort.png' },
+      { name: 'Radisson Hotel Kandy', image: '/images/landing-page/gallefort.png' },
+    ],
     travelTips: [
       'Dress modestly because this is an active religious site.',
       'Visit around ritual times for the full atmosphere.',
@@ -357,11 +460,26 @@ export const places: Place[] = [
     ],
     image: '/images/landing-page/mirissabeach.png',
     gallery: ['/images/landing-page/mirissabeach.png', '/images/landing-page/sigiriya.png', '/images/landing-page/gallefort.png'],
-    visitingHours: 'Open Daily',
-    openingTimes: '7:00 AM - 5:00 PM',
-    ticketFees: 'Activity package fees apply',
-    bestTimeToVisit: 'Year round (weather dependent)',
-    nearbyHotels: ['Palmstone Retreat', 'Rafters Retreat', 'Borderlands Eco Adventure Resort'],
+    visitTime: {
+      days: 'Monday - Sunday',
+      openTime: '7:00 AM',
+      closeTime: '5:00 PM',
+      access: 'Seasonal',
+      timePeriod: 'Year round, subject to river and weather conditions',
+      note: 'Operators may adjust sessions depending on water levels.',
+    },
+    ticketPricing: {
+      localAdults: 'LKR 5,000',
+      localChildren: 'LKR 3,500',
+      foreignAdults: 'USD 25',
+      foreignChildren: 'USD 18',
+      note: 'Package pricing can vary by operator and water level.',
+    },
+    nearbyHotels: [
+      { name: 'Palmstone Retreat', image: '/images/landing-page/mirissabeach.png' },
+      { name: 'Rafters Retreat', image: '/images/landing-page/mirissabeach.png' },
+      { name: 'Borderlands Eco Adventure Resort', image: '/images/landing-page/mirissabeach.png' },
+    ],
     travelTips: [
       'Confirm river conditions before booking rafting sessions.',
       'Pack a change of clothes and waterproof protection.',
