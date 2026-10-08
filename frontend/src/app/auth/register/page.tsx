@@ -1,26 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
 
 export default function RegisterPage() {
-  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
-
-  const cardTransform = useMemo(
-    () => ({ transform: `translate(${mouseOffset.x}px, ${mouseOffset.y}px)` }),
-    [mouseOffset],
-  );
-
-  const onMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const x = event.clientX / window.innerWidth;
-    const y = event.clientY / window.innerHeight;
-    setMouseOffset({ x: (x - 0.5) * 8, y: (y - 0.5) * 8 });
-  };
-
   return (
     <div
       className="relative h-[100dvh] overflow-hidden bg-[#f9f9ff] text-[#041b3c]"
-      onMouseMove={onMouseMove}
       style={{ fontFamily: 'Inter, sans-serif' }}
     >
       <div className="fixed inset-0 z-0 overflow-hidden">
@@ -41,16 +26,17 @@ export default function RegisterPage() {
         </Link>
       </header>
 
+
       <main className="relative z-20 flex h-[100dvh] items-center justify-center overflow-hidden px-4 pb-3 pt-14 md:px-6 md:pb-4 md:pt-20">
         <div className="w-full max-w-[500px] -translate-y-6 md:-translate-y-8">
           <div
             className="rounded-[1.5rem] border border-white/35 bg-white/30 p-4 shadow-2xl backdrop-blur-xl [@media(max-height:760px)]:scale-[0.94] [@media(max-height:700px)]:scale-[0.88] md:p-7"
-            style={cardTransform}
           >
             <div className="mb-3 text-center">
               <h1 className="mb-1.5 text-2xl font-bold text-[#003d9b] md:text-3xl">Join the EVOLANKA Community</h1>
               <p className="text-xs text-slate-700 md:text-sm">Start your Sri Lankan adventure today.</p>
             </div>
+
 
             <div className="mt-3 flex flex-col gap-2.5">
               <button
@@ -69,6 +55,8 @@ export default function RegisterPage() {
               </button>
             </div>
 
+
+
             <div className="py-3.5">
               <div className="flex items-center gap-3">
                 <div className="h-px flex-1 bg-slate-300/80" />
@@ -76,6 +64,7 @@ export default function RegisterPage() {
                 <div className="h-px flex-1 bg-slate-300/80" />
               </div>
             </div>
+
 
             <form className="mx-auto flex w-full flex-col gap-3" action="#">
               <div className="flex flex-col gap-0.5">
@@ -86,6 +75,7 @@ export default function RegisterPage() {
                   className="w-full rounded-xl border border-slate-300 bg-white/85 px-3.5 py-3 text-xs text-slate-800 outline-none transition focus:border-[#003d9b] md:text-sm"
                 />
               </div>
+
 
               <div className="flex flex-col gap-0.5">
                 <label className="pl-1 text-xs font-medium text-white md:text-sm">Country</label>
@@ -100,6 +90,7 @@ export default function RegisterPage() {
                 </select>
               </div>
 
+
               <div className="flex flex-col gap-0.5">
                 <label className="pl-1 text-xs font-medium text-white md:text-sm">Email Address</label>
                 <input
@@ -108,6 +99,7 @@ export default function RegisterPage() {
                   className="w-full rounded-xl border border-slate-300 bg-white/85 px-3.5 py-3 text-xs text-slate-800 outline-none transition focus:border-[#003d9b] md:text-sm"
                 />
               </div>
+
 
               <div className="flex flex-col gap-0.5">
                 <label className="pl-1 text-xs font-medium text-white md:text-sm">Password</label>
@@ -118,6 +110,7 @@ export default function RegisterPage() {
                 />
                 <p className="px-1 text-[10px] text-white/90">At least 8 characters with a mix of letters and numbers.</p>
               </div>
+              
 
               <button
                 type="submit"

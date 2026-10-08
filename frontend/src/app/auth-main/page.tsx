@@ -52,15 +52,15 @@ export default function AuthMainPage() {
 						</p>
 						<div className="mt-auto w-full">
 							<Link
-								href="/auth/register"
+								href="/auth/login"
 								className="mb-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0047AB] py-4 font-semibold text-white transition-colors duration-300 hover:bg-blue-800"
 							>
-								Sign Up as Traveler <span className="text-lg">→</span>
+								Sign In as Traveler <span className="text-lg">→</span>
 							</Link>
 							<p className="text-sm text-blue-900/70">
-								Already have an account?{' '}
-								<Link href="/auth/login" className="font-bold text-blue-900 underline underline-offset-2">
-									Log In
+								Don't have an account?{' '}
+								<Link href="/auth/register" className="font-bold text-blue-900 underline underline-offset-2">
+									Sign Up
 								</Link>
 							</p>
 						</div>
@@ -84,15 +84,15 @@ export default function AuthMainPage() {
 						</p>
 						<div className="mt-auto w-full">
 							<Link
-								href="/provider/register"
+								href="/provider/login"
 								className="mb-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#FFA500] py-4 font-semibold text-white shadow-lg shadow-orange-500/20 transition-colors duration-300 hover:bg-orange-500"
 							>
 								Become a Provider <span className="text-lg">🚀</span>
 							</Link>
 							<p className="text-sm text-emerald-900/70">
-								Manage your hub?{' '}
-								<Link href="/provider/login" className="font-bold text-emerald-900 underline underline-offset-2">
-									Provider Login
+								Don't have an account?{' '}
+								<Link href="/provider/register" className="font-bold text-emerald-900 underline underline-offset-2">
+									Sign Up
 								</Link>
 							</p>
 						</div>
