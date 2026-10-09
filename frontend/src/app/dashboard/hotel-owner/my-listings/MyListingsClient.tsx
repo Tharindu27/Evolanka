@@ -3,10 +3,10 @@
 import { useMemo, useState } from "react";
 import type { Listing } from "@/lib/types";
 import PageHeader from "@/components/dashboards/hotel-owner/PageHeader";
-import ListingsToolbar from "@/components/dashboards/hotel-owner/ListingsToolbar";
-import ListingCard from "@/components/dashboards/hotel-owner/ListingCard";
-import AddPropertyCard from "@/components/dashboards/hotel-owner/AddPropertyCard";
-import ListingOnboardingForm from "@/components/dashboards/hotel-owner/ListingOnboardingForm";
+import ListingsToolbar from "@/components/dashboards/hotel-owner/Listings/ListingsToolbar";
+import ListingCard from "@/components/dashboards/hotel-owner/Listings/ListingCard";
+import AddPropertyCard from "@/components/dashboards/hotel-owner/Listings/AddPropertyCard";
+import ListingOnboardingForm from "@/components/dashboards/hotel-owner/Listings/ListingOnboardingForm";
 
 const CATEGORY_MAP: Record<string, string[]> = {
   hotels: ["Resort & Spa", "Heritage Hotel"],

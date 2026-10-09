@@ -1,12 +1,6 @@
-import PageHeader from "@/components/dashboards/hotel-owner/PageHeader";
+import type { Metadata } from "next";
+import OverviewClient from "@/components/dashboards/hotel-owner/overview/OverviewClient";
 
 export default function Page() {
-  return (
-    <div className="pt-20 px-6 pb-12 max-w-7xl mx-auto w-full">
-      <PageHeader
-        title="Overview"
-        description="A snapshot of your property performance."
-      />
-    </div>
-  );
+  return <OverviewClient />;
 }
