@@ -1,35 +1,7 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-@import "tailwindcss";
-
 /* ============================================================
-   Material Symbols — defensive base CSS.
-   The Google <link> already ships this, but re-declaring it
-   guarantees it wins over any cascade reset.
+   Material Symbols — base + filled variant
    ============================================================ */
 .material-symbols-outlined {
   font-family: "Material Symbols Outlined", sans-serif;
@@ -48,13 +20,12 @@ body {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
-/* Filled variant — used by the ★ rating star */
 .fill-1 {
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
 /* ============================================================
-   Design tokens
+   EVOLANKA design tokens
    ============================================================ */
 @theme {
   /* ---------- Colors ---------- */
@@ -107,7 +78,6 @@ body {
   --color-on-primary: #ffffff;
 
   /* ---------- Radius ---------- */
-  /* rounded-sm === original bare `rounded` (0.25rem) */
   --radius-sm: 0.25rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
@@ -125,9 +95,7 @@ body {
 
   /* ---------- Font families ---------- */
   --font-display-lg: "Inter", sans-serif;
-  --font-display-lg-mobile: "Inter", sans-serif;
   --font-headline-md: "Inter", sans-serif;
-  --font-headline-md-mobile: "Inter", sans-serif;
   --font-title-sm: "Inter", sans-serif;
   --font-body-lg: "Inter", sans-serif;
   --font-body-md: "Inter", sans-serif;
@@ -140,20 +108,10 @@ body {
   --text-display-lg--letter-spacing: -0.02em;
   --text-display-lg--font-weight: 700;
 
-  --text-display-lg-mobile: 36px;
-  --text-display-lg-mobile--line-height: 44px;
-  --text-display-lg-mobile--letter-spacing: -0.02em;
-  --text-display-lg-mobile--font-weight: 700;
-
   --text-headline-md: 32px;
   --text-headline-md--line-height: 40px;
   --text-headline-md--letter-spacing: -0.01em;
   --text-headline-md--font-weight: 600;
-
-  --text-headline-md-mobile: 24px;
-  --text-headline-md-mobile--line-height: 32px;
-  --text-headline-md-mobile--letter-spacing: -0.01em;
-  --text-headline-md-mobile--font-weight: 600;
 
   --text-title-sm: 20px;
   --text-title-sm--line-height: 28px;
@@ -177,21 +135,24 @@ body {
   --text-label-sm--font-weight: 600;
 }
 
-/* ---------- Base resets from your HTML ---------- */
+/* ============================================================
+   Base
+   ============================================================ */
 html,
 body {
   margin: 0;
   padding: 0;
 }
+
 body {
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: "Inter", sans-serif;
   overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
 }
-main > :first-child {
-  margin-top: 0 !important;
-}
-main > :last-child {
-  margin-bottom: 0 !important;
-}
-::-webkit-scrollbar {
-  display: none;
-}
+
+main > :first-child { margin-top: 0 !important; }
+main > :last-child  { margin-bottom: 0 !important; }
+
+::-webkit-scrollbar { display: none; }
