@@ -2,82 +2,155 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Icon, type IconName } from "@/components/ui/icon";
+import { cn } from "@/lib/utils";
+import { PropertySwitcher } from "./PropertySwitcher";
 
-const NAV = [
-  { path: "overview",   label: "Overview",   icon: "dashboard" },
-  { path: "",           label: "My Listings", icon: "holiday_village" },
+interface ProviderSidebarProps {
+  propertyId: string;
+  propertyName: string;
+  propertyLocation?: string;
+}
+
+interface NavItem {
+  path: string;
+  label: string;
+  icon: IconName;
+  badge?: number;
+}
+
+const NAV: NavItem[] = [
+  { path: "overview", label: "Overview", icon: "dashboard" },
+  { path: "rooms", label: "Rooms", icon: "bed" },
+  { path: "bookings", label: "Bookings", icon: "event_available", badge: 3 },
+  { path: "packages", label: "Packages", icon: "inventory_2" },
   { path: "facilities", label: "Facilities", icon: "pool" },
-  { path: "packages",   label: "Packages",   icon: "inventory_2" },
-  { path: "bookings",   label: "Bookings",   icon: "event_available" },
-  { path: "earnings",   label: "Earnings",   icon: "payments" },
-  { path: "reviews",    label: "Reviews",    icon: "rate_review" },
-  { path: "settings",   label: "Settings",   icon: "settings" },
+  { path: "reviews", label: "Reviews", icon: "rate_review", badge: 12 },
+  { path: "earnings", label: "Earnings", icon: "payments" },
 ];
 
-const BASE = "/dashboard/hotel-owner";
-
-export default function ProviderSidebar() {
+export function ProviderSidebar({
+  propertyId,
+  propertyName,
+  propertyLocation,
+}: ProviderSidebarProps) {
   const pathname = usePathname();
+  const base = `/dashboard/hotel-owner/${propertyId}`;
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 hidden lg:flex flex-col bg-surface-container-low border-r border-outline-variant z-50">
+    <aside className="fixed left-0 top-0 z-50 hidden h-full w-64 flex-col border-r border-outline-variant/50 bg-surface-container-low lg:flex">
       {/* Logo */}
-      <div className="h-16 px-md flex items-center border-b border-outline-variant">
-        <Link href={BASE} className="flex items-center gap-xs">
-          <span className="material-symbols-outlined text-primary text-headline-md">
-            explore
+      <div className="flex h-16 items-center border-b border-outline-variant/40 px-4">
+        <Link
+          href="/dashboard/hotel-owner/listings"
+          className="flex items-center gap-2"
+        >
+          <span className="material-symbols-outlined text-primary text-[22px]">
+            travel_explore
           </span>
-          <span className="font-title-sm text-title-sm text-primary tracking-tight font-bold">
+          <span className="font-title-sm text-title-sm font-bold tracking-tight text-primary">
             EVOLANKA
           </span>
         </Link>
       </div>
 
-      <div className="px-md py-sm">
-        <span className="font-label-sm text-label-sm uppercase text-outline tracking-wider">
+      {/* Back to All Properties */}
+      <div className="px-4 pt-4">
+        <Link
+          href="/dashboard/hotel-owner/listings"
+          className="inline-flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant transition-colors hover:text-primary"
+        >
+          <Icon name="arrow_back" size={16} />
+          All Properties
+        </Link>
+      </div>
+
+      {/* Property switcher */}
+      <div className="px-3 pt-3">
+        <PropertySwitcher
+          currentPropertyId={propertyId}
+          currentPropertyName={propertyName}
+          currentLocation={propertyLocation}
+        />
+      </div>
+
+      {/* Section label */}
+      <div className="px-4 pt-5 pb-2">
+        <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline">
           Provider Hub
         </span>
       </div>
 
-      <nav className="flex-1 px-sm space-y-xs overflow-y-auto">
-        {NAV.map(({ path, label, icon }) => {
-          const href = path ? `${BASE}/${path}` : BASE;
-          const isActive = path
-            ? pathname.startsWith(href)
-            : pathname === BASE;
-
+      {/* Main nav */}
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3 pb-4">
+        {NAV.map((item) => {
+          const href = `${base}/${item.path}`;
+          const isActive = pathname.startsWith(href);
           return (
             <Link
-              key={label}
+              key={item.path}
               href={href}
               aria-current={isActive ? "page" : undefined}
-              className={
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
                 isActive
-                  ? "flex items-center gap-sm px-sm py-base transition-colors bg-primary-container text-on-primary font-label-md rounded-lg"
-                  : "flex items-center gap-sm px-sm py-base rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors"
-              }
+                  ? "bg-primary text-on-primary"
+                  : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface",
+              )}
             >
-              <span className="material-symbols-outlined">{icon}</span>
-              <span>{label}</span>
+              <Icon name={item.icon} size={20} />
+              <span className="flex-1 font-label-md text-label-md">
+                {item.label}
+              </span>
+              {item.badge ? (
+                <span
+                  className={cn(
+                    "rounded-full px-1.5 py-0.5 font-label-sm text-label-sm",
+                    isActive
+                      ? "bg-on-primary/20 text-on-primary"
+                      : "bg-error-container text-on-error-container",
+                  )}
+                >
+                  {item.badge}
+                </span>
+              ) : null}
             </Link>
           );
         })}
+
+        <div className="!mt-4 h-px bg-outline-variant/40" />
+
+        <Link
+          href={`${base}/settings`}
+          aria-current={pathname.startsWith(`${base}/settings`) ? "page" : undefined}
+          className={cn(
+            "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
+            pathname.startsWith(`${base}/settings`)
+              ? "bg-primary text-on-primary"
+              : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface",
+          )}
+        >
+          <Icon name="settings" size={20} />
+          <span className="font-label-md text-label-md">Settings</span>
+        </Link>
       </nav>
 
-      <div className="p-sm border-t border-outline-variant">
-        <div className="bg-surface-container p-sm rounded-lg flex items-center gap-sm">
-          <span className="material-symbols-outlined text-tertiary">
-            verified
-          </span>
-          <div className="flex flex-col">
-            <span className="font-label-sm text-label-sm text-on-surface font-semibold">
-              Verified Partner
-            </span>
-            <span className="font-label-sm text-label-sm text-on-surface-variant">
-              Super Host
-            </span>
-          </div>
-        </div>
+      {/* Footer */}
+      <div className="space-y-1 border-t border-outline-variant/40 p-3">
+        <Link
+          href="/help"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 font-label-md text-label-md text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
+        >
+          <Icon name="help" size={20} />
+          Help Center
+        </Link>
+        <button
+          type="button"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 font-label-md text-label-md text-error transition-colors hover:bg-error-container/40"
+        >
+          <Icon name="logout" size={20} />
+          Logout
+        </button>
       </div>
     </aside>
   );

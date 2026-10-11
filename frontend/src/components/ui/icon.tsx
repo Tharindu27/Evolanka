@@ -1,22 +1,7 @@
 import { cn } from "@/lib/utils";
+import type { IconName } from "@/lib/icons";
 
-export type IconName =
-  | "explore" | "travel_explore" | "dashboard" | "holiday_village"
-  | "pool" | "inventory_2" | "event_available" | "payments"
-  | "rate_review" | "settings" | "search" | "notifications"
-  | "person" | "expand_more" | "arrow_forward" | "arrow_back"
-  | "more_vert" | "location_on" | "add" | "add_business"
-  | "rocket_launch" | "file_download" | "edit_document" | "delete"
-  | "verified" | "schedule" | "check" | "close" | "chevron_left"
-  | "chevron_right" | "sort" | "calendar_today" | "bed"
-  | "door_front" | "build" | "star" | "photo_camera" | "share"
-  | "bolt" | "logout" | "help" | "home" | "grid_view" | "view_list"
-  | "filter_list" | "download" | "upload" | "edit" | "visibility"
-  | "trending_up" | "trending_down" | "account_balance"
-  | "credit_card" | "lightbulb" | "verified_user" | "receipt_long"
-  | "cloud_upload" | "image" | "videocam" | "play_circle"
-  | "shield" | "info" | "warning" | "error" | "check_circle"
-  | "expand_less" | "expand_more" | "sync";
+export type { IconName };
 
 interface IconProps {
   name: IconName;
