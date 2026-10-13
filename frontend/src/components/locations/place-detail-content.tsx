@@ -75,7 +75,7 @@ export default function PlaceDetailContent({ place }: PlaceDetailContentProps) {
       </section>
 
 
-      <section className="mb-16 overflow-hidden rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+      <section className="mb-16 overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-3xl font-black text-[#001a43]">Gallery</h2>
           <span className="text-sm text-slate-500">Scroll to view more</span>
@@ -93,12 +93,12 @@ export default function PlaceDetailContent({ place }: PlaceDetailContentProps) {
       </section>
 
 
-      <section className="mb-8 rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm">
+      <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <h2 className="mb-4 text-3xl font-black text-[#001a43]">Overview</h2>
         <p className="leading-8 text-slate-700">{place.overview}</p>
       </section>
 
-      <section className="mb-8 rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm">
+      <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <h2 className="mb-5 text-3xl font-black text-[#001a43]">Highlights</h2>
         <div className="grid gap-4 md:grid-cols-3">
           {place.highlights.map((highlight) => (
@@ -112,7 +112,7 @@ export default function PlaceDetailContent({ place }: PlaceDetailContentProps) {
 
 
       <section className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-        <article className="rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm">
+        <article className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
           <h2 className="mb-4 text-2xl font-black text-[#001a43]">Tickets and Pricing</h2>
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Ticket Categories</p>
           <div className="space-y-3">
@@ -131,7 +131,7 @@ export default function PlaceDetailContent({ place }: PlaceDetailContentProps) {
           ) : null}
         </article>
 
-        <article className="rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm">
+        <article className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
           <h2 className="mb-4 text-2xl font-black text-[#001a43]">Visit Time</h2>
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Visiting Details</p>
           <div className="space-y-3">
@@ -152,7 +152,7 @@ export default function PlaceDetailContent({ place }: PlaceDetailContentProps) {
       </section>
 
 
-      <section className="mb-8 rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm">
+      <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <h2 className="mb-5 text-2xl font-black text-[#001a43]">Nearby Hotels</h2>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {place.nearbyHotels.map((hotel) => (
@@ -174,7 +174,7 @@ export default function PlaceDetailContent({ place }: PlaceDetailContentProps) {
       </section>
 
 
-      <section className="mb-16 rounded-[28px] border border-slate-200 bg-white p-8 shadow-sm">
+      <section className="mb-16 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <h2 className="mb-5 text-2xl font-black text-[#001a43]">Travel Tips</h2>
         <ul className="space-y-3 text-slate-700">
           {place.travelTips.map((tip) => (
@@ -186,7 +186,7 @@ export default function PlaceDetailContent({ place }: PlaceDetailContentProps) {
       </section>
 
 
-      <section className="mb-16 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm">
+      <section className="mb-16 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-200 px-6 py-5">
           <p className="text-sm font-bold uppercase tracking-[0.24em] text-[#003d9b]">Map</p>
           <h2 className="mt-2 text-3xl font-black text-[#001a43]">Find This Place</h2>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 export default function AuthMainPage() {
 	return (
 		<div
-			className="relative min-h-screen overflow-x-hidden text-white antialiased"
+			className="relative flex h-[100dvh] flex-col overflow-hidden text-white antialiased"
 			style={{ fontFamily: 'Inter, sans-serif' }}
 		>
 			<div className="fixed inset-0 -z-10 h-full w-full">
@@ -24,17 +24,17 @@ export default function AuthMainPage() {
 				</Link>
 			</header>
 
-			<main className="relative z-10 flex min-h-[calc(100vh-180px)] flex-col items-center justify-center px-4">
-				<section className="mb-12 text-center" data-purpose="hero-titles">
-					<h1 className="mb-4 text-5xl font-bold tracking-tight text-white md:text-7xl">EVOLANKA</h1>
-					<p className="mx-auto max-w-2xl text-lg font-light leading-relaxed text-white opacity-90 md:text-xl">
+			<main className="relative z-10 flex min-h-0 flex-1 -translate-y-4 flex-col items-center justify-center overflow-hidden px-4 pb-2 md:-translate-y-8">
+				<section className="mb-6 text-center" data-purpose="hero-titles">
+					<h1 className="mb-3 text-4xl font-bold tracking-tight text-white md:text-6xl">EVOLANKA</h1>
+					<p className="mx-auto max-w-xl text-base font-light leading-relaxed text-white opacity-90 md:text-lg">
 						The intersection of world-class adventure and seamless professional service.
 					</p>
 				</section>
 
-				<section className="grid w-full max-w-4xl gap-8 md:grid-cols-2" data-purpose="user-pathway-cards">
-					<div className="rounded-[40px] border border-white/30 bg-white/45 p-10 text-center backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:bg-white/50 md:p-14">
-						<div className="mb-8 flex h-14 w-14 items-center justify-center rounded-xl bg-blue-100/50">
+				<section className="grid w-full max-w-[54rem] items-stretch gap-6 md:grid-cols-2" data-purpose="user-pathway-cards">
+					<div className="flex h-full flex-col rounded-[34px] border border-white/55 bg-gradient-to-b from-white/52 via-white/43 to-white/34 p-9 text-center backdrop-blur-xl shadow-[0_24px_70px_-28px_rgba(0,0,0,0.62)] transition-all duration-300 hover:scale-[1.02] hover:from-white/58 hover:via-white/49 hover:to-white/40 md:p-10">
+						<div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-white/75">
 							<svg className="h-7 w-7 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path
 									d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
@@ -45,29 +45,31 @@ export default function AuthMainPage() {
 								<path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
 							</svg>
 						</div>
-						<h2 className="mb-6 text-3xl font-bold text-blue-900">Start Your Journey</h2>
-						<p className="mx-auto mb-10 max-w-xs text-lg leading-relaxed text-blue-900/80">
+						<h2 className="mb-3 flex min-h-[4.25rem] items-center justify-center text-center text-2xl font-extrabold leading-tight text-[#08245b] md:min-h-[4.75rem] md:text-3xl">
+							Start Your Journey
+						</h2>
+						<p className="mx-auto mb-5 min-h-[7.5rem] max-w-[15.5rem] text-base leading-relaxed text-slate-950 md:min-h-[8rem] md:max-w-sm">
 							Discover hidden gems, book unique stays, and connect with a global community of travelers. Your next
 							adventure is just a tap away.
 						</p>
-						<div className="mt-auto w-full">
+						<div className="mt-auto flex w-full flex-col gap-3">
 							<Link
 								href="/auth/login"
-								className="mb-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0047AB] py-4 font-semibold text-white transition-colors duration-300 hover:bg-blue-800"
+								className="flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl bg-[#0a3fa8] px-4 py-3 text-base font-semibold text-white shadow-lg shadow-blue-900/25 transition-colors duration-300 hover:bg-[#083582]"
 							>
-								Sign In as Traveler <span className="text-lg">→</span>
+								Sign In as Traveler
 							</Link>
-							<p className="text-sm text-blue-900/70">
+							<p className="text-sm text-slate-900/95">
 								Don't have an account?{' '}
-								<Link href="/auth/register" className="font-bold text-blue-900 underline underline-offset-2">
+								<Link href="/auth/register" className="font-bold text-[#0b357f] underline underline-offset-2 transition-colors duration-200 hover:text-[#072455]">
 									Sign Up
 								</Link>
 							</p>
 						</div>
 					</div>
 
-					<div className="rounded-[40px] border border-white/30 bg-white/45 p-10 text-center backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:bg-white/50 md:p-14">
-						<div className="mb-8 flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-100/50">
+					<div className="flex h-full flex-col rounded-[34px] border border-white/55 bg-gradient-to-b from-white/52 via-white/43 to-white/34 p-9 text-center backdrop-blur-xl shadow-[0_24px_70px_-28px_rgba(0,0,0,0.62)] transition-all duration-300 hover:scale-[1.02] hover:from-white/58 hover:via-white/49 hover:to-white/40 md:p-10">
+						<div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-white/75">
 							<svg className="h-7 w-7 text-emerald-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path
 									d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
@@ -77,21 +79,23 @@ export default function AuthMainPage() {
 								/>
 							</svg>
 						</div>
-						<h2 className="mb-6 text-3xl font-bold text-emerald-900">Grow Your Business</h2>
-						<p className="mx-auto mb-10 max-w-xs text-lg leading-relaxed text-emerald-900/80">
+						<h2 className="mb-3 flex min-h-[4.25rem] items-center justify-center text-center text-2xl font-extrabold leading-tight text-[#0a4b39] md:min-h-[4.75rem] md:text-3xl">
+							Grow Your Business
+						</h2>
+						<p className="mx-auto mb-5 min-h-[7.5rem] max-w-[15.5rem] text-base leading-relaxed text-slate-950 md:min-h-[8rem] md:max-w-sm">
 							Access powerful tools to manage bookings, analyze performance, and reach thousands of explorers waiting
 							for your expertise.
 						</p>
-						<div className="mt-auto w-full">
+						<div className="mt-auto flex w-full flex-col gap-3">
 							<Link
 								href="/provider/login"
-								className="mb-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#FFA500] py-4 font-semibold text-white shadow-lg shadow-orange-500/20 transition-colors duration-300 hover:bg-orange-500"
+								className="flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl bg-[#e38816] px-4 py-3 text-base font-semibold text-white shadow-lg shadow-amber-700/25 transition-colors duration-300 hover:bg-[#c97409]"
 							>
-								Become a Provider <span className="text-lg">🚀</span>
+								Become a Provider
 							</Link>
-							<p className="text-sm text-emerald-900/70">
+							<p className="text-sm text-slate-900/95">
 								Don't have an account?{' '}
-								<Link href="/provider/register" className="font-bold text-emerald-900 underline underline-offset-2">
+								<Link href="/provider/register" className="font-bold text-[#844700] underline underline-offset-2 transition-colors duration-200 hover:text-[#5e3200]">
 									Sign Up
 								</Link>
 							</p>
@@ -100,7 +104,7 @@ export default function AuthMainPage() {
 				</section>
 			</main>
 
-			<footer className="relative z-10 w-full px-8 pb-10 pt-4">
+			<footer className="relative z-10 w-full px-8 pb-6 pt-2">
 				<div className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-12 md:flex-row md:gap-24">
 					<div className="text-center">
 						<p className="text-2xl font-bold text-white">25</p>

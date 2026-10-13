@@ -63,9 +63,6 @@ export default function CategoryContent({ category, places }: CategoryContentPro
             placeholder="Search places inside this category..."
             className="w-full border-none bg-transparent text-[#001a43] outline-none placeholder:text-[#434654]"
           />
-          <button type="button" className="rounded-full bg-[#003d9b] px-4 py-2 text-sm font-bold text-white">
-            Search
-          </button>
         </div>
       </section>
 

@@ -31,8 +31,6 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
     });
   }, [places, query]);
 
-{/* main location page description */}
-
   return (
     <>
       <section className="mb-16 text-center">
@@ -45,10 +43,6 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
         </p>
       </section>
 
-
-
-{/* search bar for filtering places by name, city, or district */}
-
       <section className="relative mx-auto mb-16 max-w-xl">
         <div className="flex items-center rounded-full border border-[#c3c6d6] bg-[#f8f9fa] px-6 py-4 transition-all focus-within:ring-2 focus-within:ring-[#003d9b]/20">
           <input
@@ -58,13 +52,9 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
             placeholder="Search by place name, city or district..."
             className="w-full border-none bg-transparent text-[#001a43] outline-none placeholder:text-[#434654]"
           />
-          <button type="button" className="rounded-full bg-[#003d9b] px-4 py-2 text-sm font-bold text-white">
-            Search
-          </button>
         </div>
       </section>
 
-{/* province section */}
       {!hasQuery ? (
         <>
           <section className="mb-16">
@@ -94,7 +84,6 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
             </div>
           </section>
 
-{/* category section */}
           <section className="mb-20">
             <div className="mb-10">
               <h2 className="mb-2 text-[28px] font-bold text-[#001a43]">Discover by Category</h2>
@@ -119,7 +108,7 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
           </section>
         </>
 
-      ) : ( 
+      ) : (
         <section className="mb-20">
           {filteredPlaces.length > 0 ? (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

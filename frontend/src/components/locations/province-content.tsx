@@ -71,15 +71,12 @@ export default function ProvinceContent({ province, places }: ProvinceContentPro
               </option>
             ))}
           </select>
-          <button type="button" className="rounded-xl bg-[#003d9b] px-4 py-3 font-semibold text-white">
-            Explore
-          </button>
         </div>
       </section>
 
       <section className="mb-20">
         <h2 className="mb-2 text-4xl font-black text-[#001a43]">Must-Visit Destinations</h2>
-        <p className="mb-8 text-[#434654]">Filtered results inside {province.name}.</p>
+        <p className="mb-8 text-slate-600">Filtered results inside {province.name}.</p>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((place) => (
