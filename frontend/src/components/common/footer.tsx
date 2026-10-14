@@ -23,27 +23,28 @@ const legalLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-[#003d9b] py-24 text-white">
+    <footer className="border-t border-[#1f3563] bg-gradient-to-b from-[#001a43] via-[#001a43] to-[#001331] py-24 text-white">
       <div className="mx-auto max-w-[1440px] px-8 md:px-12">
+        <div className="mb-10 h-px w-full bg-gradient-to-r from-transparent via-[#c9a227]/40 to-transparent" />
         <div className="mb-20 grid grid-cols-1 gap-16 md:grid-cols-4">
           <div>
-            <h3 className="mb-8 text-2xl font-black uppercase tracking-tighter">EVOLANKA</h3>
-            <p className="mb-10 leading-relaxed text-white/80">
+            <h3 className="mb-8 text-2xl font-black uppercase tracking-tighter text-[#ffd977]">EVOLANKA</h3>
+            <p className="mb-10 leading-relaxed text-white/75">
               Connecting you to the heart of Sri Lanka through soulful travel and reliable services.
             </p>
             <div className="flex gap-6 text-sm text-white/70">
-              <span className="rounded-full border border-white/20 p-2">Public</span>
-              <span className="rounded-full border border-white/20 p-2">Share</span>
-              <span className="rounded-full border border-white/20 p-2">Support</span>
+              <span className="rounded-full border border-white/20 bg-white/5 p-2">Public</span>
+              <span className="rounded-full border border-white/20 bg-white/5 p-2">Share</span>
+              <span className="rounded-full border border-white/20 bg-white/5 p-2">Support</span>
             </div>
           </div>
 
           <div>
-            <h4 className="mb-8 text-lg font-bold">Explore</h4>
+            <h4 className="mb-8 text-lg font-bold text-[#ffd977]">Explore</h4>
             <ul className="space-y-4 text-sm font-medium text-white/70">
               {exploreLinks.map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className="transition-colors hover:text-white">
+                  <Link href={item.href} className="transition-colors hover:text-[#ffd977]">
                     {item.label}
                   </Link>
                 </li>
@@ -52,11 +53,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-8 text-lg font-bold">For Providers</h4>
+            <h4 className="mb-8 text-lg font-bold text-[#ffd977]">For Providers</h4>
             <ul className="space-y-4 text-sm font-medium text-white/70">
               {providerLinks.map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className="transition-colors hover:text-white">
+                  <Link href={item.href} className="transition-colors hover:text-[#ffd977]">
                     {item.label}
                   </Link>
                 </li>
@@ -65,11 +66,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-8 text-lg font-bold">Legal</h4>
+            <h4 className="mb-8 text-lg font-bold text-[#ffd977]">Legal</h4>
             <ul className="space-y-4 text-sm font-medium text-white/70">
               {legalLinks.map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className="transition-colors hover:text-white">
+                  <Link href={item.href} className="transition-colors hover:text-[#ffd977]">
                     {item.label}
                   </Link>
                 </li>
