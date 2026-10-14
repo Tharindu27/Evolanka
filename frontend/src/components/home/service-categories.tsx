@@ -3,35 +3,35 @@ import Link from 'next/link';
 const services = [
   {
     title: 'Locations',
-    short: 'Explore',
+    short: 'EXPLORE',
     description: 'Discover the best places, routes, and destinations in Sri Lanka.',
     href: '/locations',
     accent: 'from-[#dfe9ff] to-[#eef4ff]',
   },
   {
     title: 'Hotels',
-    short: 'Stay',
+    short: 'STAY',
     description: 'Find trusted stays and premium places to rest after every journey.',
     href: '/hotels',
     accent: 'from-[#fff1d6] to-[#fffaf0]',
   },
   {
     title: 'Tour Guides',
-    short: 'Guide',
+    short: 'GUIDE',
     description: 'Meet experienced local guides for authentic and memorable trips.',
     href: '/tour-guides',
     accent: 'from-[#e7f7ef] to-[#f4fff9]',
   },
   {
     title: 'Rentals',
-    short: 'Ride',
+    short: 'RIDE',
     description: 'Book reliable vehicles and self-drive options for your travel plans.',
     href: '/rentals',
     accent: 'from-[#efe5ff] to-[#f6f0ff]',
   },
   {
     title: 'Taxis',
-    short: 'Move',
+    short: 'MOVE',
     description: 'Get quick, easy transport whenever you need to travel around.',
     href: '/taxis',
     accent: 'from-[#dff6ff] to-[#f1fbff]',
@@ -66,23 +66,17 @@ export default function ServiceCategories() {
             >
               <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-              <div className={`relative mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${service.accent} text-lg font-black text-[#041b3c] shadow-inner`}>
+              <div
+                className={`relative mb-5 flex h-12 w-full items-center justify-center rounded-xl border border-white/40 bg-gradient-to-br ${service.accent} px-3 text-center text-[11px] font-black tracking-[0.28em] text-[#041b3c] shadow-inner`}
+              >
                 {service.short}
               </div>
 
               <div className="relative mb-3 flex items-center justify-between">
                 <h3 className="text-xl font-bold text-[#041b3c]">{service.title}</h3>
-                <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                  View
-                </span>
               </div>
 
               <p className="relative text-sm leading-6 text-slate-600">{service.description}</p>
-
-              <div className="relative mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#003d9b] transition-transform group-hover:translate-x-1">
-                Explore now
-                <span aria-hidden="true">→</span>
-              </div>
             </Link>
           ))}
         </div>
