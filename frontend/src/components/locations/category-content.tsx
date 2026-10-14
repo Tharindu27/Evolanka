@@ -47,10 +47,7 @@ export default function CategoryContent({ category, places }: CategoryContentPro
         <div className="absolute inset-0 bg-gradient-to-tr from-[#001a43]/95 via-[#001a43]/30 to-[#c9a227]/20" />
 
         <div className="absolute left-0 top-0 p-5">
-          <Link
-            href="/locations"
-            className="inline-flex items-center rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
-          >
+          <Link href="/locations" className="btn-back">
             Back
           </Link>
         </div>
@@ -63,8 +60,8 @@ export default function CategoryContent({ category, places }: CategoryContentPro
       </section>
 
       <section className="relative mx-auto mb-8 max-w-2xl">
-        <div className="rounded-full border border-[#d6dcef] bg-white/90 p-2 shadow-[0_16px_45px_rgba(0,26,67,0.08)] backdrop-blur">
-          <div className="flex items-center gap-3 rounded-full border border-[#dce3f1] bg-[#f8fbff] px-5 py-4 transition-all duration-300 focus-within:border-[#003d9b]/35 focus-within:bg-white focus-within:shadow-[0_0_0_4px_rgba(0,61,155,0.08)]">
+        <div className="search-bar-shell">
+          <div className="search-bar-field">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#003d9b]/10 text-[#003d9b]">
               <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[2]">
                 <circle cx="11" cy="11" r="7" />
@@ -76,7 +73,7 @@ export default function CategoryContent({ category, places }: CategoryContentPro
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search places inside this category..."
-              className="w-full border-none bg-transparent text-[#001a43] outline-none placeholder:text-[#6c7387]"
+              className="search-bar-input"
             />
           </div>
         </div>
@@ -102,7 +99,7 @@ export default function CategoryContent({ category, places }: CategoryContentPro
               className="animate-[location-rise_560ms_ease-out_both]"
               style={{ animationDelay: `${index * 80}ms` }}
             >
-              <PlaceCard place={place} />
+              <PlaceCard place={place} backTo={`/locations/category/${category.id}`} />
             </div>
           ))}
         </section>

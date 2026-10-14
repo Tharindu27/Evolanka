@@ -11,8 +11,8 @@ export default function TravelerStories() {
         </div>
 
         <div className="relative mb-10 text-center">
-          <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-[#c9a227]">Community Moments</p>
-          <h2 className="mb-3 text-3xl font-black tracking-tight text-[#001a43] sm:text-4xl">Traveler Stories</h2>
+          <p className="brand-secondary-text mb-2 text-xs font-bold uppercase tracking-[0.28em]">Community Moments</p>
+          <h2 className="brand-page-title mb-3 text-3xl font-black tracking-tight sm:text-4xl">Traveler Stories</h2>
           <p className="mx-auto max-w-2xl text-base text-[#4e5568] sm:text-lg">
             Real moments shared by our global community of explorers.
           </p>

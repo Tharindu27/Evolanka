@@ -32,18 +32,18 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
   }, [places, query]);
 
   return (
-    <div className="relative overflow-hidden rounded-[32px] border border-[#dfe4f2] bg-[#f4f7fb] px-4 py-8 shadow-[0_30px_90px_rgba(0,26,67,0.08)] sm:px-6 lg:px-10 lg:py-10">
+    <div className="brand-backdrop relative overflow-hidden rounded-[32px] border border-[#dfe4f2] bg-[#f4f7fb] px-4 py-8 shadow-[0_30px_90px_rgba(0,26,67,0.08)] sm:px-6 lg:px-10 lg:py-10">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="animate-[location-float_12s_ease-in-out_infinite] absolute -left-20 top-10 h-56 w-56 rounded-full bg-[#003d9b]/10 blur-3xl" />
         <div className="animate-[location-float_14s_ease-in-out_infinite] absolute right-0 top-1/3 h-64 w-64 rounded-full bg-[#c9a227]/10 blur-3xl" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#003d9b]/25 to-transparent" />
       </div>
 
-      <section className="relative mb-12 overflow-hidden rounded-[28px] border border-white/70 bg-gradient-to-r from-[#001a43] via-[#003d9b] to-[#0d4bb8] px-6 py-10 text-white shadow-[0_24px_60px_rgba(0,61,155,0.22)] sm:px-8 lg:px-12">
+      <section className="relative mb-12 overflow-hidden rounded-[28px] border border-white/70 bg-gradient-to-r from-[#001534] via-[#001a43] to-[#022d6f] px-6 py-10 text-white shadow-[0_24px_60px_rgba(0,26,67,0.22)] sm:px-8 lg:px-12">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(201,162,39,0.22),transparent_30%)]" />
         <div className="relative grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
           <div className="animate-[location-rise_700ms_ease-out_both]">
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-white/90 backdrop-blur">
+            <span className="brand-secondary-text mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-white/90 backdrop-blur">
               Explore Sri Lanka
             </span>
             <h1 className="max-w-2xl text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
@@ -73,8 +73,8 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
       </section>
 
       <section className="relative mx-auto mb-12 max-w-2xl">
-        <div className="rounded-full border border-[#d6dcef] bg-white/90 p-2 shadow-[0_16px_45px_rgba(0,26,67,0.08)] backdrop-blur">
-          <div className="flex items-center gap-3 rounded-full border border-[#dce3f1] bg-[#f8fbff] px-5 py-4 transition-all duration-300 focus-within:border-[#003d9b]/35 focus-within:bg-white focus-within:shadow-[0_0_0_4px_rgba(0,61,155,0.08)]">
+        <div className="search-bar-shell">
+          <div className="search-bar-field">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#003d9b]/10 text-[#003d9b]">
               <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[2]">
                 <circle cx="11" cy="11" r="7" />
@@ -86,7 +86,7 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search by place name, city or district..."
-              className="w-full border-none bg-transparent text-[#001a43] outline-none placeholder:text-[#6c7387]"
+              className="search-bar-input"
             />
           </div>
         </div>
@@ -97,10 +97,10 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
           <section>
             <div className="mb-6 flex items-end justify-between gap-4">
               <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-[#c9a227]">Top Provinces</p>
-                <h2 className="text-3xl font-black tracking-tight text-[#001a43]">Explore by Province</h2>
+                <p className="brand-secondary-text mb-2 text-xs font-bold uppercase tracking-[0.28em]">Top Provinces</p>
+                <h2 className="brand-page-title text-3xl font-black tracking-tight ">Explore by Province</h2>
               </div>
-              <span className="hidden text-sm font-medium text-[#434654] sm:block">Swipe to browse</span>
+              <span className="brand-page-subtitle hidden text-sm font-medium sm:block">Swipe to browse</span>
             </div>
 
             <div className="-mx-4 flex gap-5 overflow-x-auto px-4 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -137,9 +137,9 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
 
           <section>
             <div className="mb-6">
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-[#c9a227]">Browse Categories</p>
-              <h2 className="text-3xl font-black tracking-tight text-[#001a43]">Discover by Category</h2>
-              <p className="mt-3 max-w-2xl text-[#434654]">
+              <p className="brand-secondary-text mb-2 text-xs font-bold uppercase tracking-[0.28em] text-[#c9a227]">Browse Categories</p>
+              <h2 className="brand-page-title text-3xl font-black tracking-tight text-[#001a43]">Discover by Category</h2>
+              <p className="brand-page-subtitle mt-3 max-w-2xl">
                 Explore Sri Lanka&apos;s diverse attractions curated by interest, from heritage sites to beach escapes.
               </p>
             </div>
@@ -194,7 +194,7 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
           ) : (
             <div className="rounded-[28px] border border-dashed border-[#c7d2ea] bg-white/80 px-6 py-16 text-center shadow-[0_12px_40px_rgba(0,26,67,0.06)]">
               <p className="text-xl font-bold text-[#001a43]">No places found for your search.</p>
-              <p className="mt-2 text-[#434654]">Try another city, district, or place name.</p>
+              <p className="brand-page-subtitle mt-2">Try another city, district, or place name.</p>
             </div>
           )}
         </section>

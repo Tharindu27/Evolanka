@@ -19,7 +19,7 @@ export default function Navbar() {
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-[#dce3f1]/90 bg-[#f8fbff]/90 backdrop-blur-xl">
       <div className="mx-auto w-full max-w-[1440px] px-4 py-3 md:px-8 lg:px-12">
         <div className="flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2 text-2xl font-black uppercase tracking-tight text-[#001a43]">
+          <Link href="/" className="brand-page-title flex items-center gap-2 text-2xl font-black uppercase tracking-tight">
             EVOLANKA
             <span className="h-2.5 w-2.5 rounded-full bg-[#c9a227]" aria-hidden="true" />
           </Link>
@@ -37,10 +37,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
-            <Link
-              href="/auth-main"
-              className="rounded-full bg-[#001a43] px-6 py-2 text-sm font-bold text-white transition-all hover:bg-[#c9a227] hover:text-[#001a43]"
-            >
+            <Link href="/auth-main" className="btn-primary rounded-full px-6 py-2 text-sm font-bold text-white transition-all hover:text-white">
               Sign In
             </Link>
           </div>
@@ -75,7 +72,7 @@ export default function Navbar() {
             <Link
               href="/auth-main"
               onClick={() => setMobileMenuOpen(false)}
-              className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-[#001a43] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#c9a227] hover:text-[#001a43]"
+              className="btn-primary mt-3 inline-flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-sm font-bold text-white transition-all hover:text-white"
             >
               Sign In
             </Link>

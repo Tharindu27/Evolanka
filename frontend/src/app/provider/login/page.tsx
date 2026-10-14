@@ -8,7 +8,7 @@ export default function ProviderLoginPage() {
 
   return (
     <div
-      className="relative h-[100dvh] overflow-hidden bg-[#f9f9ff] text-[#041b3c] selection:bg-[#dae2ff] selection:text-[#001848]"
+      className="brand-backdrop relative h-[100dvh] overflow-hidden bg-[#f9f9ff] text-[#041b3c] selection:bg-[#dae2ff] selection:text-[#001848]"
       style={{ fontFamily: 'Inter, sans-serif' }}
     >
       <div className="fixed inset-0 z-0">
@@ -21,10 +21,7 @@ export default function ProviderLoginPage() {
       </div>
 
       <header className="fixed top-0 z-40 flex h-16 w-full items-center justify-between px-6">
-        <Link
-          href="/auth-main"
-          className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/35 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition hover:bg-black/50"
-        >
+        <Link href="/auth-main" className="btn-back">
           <span>Back</span>
         </Link>
       </header>
@@ -33,8 +30,8 @@ export default function ProviderLoginPage() {
         <div className="w-full max-w-[500px] -translate-y-3 md:-translate-y-4">
           <div className="rounded-[1.5rem] border border-white/35 bg-white/30 p-4 shadow-2xl backdrop-blur-xl [@media(max-height:760px)]:scale-[0.94] [@media(max-height:700px)]:scale-[0.88] md:p-7">
             <div className="mb-3 text-center">
-              <h1 className="mb-1.5 text-2xl font-bold text-[#003d9b] md:text-3xl">Provider Sign In</h1>
-              <p className="text-xs text-slate-700 md:text-sm">Manage your business and connect with travelers.</p>
+              <h1 className="brand-page-title mb-1.5 text-2xl font-bold text-[#003d9b] md:text-3xl">Provider Sign In</h1>
+              <p className="brand-page-subtitle text-xs md:text-sm">Manage your business and connect with travelers.</p>
             </div>
 
             <div className="my-3.5 flex items-center gap-3">
@@ -120,7 +117,7 @@ export default function ProviderLoginPage() {
 
               <button
                 type="submit"
-                className="mt-1.5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#003d9b] px-6 py-3.5 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition hover:bg-[#0052cc] md:text-sm"
+                className="btn-primary mt-1.5 inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition md:text-sm"
               >
                 Sign In to dashboard
                 <span aria-hidden="true">&#8594;</span>

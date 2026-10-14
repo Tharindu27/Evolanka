@@ -8,7 +8,7 @@ export default function ProviderRegisterPage() {
 
   return (
     <div
-      className="relative h-[100dvh] overflow-hidden bg-[#f9f9ff] text-[#041b3c]"
+      className="brand-backdrop relative h-[100dvh] overflow-hidden bg-[#f9f9ff] text-[#041b3c]"
       style={{ fontFamily: 'Inter, sans-serif' }}
     >
       <div className="fixed inset-0 z-0">
@@ -21,10 +21,7 @@ export default function ProviderRegisterPage() {
       </div>
 
       <main className="relative z-20 flex h-[100dvh] items-center justify-center overflow-hidden px-4 pb-3 pt-14 md:px-6 md:pb-4 md:pt-20">
-        <Link
-          href="/auth-main"
-          className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/35 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition hover:bg-black/50 md:left-8 md:top-8"
-        >
+        <Link href="/auth-main" className="btn-back absolute left-4 top-4 md:left-8 md:top-8">
           <span>Back</span>
         </Link>
 
@@ -33,8 +30,8 @@ export default function ProviderRegisterPage() {
             className="rounded-[1.5rem] border border-white/35 bg-white/30 p-4 shadow-2xl backdrop-blur-xl [@media(max-height:760px)]:scale-[0.94] [@media(max-height:700px)]:scale-[0.88] md:p-7"
           >
             <div className="mb-3 text-center">
-              <h2 className="mb-1.5 text-2xl font-bold text-[#003d9b] md:text-3xl">Become an EVOLANKA Provider</h2>
-              <p className="text-xs text-slate-700 md:text-sm">Join Sri Lanka&apos;s leading tourism network and grow your business.</p>
+              <h2 className="brand-page-title mb-1.5 text-2xl font-bold text-[#003d9b] md:text-3xl">Become an EVOLANKA Provider</h2>
+              <p className="brand-page-subtitle text-xs text-slate-700 md:text-sm">Join Sri Lanka&apos;s leading tourism network and grow your business.</p>
             </div>
 
             <form className="mx-auto flex w-full flex-col gap-3.5" action="#">
@@ -167,7 +164,7 @@ export default function ProviderRegisterPage() {
 
               <button
                 type="submit"
-                className="mt-1.5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#003d9b] px-6 py-3.5 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition hover:bg-[#0052cc] md:text-sm"
+                className="btn-primary mt-1.5 inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition md:text-sm"
               >
                 <span>Create Provider Account</span>
                 <span aria-hidden="true">&#8594;</span>

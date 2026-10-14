@@ -3,10 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --button-primary-bg: #001a43;
-  --button-primary-hover: #071f52;
-  --button-secondary-bg: #b08d1f;
-  --button-secondary-hover: #8f7317;
+  --button-primary-bg: #001a43;   /* Primary button background color */
+  --button-primary-hover: #001a43;   /* Primary button hover background color */
+  --button-secondary-bg: #b08d1f;   /* Secondary button background color */
+  --button-secondary-hover: #b08d1f;   /* Secondary button hover background color */
 }
 
 @theme inline {
@@ -46,12 +46,154 @@
   }
 }
 
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/*-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------*/
+
+/*upper background styles*/
+.brand-backdrop {
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-backdrop::before,
+.brand-backdrop::after {
+  content: '';
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.brand-backdrop::before {
+  left: -5rem;
+  top: 2.5rem;
+  height: 14rem;
+  width: 14rem;
+  background: rgba(0, 61, 155, 0.12);
+}
+
+.brand-backdrop::after {
+  right: -2rem;
+  top: 30%;
+  height: 16rem;
+  width: 16rem;
+  background: rgba(201, 162, 39, 0.12);
+}
+
+/*-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------*/
+
+/*back button styles*/
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn-back:active {
+  transform: translateY(1px);
+}
+
+/*-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------*/
+
+/*place card styles*/
+.place-card {
+  overflow: hidden;
+  border-radius: 1.625rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 18px 50px rgba(0, 26, 67, 0.11);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.place-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(0, 26, 67, 0.18);
+}
+/*-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------*/
+
+/*search bar styles*/
+.search-bar-shell {
+  border-radius: 9999px;
+  border: 1px solid #d6dcef;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem;
+  box-shadow: 0 16px 45px rgba(0, 26, 67, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.search-bar-field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid #dce3f1;
+  background: #f8fbff;
+  padding: 0.875rem 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.search-bar-field:focus-within {
+  border-color: rgba(0, 61, 155, 0.35);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(0, 61, 155, 0.08);
+}
+
+.search-bar-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #001a43;
+  outline: none;
+}
+
+.search-bar-input::placeholder {
+  color: #6c7387;
+}
+
+/*-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------*/
+
+/*brand text styles*/
+.brand-page-title {
+  color: #001a43;
+}
+
+.brand-page-subtitle {
+  color: #4e5568;
+}
+
+.brand-secondary-text {
+  color: #b08d1f;
+}
+
+/*-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------*/
+
+/*primary and secondary button styles*/
 .btn-primary {
   background-color: var(--button-primary-bg);
   color: #ffffff;

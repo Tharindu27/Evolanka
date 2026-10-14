@@ -7,7 +7,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-[#f4f5f7] font-[Inter,sans-serif] text-[#041b3c]">
+    <div className="brand-backdrop relative flex min-h-[100dvh] flex-col overflow-hidden bg-[#f4f5f7] font-[Inter,sans-serif] text-[#041b3c]">
       <div className="absolute inset-0 z-0">
         <img
           src="/images/Auth/log-bg.png"
@@ -19,10 +19,7 @@ export default function LoginPage() {
       </div>
 
       <header className="absolute left-0 right-0 top-0 z-20 flex items-center justify-between px-6 py-3">
-        <Link
-          href="/auth-main"
-          className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/35 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition hover:bg-black/50"
-        >
+        <Link href="/auth-main" className="btn-back">
           <span>Back</span>
         </Link>
       </header>
@@ -30,8 +27,8 @@ export default function LoginPage() {
       <main className="relative z-10 flex min-h-[100dvh] items-center justify-center px-6 py-16">
         <div className="w-full max-w-[520px] rounded-[32px] border border-white/50 bg-white/40 p-6 shadow-xl backdrop-blur-md md:p-10">
           <div className="mb-6 text-center">
-            <h1 className="mb-1 text-3xl font-semibold text-[#001a43]  md:text-4xl">Sign In to EVOLANKA</h1>
-            <p className="text-sm text-slate-700 md:text-base">Welcome back to your next adventure.</p>
+            <h1 className="brand-page-title mb-1 text-3xl font-semibold md:text-4xl">Sign In to EVOLANKA</h1>
+            <p className="brand-page-subtitle text-sm md:text-base">Welcome back to your next adventure.</p>
           </div>
 
           <div className="mb-6 flex flex-col gap-3">
@@ -128,10 +125,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="mt-1 w-full rounded-xl bg-[#001a43]  py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#001a43]  active:scale-[0.98]"
-            >
+            <button type="submit" className="btn-primary mt-1 w-full rounded-xl py-3 text-sm font-semibold shadow-sm transition-all active:scale-[0.98]">
               Sign In
             </button>
           </form>

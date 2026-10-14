@@ -46,10 +46,7 @@ export default function ProvinceContent({ province, places }: ProvinceContentPro
         <div className="absolute inset-0 bg-gradient-to-tr from-[#001a43]/95 via-[#001a43]/30 to-[#c9a227]/20" />
 
         <div className="absolute left-0 top-0 p-5">
-          <Link
-            href="/locations"
-            className="inline-flex items-center rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
-          >
+          <Link href="/locations" className="btn-back">
             Back
           </Link>
         </div>
@@ -71,7 +68,7 @@ export default function ProvinceContent({ province, places }: ProvinceContentPro
 
       <section className="mb-10 rounded-[28px] border border-[#dce3f1] bg-white/90 p-4 shadow-[0_14px_40px_rgba(0,26,67,0.08)] backdrop-blur md:p-5">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_240px]">
-          <div className="flex items-center gap-3 rounded-full border border-[#dce3f1] bg-[#f8fbff] px-5 py-3 transition-all duration-300 focus-within:border-[#003d9b]/35 focus-within:bg-white focus-within:shadow-[0_0_0_4px_rgba(0,61,155,0.08)]">
+          <div className="search-bar-field">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#003d9b]/10 text-[#003d9b]">
               <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[2]">
                 <circle cx="11" cy="11" r="7" />
@@ -83,7 +80,7 @@ export default function ProvinceContent({ province, places }: ProvinceContentPro
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search attractions..."
-              className="w-full border-none bg-transparent text-[#001a43] outline-none placeholder:text-[#6c7387]"
+              className="search-bar-input"
             />
           </div>
           <select
@@ -122,7 +119,7 @@ export default function ProvinceContent({ province, places }: ProvinceContentPro
                 className="animate-[location-rise_560ms_ease-out_both]"
                 style={{ animationDelay: `${index * 80}ms` }}
               >
-                <PlaceCard place={place} />
+                <PlaceCard place={place} backTo={`/locations/province/${province.id}`} />
               </div>
             ))}
           </div>

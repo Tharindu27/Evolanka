@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function RegisterPage() {
   return (
     <div
-      className="relative h-[100dvh] overflow-hidden bg-[#f9f9ff] text-[#041b3c]"
+      className="brand-backdrop relative h-[100dvh] overflow-hidden bg-[#f9f9ff] text-[#041b3c]"
       style={{ fontFamily: 'Inter, sans-serif' }}
     >
       <div className="fixed inset-0 z-0 overflow-hidden">
@@ -19,10 +19,7 @@ export default function RegisterPage() {
       </div>
 
       <header className="fixed top-0 z-40 flex h-16 w-full items-center justify-between px-6">
-        <Link
-          href="/auth-main"
-          className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/35 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition hover:bg-black/50"
-        >
+        <Link href="/auth-main" className="btn-back">
           Back
         </Link>
       </header>
@@ -34,8 +31,8 @@ export default function RegisterPage() {
             className="rounded-[1.5rem] border border-white/35 bg-white/30 p-4 shadow-2xl backdrop-blur-xl [@media(max-height:760px)]:scale-[0.94] [@media(max-height:700px)]:scale-[0.88] md:p-7"
           >
             <div className="mb-3 text-center">
-              <h1 className="mb-1.5 text-2xl font-bold text-[#001a43]  md:text-3xl">Join the EVOLANKA Community</h1>
-              <p className="text-xs text-slate-700 md:text-sm">Start your Sri Lankan adventure today.</p>
+              <h1 className="brand-page-title mb-1.5 text-2xl font-bold md:text-3xl">Join the EVOLANKA Community</h1>
+              <p className="brand-page-subtitle text-xs md:text-sm">Start your Sri Lankan adventure today.</p>
             </div>
 
 
@@ -115,7 +112,7 @@ export default function RegisterPage() {
 
               <button
                 type="submit"
-                className="mt-1 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#001a43]  px-6 py-3 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition hover:bg-[#001a43]  md:text-sm"
+                className="btn-primary mt-1 inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition md:text-sm"
               >
                 Create My Account
               </button>

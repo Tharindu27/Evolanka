@@ -4,12 +4,15 @@ import type { Place } from '@/data/location-data/location-mock-data';
 
 type PlaceCardProps = {
   place: Place;
+  backTo?: string;
 };
 
-export default function PlaceCard({ place }: PlaceCardProps) {
+export default function PlaceCard({ place, backTo }: PlaceCardProps) {
+  const destination = backTo ? { pathname: `/locations/place/${place.id}`, query: { from: backTo } } : `/locations/place/${place.id}`;
+
   return (
-    <Link href={`/locations/place/${place.id}`} className="group block">
-      <article className="overflow-hidden rounded-[26px] border border-white/70 bg-white shadow-[0_18px_50px_rgba(0,26,67,0.11)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(0,26,67,0.18)]">
+    <Link href={destination} className="group block">
+      <article className="place-card">
         <div className="relative h-56 w-full overflow-hidden">
           <img
             src={place.image}

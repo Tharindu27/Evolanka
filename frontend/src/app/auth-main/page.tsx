@@ -3,7 +3,7 @@ import Link from 'next/link';
 export default function AuthMainPage() {
 	return (
 		<div
-			className="relative flex h-[100dvh] flex-col overflow-hidden text-white antialiased"
+			className="brand-backdrop relative flex h-[100dvh] flex-col overflow-hidden text-white antialiased"
 			style={{ fontFamily: 'Inter, sans-serif' }}
 		>
 			<div className="fixed inset-0 -z-10 h-full w-full">

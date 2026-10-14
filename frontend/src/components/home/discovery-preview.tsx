@@ -12,8 +12,8 @@ export default function DiscoveryPreview() {
 
         <div className="relative mb-10 flex flex-col items-start justify-between gap-5 md:flex-row md:items-end">
           <div>
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-[#c9a227]">Trending Now</p>
-            <h2 className="mb-2 text-3xl font-black tracking-tight text-[#001a43] sm:text-4xl">Discover Your Next Adventure</h2>
+            <p className="brand-secondary-text mb-2 text-xs font-bold uppercase tracking-[0.28em]">Trending Now</p>
+            <h2 className="brand-page-title mb-2 text-3xl font-black tracking-tight sm:text-4xl">Discover Your Next Adventure</h2>
             <p className="max-w-xl text-base text-[#4e5568] sm:text-lg">
             Join the feed where travelers share live updates from across Sri Lanka.
             </p>

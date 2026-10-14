@@ -1,14 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import type { Place } from '@/data/location-data/location-mock-data';
 
 type PlaceDetailContentProps = {
   place: Place;
+  backHref?: string;
 };
 
-export default function PlaceDetailContent({ place }: PlaceDetailContentProps) {
+export default function PlaceDetailContent({ place, backHref = '/locations' }: PlaceDetailContentProps) {
   const latOffset = 0.08;
   const lngOffset = 0.08;
   const bbox = [
@@ -32,7 +32,6 @@ export default function PlaceDetailContent({ place }: PlaceDetailContentProps) {
       .trim()
       .replace(/\s+/g, '-');
 
-  const router = useRouter();
   const pricingRows = [
     { label: 'Local Adults', value: place.ticketPricing.localAdults },
     { label: 'Local Children', value: place.ticketPricing.localChildren },
@@ -66,12 +65,9 @@ export default function PlaceDetailContent({ place }: PlaceDetailContentProps) {
         <div className="absolute inset-0 bg-gradient-to-tr from-[#001a43]/95 via-[#001a43]/30 to-[#c9a227]/20" />
 
         <div className="absolute left-0 top-0 p-5">
-          <button
-            onClick={() => router.back()}
-            className="inline-flex items-center rounded-xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
-          >
+          <Link href={backHref} className="btn-back" aria-label="Go back to previous page">
             Back
-          </button>
+          </Link>
         </div>
 
         <div className="absolute bottom-0 left-0 w-full p-8 text-white md:p-12">
