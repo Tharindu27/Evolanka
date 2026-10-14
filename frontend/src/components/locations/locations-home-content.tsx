@@ -134,6 +134,7 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
             </div>
           </section>
 
+
           <section>
             <div className="mb-6">
               <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-[#c9a227]">Browse Categories</p>
