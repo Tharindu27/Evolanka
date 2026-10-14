@@ -13,6 +13,7 @@ export default function LoginPage() {
           src="/images/Auth/log-bg.png"
           alt="Sri Lankan landscape at sunrise"
           className="h-full w-full object-cover"
+          style={{ filter: 'saturate(1.08) contrast(0.8) brightness(0.8)' }}
         />
         <div className="absolute inset-0 bg-black/15" />
       </div>
@@ -29,7 +30,7 @@ export default function LoginPage() {
       <main className="relative z-10 flex min-h-[100dvh] items-center justify-center px-6 py-16">
         <div className="w-full max-w-[520px] rounded-[32px] border border-white/50 bg-white/40 p-6 shadow-xl backdrop-blur-md md:p-10">
           <div className="mb-6 text-center">
-            <h1 className="mb-1 text-3xl font-semibold text-[#003d9b] md:text-4xl">Sign In to EVOLANKA</h1>
+            <h1 className="mb-1 text-3xl font-semibold text-[#001a43]  md:text-4xl">Sign In to EVOLANKA</h1>
             <p className="text-sm text-slate-700 md:text-base">Welcome back to your next adventure.</p>
           </div>
 
@@ -129,7 +130,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="mt-1 w-full rounded-xl bg-[#003d9b] py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#0052cc] active:scale-[0.98]"
+              className="mt-1 w-full rounded-xl bg-[#001a43]  py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#001a43]  active:scale-[0.98]"
             >
               Sign In
             </button>

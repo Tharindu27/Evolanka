@@ -12,6 +12,7 @@ export default function AuthMainPage() {
 					alt="Sigiriya Lion Rock at sunrise"
 					className="h-full w-full object-cover"
 					src="/images/landing-page/sigiriya.png"
+					style={{ filter: 'saturate(1.08) contrast(0.8) brightness(0.8)' }}
 				/>
 			</div>
 
@@ -55,7 +56,7 @@ export default function AuthMainPage() {
 						<div className="mt-auto flex w-full flex-col gap-3">
 							<Link
 								href="/auth/login"
-								className="flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl bg-[#0a3fa8] px-4 py-3 text-base font-semibold text-white shadow-lg shadow-blue-900/25 transition-colors duration-300 hover:bg-[#083582]"
+								className="flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl bg-[#041b3c] px-4 py-3 text-base font-semibold text-white shadow-lg shadow-blue-950/30 transition-colors duration-300 hover:bg-[#020f2d]"
 							>
 								Sign In as Traveler
 							</Link>
@@ -89,7 +90,7 @@ export default function AuthMainPage() {
 						<div className="mt-auto flex w-full flex-col gap-3">
 							<Link
 								href="/provider/login"
-								className="flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl bg-[#e38816] px-4 py-3 text-base font-semibold text-white shadow-lg shadow-amber-700/25 transition-colors duration-300 hover:bg-[#c97409]"
+								className="flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl bg-[#b08d1f] px-4 py-3 text-base font-semibold text-white shadow-lg shadow-amber-700/25 transition-colors duration-300 hover:bg-[#b08d1f]"
 							>
 								Become a Provider
 							</Link>

@@ -14,6 +14,7 @@ export default function RegisterPage() {
           src="/images/Auth/reg-bg.png"
           alt="Sri Lanka landscape"
           className="h-full w-full object-cover"
+          style={{ filter: 'saturate(1.08) contrast(0.9) brightness(0.8)' }}
         />
       </div>
 
@@ -33,7 +34,7 @@ export default function RegisterPage() {
             className="rounded-[1.5rem] border border-white/35 bg-white/30 p-4 shadow-2xl backdrop-blur-xl [@media(max-height:760px)]:scale-[0.94] [@media(max-height:700px)]:scale-[0.88] md:p-7"
           >
             <div className="mb-3 text-center">
-              <h1 className="mb-1.5 text-2xl font-bold text-[#003d9b] md:text-3xl">Join the EVOLANKA Community</h1>
+              <h1 className="mb-1.5 text-2xl font-bold text-[#001a43]  md:text-3xl">Join the EVOLANKA Community</h1>
               <p className="text-xs text-slate-700 md:text-sm">Start your Sri Lankan adventure today.</p>
             </div>
 
@@ -114,7 +115,7 @@ export default function RegisterPage() {
 
               <button
                 type="submit"
-                className="mt-1 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#003d9b] px-6 py-3 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition hover:bg-[#0052cc] md:text-sm"
+                className="mt-1 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#001a43]  px-6 py-3 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition hover:bg-[#001a43]  md:text-sm"
               >
                 Create My Account
               </button>

@@ -3,6 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --button-primary-bg: #001a43;
+  --button-primary-hover: #071f52;
+  --button-secondary-bg: #b08d1f;
+  --button-secondary-hover: #8f7317;
 }
 
 @theme inline {
@@ -46,4 +50,22 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.btn-primary {
+  background-color: var(--button-primary-bg);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--button-secondary-bg);
+  color: #ffffff;
+}
+
+.btn-secondary:hover {
+  background-color: var(--button-secondary-hover);
 }

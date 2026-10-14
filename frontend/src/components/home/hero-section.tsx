@@ -8,10 +8,11 @@ export default function HeroSection() {
           className="h-full w-full bg-cover bg-center"
           style={{
             backgroundImage: 'url("/images/landing-page/landing-hero.png")',
+            filter: 'saturate(1.08) contrast(1.00) brightness(0.6)',
           }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(0,15,42,0.86)_20%,rgba(0,26,67,0.66)_54%,rgba(0,15,42,0.82)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_18%,rgba(201,162,39,0.35),transparent_32%),radial-gradient(circle_at_84%_78%,rgba(255,255,255,0.16),transparent_38%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(0,12,35,0.34)_10%,rgba(7,49,96,0.24)_45%,rgba(10,29,60,0.3)_72%,rgba(0,12,35,0.38)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(242,196,86,0.2),transparent_24%),radial-gradient(circle_at_80%_75%,rgba(59,130,246,0.12),transparent_30%),radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.04),transparent_42%)]" />
       </div>
 
       <div className="pointer-events-none absolute left-8 top-28 hidden h-36 w-36 animate-[location-float_12s_ease-in-out_infinite] rounded-full border border-white/25 bg-white/10 backdrop-blur md:block" />
