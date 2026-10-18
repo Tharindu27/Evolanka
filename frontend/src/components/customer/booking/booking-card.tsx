@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import type { BookingItem } from '@/data/customer-booking-data';
 
 type BookingCardProps = {
@@ -62,9 +64,18 @@ export default function BookingCard({ booking }: BookingCardProps) {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <button className="btn-primary  rounded-xl  px-6 py-2 text-sm font-semibold text-white shadow-[0_12px_25px_rgba(13,74,190,0.28)] transition hover:bg-[#083d9d]">
-                View Details
-              </button>
+              {booking.category === 'Hotel' ? (
+                <Link
+                  href={`/customer/profile/bookings/${booking.id}`}
+                  className="btn-primary  rounded-xl  px-6 py-2 text-sm font-semibold text-white shadow-[0_12px_25px_rgba(13,74,190,0.28)] transition hover:bg-[#083d9d]"
+                >
+                  View Details
+                </Link>
+              ) : (
+                <button className="btn-primary  rounded-xl  px-6 py-2 text-sm font-semibold text-white shadow-[0_12px_25px_rgba(13,74,190,0.28)] transition hover:bg-[#083d9d]">
+                  View Details
+                </button>
+              )}
             </div>
           </div>
         </div>
