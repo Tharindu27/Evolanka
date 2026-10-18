@@ -440,7 +440,7 @@ body {
   top: 7rem;
 }
 
-.guide-booking-card {
+.tour-guide-booking-card {
   border: 1px solid #dce3f1;
   border-radius: 1.5rem;
   background: #ffffff;
@@ -448,7 +448,7 @@ body {
   box-shadow: 0 20px 55px rgba(0, 26, 67, 0.13);
 }
 
-.guide-calendar-day {
+.tour-guide-calendar-day {
   height: 2.25rem;
   border-radius: 0.625rem;
   color: #001a43;
@@ -457,16 +457,16 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.guide-calendar-day:hover:not(:disabled) {
+.tour-guide-calendar-day:hover:not(:disabled) {
   background: #dfe8fb;
 }
 
-.guide-calendar-day:disabled {
+.tour-guide-calendar-day:disabled {
   color: #c3c9d8;
   cursor: not-allowed;
 }
 
-.guide-calendar-day[aria-pressed="true"] {
+.tour-guide-calendar-day[aria-pressed="true"] {
   background: #001a43;
   color: #ffffff;
 }
@@ -2132,3 +2132,2717 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+  .guide-provider-app {
+    --guide-navy: #041b3c;
+    --guide-primary: #003d9b;
+    --guide-primary-soft: #edf3ff;
+    --guide-muted: #68758c;
+    --guide-line: #e2e8f2;
+    --guide-surface: #ffffff;
+    --guide-background: #f5f7fb;
+    display: flex;
+    min-height: 100dvh;
+    background: var(--guide-background);
+    color: var(--guide-navy);
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  }
+
+  .guide-provider-sidebar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    width: 16.5rem;
+    height: 100dvh;
+    flex: 0 0 16.5rem;
+    flex-direction: column;
+    border-right: 1px solid var(--guide-line);
+    background: var(--guide-surface);
+    padding: 1.45rem 1rem 1rem;
+  }
+
+  .guide-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin: 0 0 1.35rem 0.2rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .guide-brand-mark {
+    display: grid;
+    width: 2.4rem;
+    height: 2.4rem;
+    place-items: center;
+    border-radius: 0.8rem;
+    background: linear-gradient(145deg, #003d9b, #1769d7);
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 900;
+  }
+
+  .guide-brand strong,
+  .guide-brand small,
+  .guide-account-text strong,
+  .guide-account-text small {
+    display: block;
+  }
+
+  .guide-brand strong {
+    color: var(--guide-primary);
+    font-size: 0.95rem;
+    letter-spacing: 0.035em;
+  }
+
+  .guide-brand small {
+    margin-top: 0.1rem;
+    color: var(--guide-muted);
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+
+  .guide-account-card {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.7rem;
+    border: 1px solid #e8edf6;
+    border-radius: 0.85rem;
+    background: #f8faff;
+    padding: 0.7rem;
+  }
+
+  .guide-account-image {
+    flex: 0 0 auto;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .guide-account-text {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .guide-account-text strong {
+    overflow: hidden;
+    color: var(--guide-navy);
+    font-size: 0.79rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .guide-account-text small {
+    margin-top: 0.17rem;
+    color: var(--guide-muted);
+    font-size: 0.67rem;
+  }
+
+  .guide-account-status,
+  .guide-preview-chip > span {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: #38a976;
+    box-shadow: 0 0 0 3px rgba(56, 169, 118, 0.13);
+  }
+
+  .guide-sidebar-nav {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.3rem;
+    overflow-y: auto;
+    padding-top: 1.55rem;
+  }
+
+  .guide-nav-section-label {
+    margin: 0 0 0.5rem 0.65rem;
+    color: #99a4b5;
+    font-size: 0.62rem;
+    font-weight: 850;
+    letter-spacing: 0.13em;
+  }
+
+  .guide-nav-item {
+    display: flex;
+    min-height: 2.8rem;
+    align-items: center;
+    gap: 0.72rem;
+    border: 0;
+    border-radius: 0.65rem;
+    background: transparent;
+    padding: 0.65rem 0.7rem;
+    color: #66738a;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+  }
+
+  .guide-nav-item span {
+    flex: 1;
+    font-size: 0.82rem;
+    font-weight: 650;
+  }
+
+  .guide-nav-item small {
+    display: grid;
+    min-width: 1.3rem;
+    height: 1.3rem;
+    place-items: center;
+    border-radius: 999px;
+    background: #fff1d3;
+    color: #815600;
+    font-size: 0.65rem;
+    font-weight: 850;
+  }
+
+  .guide-nav-item:hover,
+  .guide-sidebar-footer-link:hover {
+    background: #f1f5fd;
+    color: var(--guide-primary);
+  }
+
+  .guide-nav-item.is-active {
+    background: var(--guide-primary-soft);
+    color: var(--guide-primary);
+    font-weight: 800;
+  }
+
+  .guide-sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    border-top: 1px solid var(--guide-line);
+    padding-top: 0.9rem;
+  }
+
+  .guide-new-offer-button,
+  .guide-primary-button {
+    display: inline-flex;
+    min-height: 2.8rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid var(--guide-primary);
+    border-radius: 0.72rem;
+    background: var(--guide-primary);
+    padding: 0.65rem 0.9rem;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 800;
+    transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  }
+
+  .guide-new-offer-button {
+    margin-bottom: 0.45rem;
+    background: #f8b323;
+    border-color: #f8b323;
+    color: #382500;
+  }
+
+  .guide-new-offer-button:hover,
+  .guide-primary-button:hover:not(:disabled) {
+    box-shadow: 0 7px 18px rgba(0, 61, 155, 0.16);
+    transform: translateY(-1px);
+  }
+
+  .guide-new-offer-button:hover {
+    background: #ffc54c;
+  }
+
+  .guide-sidebar-footer-link {
+    display: flex;
+    min-height: 2.55rem;
+    align-items: center;
+    gap: 0.7rem;
+    border: 0;
+    border-radius: 0.65rem;
+    background: transparent;
+    padding: 0.55rem 0.7rem;
+    color: #66738a;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.76rem;
+    font-weight: 650;
+    text-align: left;
+    text-decoration: none;
+    transition: background 160ms ease, color 160ms ease;
+  }
+
+  .guide-provider-main {
+    min-width: 0;
+    flex: 1;
+    padding: 2rem clamp(1.3rem, 3.2vw, 3rem) 1.3rem;
+  }
+
+  .guide-provider-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin: 0 auto 1.35rem;
+  }
+
+  .guide-header-eyebrow,
+  .guide-panel-eyebrow {
+    margin: 0 0 0.35rem;
+    color: var(--guide-muted);
+    font-size: 0.65rem;
+    font-weight: 850;
+    letter-spacing: 0.105em;
+    text-transform: uppercase;
+  }
+
+  .guide-provider-header h1 {
+    margin: 0;
+    color: var(--guide-navy);
+    font-size: clamp(1.55rem, 2.2vw, 2rem);
+    font-weight: 850;
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+  }
+
+  .guide-provider-header > div:first-child > p:last-child {
+    margin: 0.45rem 0 0;
+    color: var(--guide-muted);
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .guide-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .guide-preview-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.48rem;
+    border: 1px solid #cdebdc;
+    border-radius: 999px;
+    background: #f0fbf5;
+    padding: 0.48rem 0.7rem;
+    color: #23774f;
+    font-size: 0.69rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .guide-preview-chip > span {
+    width: 0.42rem;
+    height: 0.42rem;
+    box-shadow: none;
+  }
+
+  .guide-notification-wrap {
+    position: relative;
+  }
+
+  .guide-notification-button {
+    position: relative;
+    display: grid;
+    width: 2.6rem;
+    height: 2.6rem;
+    place-items: center;
+    border: 1px solid var(--guide-line);
+    border-radius: 0.75rem;
+    background: var(--guide-surface);
+    color: var(--guide-primary);
+    cursor: pointer;
+  }
+
+  .guide-notification-dot {
+    position: absolute;
+    top: 0.52rem;
+    right: 0.52rem;
+    width: 0.42rem;
+    height: 0.42rem;
+    border: 2px solid white;
+    border-radius: 50%;
+    background: #e5a315;
+  }
+
+  .guide-notification-popover {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 0.55rem);
+    right: 0;
+    width: min(18rem, calc(100vw - 2rem));
+    border: 1px solid var(--guide-line);
+    border-radius: 0.8rem;
+    background: #fff;
+    padding: 1rem;
+    box-shadow: 0 14px 36px rgba(4, 27, 60, 0.14);
+  }
+
+  .guide-notification-popover strong {
+    font-size: 0.84rem;
+  }
+
+  .guide-notification-popover p {
+    margin: 0.45rem 0 0.7rem;
+    color: var(--guide-muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .guide-notification-popover button {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    color: var(--guide-primary);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.74rem;
+    font-weight: 800;
+  }
+
+  .guide-preview-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    margin: 0 0 1.25rem;
+    border: 1px solid #f1dcae;
+    border-radius: 0.75rem;
+    background: #fff9e9;
+    padding: 0.72rem 0.85rem;
+    color: #6f5722;
+  }
+
+  .guide-preview-banner-icon {
+    display: grid;
+    width: 1.15rem;
+    height: 1.15rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 50%;
+    background: #f4cf75;
+    color: #493600;
+    font-size: 0.72rem;
+    font-weight: 900;
+  }
+
+  .guide-preview-banner p {
+    margin: 0;
+    font-size: 0.72rem;
+    line-height: 1.55;
+  }
+
+  .guide-provider-content {
+    width: min(100%, 1440px);
+    margin: 0 auto;
+  }
+
+  .guide-provider-content h2,
+  .guide-panel h2 {
+    color: var(--guide-navy);
+  }
+
+  .guide-panel {
+    min-width: 0;
+    border: 1px solid var(--guide-line);
+    border-radius: 0.9rem;
+    background: var(--guide-surface);
+    box-shadow: 0 3px 12px rgba(28, 56, 103, 0.035);
+  }
+
+  .guide-panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .guide-panel-heading h2,
+  .guide-calendar-heading h2,
+  .guide-quick-actions h2,
+  .guide-date-details h2 {
+    margin: 0;
+    font-size: 1.04rem;
+    font-weight: 820;
+    letter-spacing: -0.025em;
+  }
+
+  .guide-text-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border: 0;
+    background: transparent;
+    padding: 0.25rem 0;
+    color: var(--guide-primary);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .guide-text-button:hover {
+    color: #1769d7;
+  }
+
+  .guide-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .guide-stat-card {
+    min-width: 0;
+    border: 1px solid var(--guide-line);
+    border-radius: 0.85rem;
+    background: #fff;
+    padding: 1rem;
+  }
+
+  .guide-stat-top {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--guide-muted);
+    font-size: 0.7rem;
+    font-weight: 750;
+  }
+
+  .guide-stat-icon {
+    display: grid;
+    width: 1.85rem;
+    height: 1.85rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 0.58rem;
+    background: var(--guide-primary-soft);
+    color: var(--guide-primary);
+  }
+
+  .guide-stat-card > strong {
+    display: block;
+    margin-top: 0.9rem;
+    color: var(--guide-navy);
+    font-size: 1.55rem;
+    font-weight: 880;
+    letter-spacing: -0.045em;
+  }
+
+  .guide-stat-card > small {
+    display: block;
+    margin-top: 0.2rem;
+    color: #8a95a8;
+    font-size: 0.66rem;
+  }
+
+  .guide-dashboard-grid,
+  .guide-bookings-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.75fr) minmax(17rem, 0.9fr);
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .guide-welcome-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 0.95rem;
+    background: linear-gradient(110deg, #06265a, #104a9f);
+    padding: 1.25rem 1.4rem;
+    color: #fff;
+  }
+
+  .guide-welcome-panel .guide-panel-eyebrow {
+    color: #b8d0f7;
+  }
+
+  .guide-welcome-panel h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 850;
+  }
+
+  .guide-welcome-panel p:last-child {
+    margin: 0.4rem 0 0;
+    color: #d3e1f7;
+    font-size: 0.76rem;
+    line-height: 1.5;
+  }
+
+  .guide-welcome-panel .guide-primary-button {
+    flex: 0 0 auto;
+    border-color: #ffc54c;
+    background: #ffc54c;
+    color: #382500;
+  }
+
+  .guide-overview-bookings {
+    padding: 1.1rem;
+  }
+
+  .guide-overview-bookings .guide-panel-heading {
+    margin-bottom: 0.85rem;
+  }
+
+  .guide-dashboard-side,
+  .guide-bookings-side {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .guide-booking-manager {
+    overflow: hidden;
+  }
+
+  .guide-booking-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--guide-line);
+  }
+
+  .guide-booking-tabs button {
+    position: relative;
+    display: flex;
+    min-height: 3.5rem;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    border: 0;
+    background: transparent;
+    padding: 0.7rem 0.55rem;
+    color: #768198;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.74rem;
+    font-weight: 700;
+    transition: background 150ms ease, color 150ms ease;
+  }
+
+  .guide-booking-tabs button:hover {
+    background: #f8faff;
+  }
+
+  .guide-booking-tabs button.is-active {
+    color: var(--guide-primary);
+  }
+
+  .guide-booking-tabs button.is-active::after {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: var(--guide-primary);
+    content: '';
+  }
+
+  .guide-booking-tabs button span {
+    display: grid;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    place-items: center;
+    border-radius: 999px;
+    background: #eef2f8;
+    color: #68758c;
+    font-size: 0.62rem;
+    font-weight: 850;
+  }
+
+  .guide-booking-tabs button.is-active span {
+    background: #e3edff;
+    color: var(--guide-primary);
+  }
+
+  .guide-booking-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.85rem 1rem 0.25rem;
+  }
+
+  .guide-search-field {
+    display: flex;
+    width: min(100%, 22rem);
+    min-height: 2.25rem;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid var(--guide-line);
+    border-radius: 0.6rem;
+    background: #fff;
+    padding: 0 0.65rem;
+    color: #8894a7;
+  }
+
+  .guide-search-field:focus-within {
+    border-color: #87a9e2;
+    box-shadow: 0 0 0 3px rgba(0, 61, 155, 0.08);
+  }
+
+  .guide-search-field input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--guide-navy);
+    font: inherit;
+    font-size: 0.72rem;
+  }
+
+  .guide-search-field input::placeholder {
+    color: #9ba5b5;
+  }
+
+  .guide-preview-inline {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #e2e8f2;
+    border-radius: 999px;
+    background: #f7f9fc;
+    padding: 0.3rem 0.55rem;
+    color: #738098;
+    font-size: 0.62rem;
+    font-weight: 750;
+    white-space: nowrap;
+  }
+
+  .guide-booking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding: 0.65rem 1rem 1rem;
+  }
+
+  .guide-booking-card {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.85rem;
+    border: 1px solid #e8edf5;
+    border-radius: 0.78rem;
+    background: #fff;
+    padding: 0.85rem;
+    transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  }
+
+  .guide-booking-card:hover {
+    border-color: #b9cae7;
+    box-shadow: 0 6px 18px rgba(25, 55, 103, 0.06);
+    transform: translateY(-1px);
+  }
+
+  .guide-guest-avatar {
+    display: grid;
+    width: 2.8rem;
+    height: 2.8rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 0.72rem;
+    background: linear-gradient(145deg, #e9f0ff, #d5e4ff);
+    color: #17478f;
+    font-size: 0.78rem;
+    font-weight: 850;
+  }
+
+  .guide-booking-main {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .guide-booking-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.28rem;
+  }
+
+  .guide-status-pill {
+    display: inline-flex;
+    min-height: 1.2rem;
+    align-items: center;
+    border-radius: 0.28rem;
+    background: #fff3d9;
+    padding: 0.17rem 0.42rem;
+    color: #76520e;
+    font-size: 0.58rem;
+    font-weight: 850;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .guide-status-accepted {
+    background: #e8f7ef;
+    color: #26764f;
+  }
+
+  .guide-status-declined {
+    background: #fff0ef;
+    color: #a1453f;
+  }
+
+  .guide-booking-reference {
+    color: #9aa4b3;
+    font-size: 0.63rem;
+    font-weight: 650;
+  }
+
+  .guide-booking-main h3 {
+    overflow: hidden;
+    margin: 0;
+    color: var(--guide-navy);
+    font-size: 0.83rem;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .guide-booking-tour,
+  .guide-booking-region {
+    overflow: hidden;
+    margin: 0.25rem 0 0;
+    color: #68758c;
+    font-size: 0.69rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .guide-booking-tour {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #43536e;
+    font-weight: 650;
+  }
+
+  .guide-booking-tour svg {
+    flex: 0 0 auto;
+    color: var(--guide-primary);
+  }
+
+  .guide-booking-region {
+    display: none;
+    color: #929daf;
+    font-size: 0.64rem;
+  }
+
+  .guide-booking-end {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+  }
+
+  .guide-booking-date {
+    margin: 0;
+    color: #43516a;
+    font-size: 0.68rem;
+    font-weight: 750;
+    text-align: right;
+  }
+
+  .guide-booking-amount {
+    margin: 0;
+    color: var(--guide-primary);
+    font-size: 0.9rem;
+    font-weight: 900;
+  }
+
+  .guide-booking-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.1rem;
+  }
+
+  .guide-booking-actions button {
+    display: inline-flex;
+    min-height: 1.8rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    border: 1px solid transparent;
+    border-radius: 0.45rem;
+    background: transparent;
+    padding: 0.25rem 0.4rem;
+    color: #748097;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.63rem;
+    font-weight: 750;
+  }
+
+  .guide-booking-actions button:hover {
+    border-color: #dce5f3;
+    background: #f7f9fc;
+    color: var(--guide-primary);
+  }
+
+  .guide-booking-actions .guide-action-accept {
+    border-color: #cce9d8;
+    background: #f0fbf5;
+    color: #26764f;
+  }
+
+  .guide-booking-actions .guide-action-decline {
+    width: 1.8rem;
+    padding: 0.2rem;
+    border-color: #f1d9d7;
+    background: #fff6f5;
+    color: #a1453f;
+  }
+
+  .guide-empty-state {
+    display: flex;
+    min-height: 11rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    color: #8b97aa;
+    text-align: center;
+  }
+
+  .guide-empty-state strong {
+    color: #43536e;
+    font-size: 0.83rem;
+  }
+
+  .guide-empty-state span {
+    font-size: 0.7rem;
+  }
+
+  .guide-calendar-panel {
+    padding: 1rem;
+  }
+
+  .guide-calendar-panel-compact {
+    padding: 0.95rem;
+  }
+
+  .guide-calendar-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .guide-calendar-heading h2 {
+    font-size: 0.96rem;
+  }
+
+  .guide-calendar-controls {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .guide-calendar-controls button {
+    display: grid;
+    width: 1.85rem;
+    height: 1.85rem;
+    place-items: center;
+    border: 1px solid var(--guide-line);
+    border-radius: 0.5rem;
+    background: #fff;
+    color: #57657d;
+    cursor: pointer;
+  }
+
+  .guide-calendar-controls button:hover {
+    border-color: #b9cae7;
+    color: var(--guide-primary);
+  }
+
+  .guide-chevron-left {
+    transform: rotate(180deg);
+  }
+
+  .guide-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.2rem;
+    text-align: center;
+  }
+
+  .guide-calendar-weekdays {
+    margin-bottom: 0.3rem;
+  }
+
+  .guide-calendar-weekdays span {
+    color: #9aa4b3;
+    font-size: 0.59rem;
+    font-weight: 800;
+  }
+
+  .guide-calendar-day,
+  .guide-calendar-empty {
+    display: grid;
+    min-width: 0;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 0.48rem;
+  }
+
+  .guide-calendar-day {
+    background: transparent;
+    color: #46546a;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.68rem;
+    font-weight: 700;
+    transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+  }
+
+  .guide-calendar-day:hover {
+    border-color: #adc3e8;
+  }
+
+  .guide-calendar-day-booked {
+    background: #eaf1ff;
+    color: var(--guide-primary);
+  }
+
+  .guide-calendar-day-blocked {
+    background: #fff1d6;
+    color: #7c5612;
+    text-decoration: line-through;
+  }
+
+  .guide-calendar-day-selected {
+    border-color: var(--guide-primary);
+    background: var(--guide-primary);
+    color: #fff;
+  }
+
+  .guide-calendar-day-today:not(.guide-calendar-day-selected) {
+    border-color: #adc3e8;
+    font-weight: 900;
+  }
+
+  .guide-calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 0.8rem;
+    border-top: 1px solid #edf0f5;
+    padding-top: 0.75rem;
+  }
+
+  .guide-calendar-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+    color: #727f95;
+    font-size: 0.62rem;
+  }
+
+  .guide-legend-dot {
+    width: 0.48rem;
+    height: 0.48rem;
+    border-radius: 50%;
+  }
+
+  .guide-legend-tour {
+    background: #527ac3;
+  }
+
+  .guide-legend-blocked {
+    background: #e7aa2d;
+  }
+
+  .guide-calendar-open {
+    margin-top: 0.7rem;
+  }
+
+  .guide-earnings-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid #dce5f4;
+    border-radius: 0.85rem;
+    background: #edf3ff;
+    padding: 1rem;
+  }
+
+  .guide-earnings-summary > strong {
+    margin-top: 0.15rem;
+    color: var(--guide-primary);
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .guide-earnings-summary > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.35rem;
+    color: #28784f;
+    font-size: 0.68rem;
+    font-weight: 800;
+  }
+
+  .guide-earnings-summary .guide-text-button {
+    margin-top: 0.65rem;
+  }
+
+  .guide-quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .guide-quick-actions h2 {
+    margin: 0 0 0.15rem;
+    font-size: 0.9rem;
+  }
+
+  .guide-quick-actions button {
+    display: flex;
+    min-height: 2.85rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border: 1px solid var(--guide-line);
+    border-radius: 0.68rem;
+    background: #fff;
+    padding: 0.55rem 0.7rem;
+    color: #43536e;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.69rem;
+    font-weight: 750;
+    text-align: left;
+    transition: border-color 150ms ease, color 150ms ease, transform 150ms ease;
+  }
+
+  .guide-quick-actions button:hover {
+    border-color: #adc3e8;
+    color: var(--guide-primary);
+    transform: translateY(-1px);
+  }
+
+  .guide-quick-actions button span {
+    display: flex;
+    align-items: center;
+    gap: 0.48rem;
+  }
+
+  .guide-calendar-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(17rem, 0.8fr);
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .guide-calendar-main-column,
+  .guide-calendar-sidebar,
+  .guide-settings-profile-column {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .guide-calendar-page-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+
+  .guide-calendar-page-heading h2 {
+    margin: 0.2rem 0 0;
+    color: var(--guide-navy);
+    font-size: 1.15rem;
+  }
+
+  .guide-calendar-panel-full {
+    padding: 1.35rem;
+  }
+
+  .guide-calendar-full-weekdays,
+  .guide-calendar-full-days {
+    gap: 0.4rem;
+  }
+
+  .guide-calendar-full-weekdays {
+    margin-bottom: 0.4rem;
+  }
+
+  .guide-calendar-full-weekdays span {
+    font-size: 0.68rem;
+  }
+
+  .guide-calendar-full-days {
+    grid-auto-rows: minmax(5.8rem, auto);
+  }
+
+  .guide-calendar-panel-full .guide-calendar-day {
+    display: flex;
+    min-height: 5.8rem;
+    aspect-ratio: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    overflow: hidden;
+    border-color: #edf0f5;
+    border-radius: 0.62rem;
+    padding: 0.48rem;
+    text-align: left;
+  }
+
+  .guide-calendar-panel-full .guide-calendar-day-selected {
+    border-color: var(--guide-primary);
+    background: var(--guide-primary);
+    color: #fff;
+  }
+
+  .guide-calendar-day-number {
+    font-size: 0.74rem;
+    line-height: 1;
+  }
+
+  .guide-calendar-event,
+  .guide-calendar-event-overflow,
+  .guide-calendar-blocked-label,
+  .guide-calendar-available-label {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 0.35rem;
+    padding: 0.22rem 0.3rem;
+    font-size: 0.59rem;
+    font-weight: 700;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+  }
+
+  .guide-calendar-event {
+    background: rgba(255, 255, 255, 0.72);
+    color: #244f91;
+    white-space: normal;
+  }
+
+  .guide-calendar-event-overflow {
+    background: rgba(255, 255, 255, 0.65);
+    color: #53627b;
+  }
+
+  .guide-calendar-blocked-label {
+    background: #fff0cf;
+    color: #795514;
+  }
+
+  .guide-calendar-available-label {
+    color: #8b96a8;
+    font-weight: 600;
+  }
+
+  .guide-calendar-day-outside {
+    opacity: 0.48;
+  }
+
+  .guide-calendar-panel-full .guide-calendar-day-selected .guide-calendar-event,
+  .guide-calendar-panel-full .guide-calendar-day-selected .guide-calendar-event-overflow,
+  .guide-calendar-panel-full .guide-calendar-day-selected .guide-calendar-blocked-label,
+  .guide-calendar-panel-full .guide-calendar-day-selected .guide-calendar-available-label {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+  }
+
+  .guide-calendar-quick-actions,
+  .guide-calendar-legend-panel,
+  .guide-calendar-sync-panel {
+    padding: 1rem;
+  }
+
+  .guide-calendar-quick-actions h2,
+  .guide-calendar-legend-panel h2 {
+    margin: 0 0 0.7rem;
+    color: var(--guide-navy);
+    font-size: 0.88rem;
+  }
+
+  .guide-calendar-quick-actions > button {
+    display: flex;
+    width: 100%;
+    min-height: 2.65rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border: 0;
+    border-top: 1px solid #edf0f5;
+    background: transparent;
+    padding: 0.55rem 0;
+    color: #53627b;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.69rem;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  .guide-calendar-quick-actions > button span {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .guide-calendar-quick-actions > button:hover {
+    color: var(--guide-primary);
+  }
+
+  .guide-calendar-legend-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .guide-calendar-legend-panel > span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6f7b91;
+    font-size: 0.68rem;
+  }
+
+  .guide-legend-available {
+    background: #d9eadd;
+  }
+
+  .guide-legend-multi {
+    background: #7d65bd;
+  }
+
+  .guide-calendar-sync-panel {
+    border: 1px solid #dce5f4;
+    border-radius: 0.85rem;
+    background: #f7f9fd;
+  }
+
+  .guide-calendar-sync-panel > div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--guide-primary);
+  }
+
+  .guide-calendar-sync-panel strong {
+    color: #465672;
+    font-size: 0.75rem;
+  }
+
+  .guide-calendar-sync-panel p {
+    margin: 0.55rem 0;
+    color: #7b879b;
+    font-size: 0.66rem;
+    line-height: 1.5;
+  }
+
+  .guide-calendar-sync-panel button {
+    min-height: 2.3rem;
+    border: 1px solid #d7deea;
+    border-radius: 0.55rem;
+    background: #fff;
+    padding: 0.4rem 0.65rem;
+    color: #8994a7;
+    font: inherit;
+    font-size: 0.66rem;
+    font-weight: 700;
+  }
+
+  .guide-calendar-save-button {
+    width: 100%;
+  }
+
+  .guide-settings-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .guide-settings-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(14rem, 0.75fr);
+    gap: 1rem;
+  }
+
+  .guide-settings-status-card,
+  .guide-settings-earnings-card {
+    min-width: 0;
+    border: 1px solid var(--guide-line);
+    border-radius: 0.9rem;
+    background: #fff;
+    padding: 1.15rem;
+  }
+
+  .guide-settings-status-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .guide-settings-status-icon {
+    display: grid;
+    width: 2.6rem;
+    height: 2.6rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 0.7rem;
+    background: #edf3ff;
+    color: var(--guide-primary);
+  }
+
+  .guide-settings-status-card h2 {
+    margin: 0.2rem 0 0.3rem;
+    color: var(--guide-navy);
+    font-size: 0.98rem;
+  }
+
+  .guide-settings-status-card > div > p:not(.guide-panel-eyebrow) {
+    margin: 0;
+    color: #748097;
+    font-size: 0.69rem;
+    line-height: 1.55;
+  }
+
+  .guide-settings-status-badge,
+  .guide-preview-inline {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #dce5f4;
+    border-radius: 999px;
+    background: #f7f9fd;
+    padding: 0.28rem 0.52rem;
+    color: #63728b;
+    font-size: 0.61rem;
+    font-weight: 750;
+    white-space: nowrap;
+  }
+
+  .guide-settings-status-badge {
+    margin-top: 0.6rem;
+  }
+
+  .guide-settings-earnings-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .guide-settings-earnings-card > strong {
+    margin-top: 0.15rem;
+    color: var(--guide-primary);
+    font-size: 1.45rem;
+    letter-spacing: -0.04em;
+  }
+
+  .guide-settings-earnings-card > span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.2rem;
+    color: #758198;
+    font-size: 0.65rem;
+  }
+
+  .guide-settings-earnings-track {
+    width: 100%;
+    height: 0.35rem;
+    margin-top: 0.75rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e9eef7;
+  }
+
+  .guide-settings-earnings-track span {
+    display: block;
+    width: 68%;
+    height: 100%;
+    border-radius: inherit;
+    background: #f2b42d;
+  }
+
+  .guide-settings-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .guide-vehicle-settings,
+  .guide-settings-profile {
+    min-width: 0;
+    padding: 1.15rem;
+  }
+
+  .guide-settings-panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .guide-settings-panel-heading > div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--guide-primary);
+  }
+
+  .guide-settings-panel-heading h2 {
+    margin: 0;
+    color: var(--guide-navy);
+    font-size: 0.92rem;
+  }
+
+  .guide-vehicle-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .guide-vehicle-toggle-row > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .guide-vehicle-toggle-row strong {
+    color: #465672;
+    font-size: 0.72rem;
+  }
+
+  .guide-vehicle-toggle-row small,
+  .guide-settings-fields small,
+  .guide-language-settings > small,
+  .guide-settings-bio-label > small {
+    color: #8a95a8;
+    font-size: 0.62rem;
+    line-height: 1.4;
+  }
+
+  .guide-toggle-switch {
+    position: relative;
+    display: inline-flex;
+    width: 2.6rem;
+    height: 1.45rem;
+    flex: 0 0 auto;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .guide-toggle-switch input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .guide-toggle-switch > span:last-child {
+    width: 100%;
+    height: 100%;
+    border-radius: 999px;
+    background: #cbd3e0;
+    transition: background 150ms ease;
+  }
+
+  .guide-toggle-switch > span:last-child::after {
+    position: absolute;
+    top: 0.2rem;
+    left: 0.2rem;
+    width: 1.05rem;
+    height: 1.05rem;
+    border-radius: 50%;
+    background: #fff;
+    content: '';
+    transition: transform 150ms ease;
+  }
+
+  .guide-toggle-switch input:checked + span {
+    background: #37865d;
+  }
+
+  .guide-toggle-switch input:checked + span::after {
+    transform: translateX(1.15rem);
+  }
+
+  .guide-toggle-switch input:focus-visible + span {
+    outline: 3px solid rgba(0, 61, 155, 0.2);
+    outline-offset: 2px;
+  }
+
+  .guide-vehicle-settings-image,
+  .guide-vehicle-settings-no-image {
+    display: block;
+    width: 100%;
+    height: 10rem;
+    border-radius: 0.72rem;
+    object-fit: cover;
+  }
+
+  .guide-vehicle-settings-no-image {
+    display: grid;
+    place-items: center;
+    background: #f6f8fb;
+    color: #8792a5;
+    font-size: 0.68rem;
+  }
+
+  .guide-vehicle-settings-form,
+  .guide-settings-profile form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.78rem;
+    margin-top: 0.9rem;
+  }
+
+  .guide-vehicle-settings-form > label,
+  .guide-settings-fields > label,
+  .guide-settings-bio-label {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.35rem;
+    color: #53627b;
+    font-size: 0.68rem;
+    font-weight: 750;
+  }
+
+  .guide-vehicle-settings-form input,
+  .guide-settings-profile input,
+  .guide-settings-profile select,
+  .guide-settings-profile textarea {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #dce3ee;
+    border-radius: 0.58rem;
+    background: #fff;
+    padding: 0.66rem 0.7rem;
+    color: var(--guide-navy);
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+
+  .guide-vehicle-settings-form input:focus,
+  .guide-settings-profile input:focus,
+  .guide-settings-profile select:focus,
+  .guide-settings-profile textarea:focus {
+    border-color: #83a7e1;
+    outline: 3px solid rgba(0, 61, 155, 0.1);
+  }
+
+  .guide-vehicle-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .guide-vehicle-features > div,
+  .guide-language-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .guide-vehicle-features > div > span,
+  .guide-language-chips > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border-radius: 999px;
+    background: #f1f5fb;
+    padding: 0.32rem 0.55rem;
+    color: #63728b;
+    font-size: 0.61rem;
+    font-weight: 700;
+  }
+
+  .guide-vehicle-settings-form .guide-secondary-button {
+    width: 100%;
+  }
+
+  .guide-settings-profile form {
+    margin-top: 0;
+  }
+
+  .guide-settings-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .guide-locked-setting {
+    display: flex;
+    min-height: 2.55rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    border: 1px solid #e2e7ef;
+    border-radius: 0.58rem;
+    background: #f6f8fb;
+    padding: 0.65rem 0.7rem;
+    color: #53627b;
+  }
+
+  .guide-language-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .guide-language-settings > label {
+    color: #53627b;
+    font-size: 0.68rem;
+    font-weight: 750;
+  }
+
+  .guide-language-chips > span {
+    padding-right: 0.35rem;
+  }
+
+  .guide-language-chips button {
+    display: grid;
+    width: 1.2rem;
+    height: 1.2rem;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #7a879b;
+    cursor: pointer;
+  }
+
+  .guide-language-chips button:hover {
+    background: #e1e8f3;
+    color: #a1453f;
+  }
+
+  .guide-language-add {
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .guide-language-add button {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.3rem;
+    border: 1px solid #dce3ee;
+    border-radius: 0.58rem;
+    background: #fff;
+    padding: 0.55rem 0.65rem;
+    color: var(--guide-primary);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.67rem;
+    font-weight: 750;
+  }
+
+  .guide-language-add button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .guide-settings-bio-label textarea {
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .guide-settings-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.55rem;
+  }
+
+  .guide-settings-form-actions button {
+    min-height: 2.6rem;
+  }
+
+  .guide-settings-safety {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    border: 1px solid #e1e8f2;
+    border-radius: 0.75rem;
+    background: #f8faff;
+    padding: 0.8rem;
+    color: var(--guide-primary);
+  }
+
+  .guide-settings-safety strong {
+    color: #465672;
+    font-size: 0.69rem;
+  }
+
+  .guide-settings-safety p {
+    margin: 0.25rem 0 0;
+    color: #808ca0;
+    font-size: 0.64rem;
+    line-height: 1.5;
+  }
+
+  .guide-date-details {
+    padding: 1.2rem;
+  }
+
+  .guide-date-details h2 {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .guide-schedule-empty {
+    margin: 1rem 0;
+    border-radius: 0.65rem;
+    background: #f7f9fc;
+    padding: 0.85rem;
+    color: #768198;
+    font-size: 0.74rem;
+    line-height: 1.5;
+  }
+
+  .guide-scheduled-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin: 1rem 0;
+  }
+
+  .guide-scheduled-list article {
+    display: flex;
+    gap: 0.6rem;
+    border-radius: 0.65rem;
+    background: #f5f8ff;
+    padding: 0.75rem;
+  }
+
+  .guide-schedule-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    flex: 0 0 auto;
+    margin-top: 0.2rem;
+    border-radius: 50%;
+    background: #527ac3;
+  }
+
+  .guide-scheduled-list strong,
+  .guide-scheduled-list p,
+  .guide-scheduled-list small {
+    display: block;
+  }
+
+  .guide-scheduled-list strong {
+    font-size: 0.75rem;
+  }
+
+  .guide-scheduled-list p {
+    margin: 0.25rem 0 0;
+    color: #66738a;
+    font-size: 0.69rem;
+  }
+
+  .guide-scheduled-list small {
+    margin-top: 0.25rem;
+    color: #97a1b1;
+    font-size: 0.62rem;
+  }
+
+  .guide-block-date-button,
+  .guide-profile-form .guide-primary-button,
+  .guide-offer-form .guide-primary-button {
+    width: 100%;
+  }
+
+  .guide-primary-button:disabled,
+  .guide-secondary-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .guide-small-note {
+    color: #8792a5;
+    font-size: 0.65rem;
+    line-height: 1.5;
+  }
+
+  .guide-secondary-button {
+    display: inline-flex;
+    min-height: 2.55rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cfd8e8;
+    border-radius: 0.65rem;
+    background: #fff;
+    padding: 0.55rem 0.8rem;
+    color: #4d5e7b;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 750;
+  }
+
+  .guide-secondary-button:not(:disabled):hover {
+    border-color: #9fb6dd;
+    color: var(--guide-primary);
+  }
+
+  .guide-stat-grid-earnings {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .guide-positive-value {
+    color: #23774f !important;
+  }
+
+  .guide-chart-panel,
+  .guide-payout-panel {
+    margin-top: 1rem;
+    padding: 1.2rem;
+  }
+
+  .guide-chart {
+    display: flex;
+    height: 13.5rem;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 0.65rem;
+    margin-top: 1.15rem;
+    border-bottom: 1px solid var(--guide-line);
+    background: repeating-linear-gradient(to bottom, transparent 0, transparent 3.15rem, #edf1f7 3.2rem, transparent 3.25rem);
+    padding: 0 0.35rem;
+  }
+
+  .guide-chart-column {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.45rem;
+  }
+
+  .guide-chart-column > span {
+    width: min(2.2rem, 72%);
+    min-height: 0.6rem;
+    border-radius: 0.45rem 0.45rem 0 0;
+    background: linear-gradient(180deg, #3a7fe0, #0a4ba5);
+  }
+
+  .guide-chart-column small {
+    padding-bottom: 0.5rem;
+    color: #8a95a8;
+    font-size: 0.62rem;
+  }
+
+  .guide-payout-panel .guide-panel-heading {
+    margin-bottom: 0.6rem;
+  }
+
+  .guide-payout-row {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0.7rem;
+    border-top: 1px solid #edf0f5;
+    padding: 0.8rem 0;
+  }
+
+  .guide-payout-icon {
+    display: grid;
+    width: 1.85rem;
+    height: 1.85rem;
+    place-items: center;
+    border-radius: 50%;
+    background: #e9f7ef;
+    color: #26764f;
+  }
+
+  .guide-payout-row strong,
+  .guide-payout-row small {
+    display: block;
+  }
+
+  .guide-payout-row strong {
+    font-size: 0.76rem;
+  }
+
+  .guide-payout-row small {
+    margin-top: 0.2rem;
+    color: #8994a7;
+    font-size: 0.64rem;
+  }
+
+  .guide-payout-row b {
+    color: var(--guide-navy);
+    font-size: 0.78rem;
+  }
+
+  .guide-review-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #f0ddb0;
+    border-radius: 0.85rem;
+    background: #fff9e9;
+    padding: 1rem 1.2rem;
+  }
+
+  .guide-review-score {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #b17a0b;
+  }
+
+  .guide-review-score strong {
+    color: #493600;
+    font-size: 1.35rem;
+  }
+
+  .guide-review-score span,
+  .guide-review-summary > p {
+    color: #78683d;
+    font-size: 0.68rem;
+  }
+
+  .guide-review-summary > p {
+    max-width: 24rem;
+    margin: 0;
+    line-height: 1.5;
+    text-align: right;
+  }
+
+  .guide-review-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  .guide-review-card {
+    padding: 1rem;
+  }
+
+  .guide-review-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .guide-review-card-heading > div:nth-child(2) {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .guide-review-card-heading strong,
+  .guide-review-card-heading span {
+    display: block;
+  }
+
+  .guide-review-card-heading strong {
+    font-size: 0.77rem;
+  }
+
+  .guide-review-card-heading span {
+    overflow: hidden;
+    margin-top: 0.2rem;
+    color: #8490a3;
+    font-size: 0.64rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .guide-review-stars {
+    display: flex;
+    color: #d99b1b;
+  }
+
+  .guide-review-card > p {
+    color: #55637a;
+    font-size: 0.75rem;
+    line-height: 1.6;
+  }
+
+  .guide-profile-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.75fr);
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .guide-profile-form-panel,
+  .guide-profile-preview {
+    padding: 1.2rem;
+  }
+
+  .guide-profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.95rem;
+    margin-top: 1.2rem;
+  }
+
+  .guide-profile-form label,
+  .guide-offer-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.38rem;
+    color: #53627b;
+    font-size: 0.7rem;
+    font-weight: 750;
+  }
+
+  .guide-profile-form input,
+  .guide-profile-form textarea,
+  .guide-offer-form input {
+    width: 100%;
+    border: 1px solid #dce3ee;
+    border-radius: 0.62rem;
+    background: #fff;
+    padding: 0.72rem 0.75rem;
+    color: var(--guide-navy);
+    font: inherit;
+    font-size: 0.76rem;
+    font-weight: 500;
+  }
+
+  .guide-profile-form textarea {
+    resize: vertical;
+    line-height: 1.55;
+  }
+
+  .guide-profile-form input:focus,
+  .guide-profile-form textarea:focus,
+  .guide-offer-form input:focus {
+    border-color: #83a7e1;
+    outline: 3px solid rgba(0, 61, 155, 0.1);
+  }
+
+  .guide-profile-readonly {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    border-radius: 0.65rem;
+    background: #f6f8fb;
+    padding: 0.75rem;
+  }
+
+  .guide-profile-readonly span,
+  .guide-profile-readonly small {
+    color: #8994a7;
+    font-size: 0.64rem;
+  }
+
+  .guide-profile-readonly strong {
+    color: #45536a;
+    font-size: 0.75rem;
+  }
+
+  .guide-profile-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .guide-profile-preview {
+    text-align: center;
+  }
+
+  .guide-profile-preview .guide-panel-eyebrow {
+    text-align: left;
+  }
+
+  .guide-profile-image {
+    display: block;
+    margin: 0.7rem auto 0.65rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .guide-profile-preview h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 850;
+  }
+
+  .guide-profile-preview > p:nth-of-type(1) {
+    margin: 0.25rem 0 0.5rem;
+    color: #78849a;
+    font-size: 0.7rem;
+  }
+
+  .guide-profile-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.24rem;
+    color: #b17a0b;
+    font-size: 0.72rem;
+    font-weight: 850;
+  }
+
+  .guide-profile-rating small {
+    color: #929daf;
+    font-size: 0.62rem;
+    font-weight: 600;
+  }
+
+  .guide-profile-bio {
+    margin: 0.85rem 0;
+    color: #65728a;
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+
+  .guide-guide-type {
+    display: inline-flex;
+    border-radius: 999px;
+    background: #edf3ff;
+    padding: 0.35rem 0.6rem;
+    color: var(--guide-primary);
+    font-size: 0.62rem;
+    font-weight: 800;
+  }
+
+  .guide-security-note {
+    display: flex;
+    gap: 0.55rem;
+    border: 1px solid #e1e8f2;
+    border-radius: 0.75rem;
+    background: #f8faff;
+    padding: 0.8rem;
+    color: var(--guide-primary);
+  }
+
+  .guide-security-note p {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+  }
+
+  .guide-security-note strong {
+    color: #465672;
+    font-size: 0.69rem;
+  }
+
+  .guide-security-note span {
+    color: #808ca0;
+    font-size: 0.64rem;
+    line-height: 1.5;
+  }
+
+  .guide-dashboard-loading {
+    display: grid;
+    min-height: 18rem;
+    place-items: center;
+    color: #758198;
+    font-size: 0.82rem;
+  }
+
+  .guide-dashboard-footer {
+    margin-top: 1.6rem;
+    color: #9aa4b3;
+    font-size: 0.64rem;
+    text-align: center;
+  }
+
+  .guide-dashboard-footer span {
+    padding: 0 0.25rem;
+  }
+
+  .guide-mobile-nav {
+    display: none;
+  }
+
+  .guide-modal-backdrop {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow-y: auto;
+    background: rgba(4, 18, 43, 0.52);
+    padding: 1rem;
+  }
+
+  .guide-modal {
+    position: relative;
+    width: min(100%, 31rem);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 1rem;
+    background: #fff;
+    padding: 1.4rem;
+    box-shadow: 0 24px 65px rgba(4, 18, 43, 0.24);
+  }
+
+  .guide-modal-close {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 1px solid var(--guide-line);
+    border-radius: 0.55rem;
+    background: #fff;
+    color: #68758c;
+    cursor: pointer;
+  }
+
+  .guide-modal h2 {
+    max-width: calc(100% - 2rem);
+    margin: 0.2rem 0 0;
+    color: var(--guide-navy);
+    font-size: 1.25rem;
+    font-weight: 850;
+    letter-spacing: -0.035em;
+  }
+
+  .guide-modal-location {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #63718a;
+    font-size: 0.75rem;
+  }
+
+  .guide-modal dl {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin: 1rem 0;
+    border-top: 1px solid var(--guide-line);
+    padding-top: 0.9rem;
+  }
+
+  .guide-modal dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .guide-modal dt {
+    color: #7a869a;
+    font-size: 0.72rem;
+  }
+
+  .guide-modal dd {
+    margin: 0;
+    color: #32435f;
+    font-size: 0.73rem;
+    font-weight: 750;
+    text-align: right;
+  }
+
+  .guide-modal > .guide-primary-button {
+    width: 100%;
+  }
+
+  .guide-modal-intro {
+    color: #748097;
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .guide-offer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  .guide-toast {
+    position: fixed;
+    z-index: 120;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    display: flex;
+    max-width: min(28rem, calc(100vw - 2rem));
+    align-items: center;
+    gap: 0.9rem;
+    border: 1px solid #cbd8ea;
+    border-radius: 0.75rem;
+    background: #fff;
+    padding: 0.7rem 0.85rem;
+    color: #394a65;
+    box-shadow: 0 8px 30px rgba(4, 27, 60, 0.14);
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+
+  .guide-toast button {
+    display: grid;
+    width: 1.7rem;
+    height: 1.7rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 0;
+    border-radius: 0.4rem;
+    background: #f1f4f8;
+    color: #68758c;
+    cursor: pointer;
+  }
+
+  .guide-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  @media (max-width: 1120px) {
+    .guide-provider-sidebar {
+      width: 14.5rem;
+      flex-basis: 14.5rem;
+    }
+
+    .guide-dashboard-grid,
+    .guide-bookings-layout {
+      grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 0.9fr);
+    }
+
+    .guide-booking-card {
+      gap: 0.65rem;
+      padding: 0.72rem;
+    }
+
+    .guide-booking-actions button span:not(.guide-visually-hidden) {
+      display: none;
+    }
+
+    .guide-booking-actions .guide-action-accept span {
+      display: inline;
+    }
+  }
+
+  @media (max-width: 880px) {
+    .guide-provider-app {
+      display: block;
+      padding-bottom: 5.2rem;
+    }
+
+    .guide-provider-sidebar {
+      display: none;
+    }
+
+    .guide-provider-main {
+      padding: 1.5rem 1.35rem 1rem;
+    }
+
+    .guide-mobile-nav {
+      position: fixed;
+      z-index: 50;
+      right: 0.75rem;
+      bottom: 0.55rem;
+      left: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border: 1px solid #e0e7f1;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.96);
+      padding: 0.4rem;
+      box-shadow: 0 8px 30px rgba(4, 27, 60, 0.14);
+      backdrop-filter: blur(14px);
+    }
+
+    .guide-mobile-nav button {
+      display: flex;
+      min-height: 3rem;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.18rem;
+      border: 0;
+      border-radius: 0.7rem;
+      background: transparent;
+      color: #7a869a;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .guide-mobile-nav button span {
+      font-size: 0.58rem;
+      font-weight: 750;
+    }
+
+    .guide-mobile-nav button.is-active {
+      background: #edf3ff;
+      color: var(--guide-primary);
+    }
+
+    .guide-bookings-layout,
+    .guide-dashboard-grid,
+    .guide-calendar-layout,
+    .guide-settings-layout,
+    .guide-settings-summary {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .guide-bookings-side,
+    .guide-dashboard-side {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .guide-bookings-side .guide-quick-actions {
+      grid-column: 1 / -1;
+    }
+
+    .guide-calendar-layout .guide-calendar-panel {
+      padding: 1rem;
+    }
+
+    .guide-calendar-full-days {
+      grid-auto-rows: minmax(5rem, auto);
+    }
+  }
+
+  @media (max-width: 620px) {
+    .guide-provider-main {
+      padding: 1.1rem 0.9rem 0.8rem;
+    }
+
+    .guide-provider-header {
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .guide-provider-header h1 {
+      font-size: 1.45rem;
+    }
+
+    .guide-provider-header > div:first-child > p:last-child {
+      max-width: 24rem;
+      font-size: 0.74rem;
+    }
+
+    .guide-preview-chip {
+      width: 2.45rem;
+      height: 2.45rem;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0;
+      font-size: 0;
+    }
+
+    .guide-preview-chip > span {
+      width: 0.48rem;
+      height: 0.48rem;
+    }
+
+    .guide-header-actions {
+      gap: 0.45rem;
+    }
+
+    .guide-stat-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.6rem;
+    }
+
+    .guide-calendar-full-grid {
+      gap: 0.2rem;
+    }
+
+    .guide-calendar-full-days {
+      grid-auto-rows: minmax(4rem, auto);
+    }
+
+    .guide-calendar-panel-full .guide-calendar-day {
+      min-height: 4rem;
+      gap: 0.25rem;
+      padding: 0.3rem;
+    }
+
+    .guide-calendar-event,
+    .guide-calendar-event-overflow,
+    .guide-calendar-blocked-label,
+    .guide-calendar-available-label {
+      padding: 0.18rem 0.2rem;
+      font-size: 0.52rem;
+    }
+
+    .guide-calendar-page-heading {
+      align-items: flex-start;
+    }
+
+    .guide-calendar-page-heading h2 {
+      font-size: 1rem;
+    }
+
+    .guide-settings-fields {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .guide-settings-form-actions {
+      flex-direction: column-reverse;
+    }
+
+    .guide-settings-form-actions button {
+      width: 100%;
+    }
+
+    .guide-settings-status-card,
+    .guide-settings-earnings-card,
+    .guide-vehicle-settings,
+    .guide-settings-profile {
+      padding: 0.9rem;
+    }
+
+    .guide-calendar-heading h2 {
+      font-size: 0.85rem;
+    }
+
+    .guide-calendar-controls button {
+      width: 1.7rem;
+      height: 1.7rem;
+    }
+
+    .guide-stat-card {
+      padding: 0.8rem;
+    }
+
+    .guide-stat-card > strong {
+      margin-top: 0.65rem;
+      font-size: 1.35rem;
+    }
+
+    .guide-stat-top {
+      font-size: 0.65rem;
+    }
+
+    .guide-welcome-panel {
+      align-items: flex-start;
+      flex-direction: column;
+      padding: 1rem;
+    }
+
+    .guide-welcome-panel .guide-primary-button {
+      width: 100%;
+    }
+
+    .guide-booking-tabs button {
+      min-height: 3.25rem;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.65rem;
+    }
+
+    .guide-booking-toolbar {
+      align-items: flex-start;
+    }
+
+    .guide-booking-card {
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .guide-guest-avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .guide-booking-main {
+      width: calc(100% - 3.3rem);
+      flex: 1 1 calc(100% - 3.3rem);
+    }
+
+    .guide-booking-end {
+      width: 100%;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 3.15rem;
+    }
+
+    .guide-booking-date {
+      text-align: left;
+    }
+
+    .guide-booking-actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+
+    .guide-booking-actions button span:not(.guide-visually-hidden) {
+      display: inline;
+    }
+
+    .guide-bookings-side,
+    .guide-dashboard-side {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .guide-review-summary {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .guide-review-summary > p {
+      text-align: left;
+    }
+
+    .guide-review-list,
+    .guide-profile-layout,
+    .guide-stat-grid-earnings {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .guide-payout-row {
+      grid-template-columns: 2rem minmax(0, 1fr) auto;
+    }
+
+    .guide-payout-row .guide-status-pill {
+      grid-column: 2 / -1;
+      justify-self: start;
+    }
+
+    .guide-modal {
+      padding: 1.15rem;
+    }
+
+    .guide-toast {
+      right: 0.75rem;
+      bottom: 5.4rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .guide-nav-item,
+    .guide-new-offer-button,
+    .guide-primary-button,
+    .guide-sidebar-footer-link,
+    .guide-booking-card,
+    .guide-booking-tabs button,
+    .guide-calendar-day,
+    .guide-quick-actions button {
+      scroll-behavior: auto;
+      transition: none;
+    }
+  }

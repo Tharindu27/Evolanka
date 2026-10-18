@@ -46,7 +46,7 @@ export default function GuideBookingCard({ guideName, pricePerDay }: GuideBookin
   return (
     <>
       <div className="guide-booking-sticky">
-      <div className="guide-booking-card">
+      <div className="tour-guide-booking-card">
         <div className="mb-5 flex items-end justify-between">
           <div>
             <span className="text-3xl font-black text-[#001a43]">${pricePerDay}</span>
@@ -90,7 +90,7 @@ export default function GuideBookingCard({ guideName, pricePerDay }: GuideBookin
                     <button
                       key={index}
                       type="button"
-                      className="guide-calendar-day"
+                      className="tour-guide-calendar-day"
                       disabled={isPast}
                       aria-pressed={isSelected}
                       onClick={() => setSelectedDate(date)}
