@@ -60,7 +60,7 @@ function toggleOption<T extends string>(options: T[], option: T): T[] {
     : [...options, option];
 }
 
-function VehicleCard({ vehicle }: { vehicle: RentalVehicle }) {
+function VehicleCard({ providerId, vehicle }: { providerId: string; vehicle: RentalVehicle }) {
   return (
     <article className="rental-vehicle-card">
       <div className="rental-vehicle-image-wrap">
@@ -77,15 +77,13 @@ function VehicleCard({ vehicle }: { vehicle: RentalVehicle }) {
           </svg>
           {vehicle.rating.toFixed(1)}
         </span>
-        <button
-          type="button"
+        <Link
+          href={`/rentals/${providerId}/book/${vehicle.id}`}
           className="rental-vehicle-book-button"
-          disabled
-          title="Online booking is not available yet"
-          aria-describedby="rental-detail-booking-note"
+          aria-label={`Book ${vehicle.name}`}
         >
           Book Now
-        </button>
+        </Link>
       </div>
 
       <div className="rental-vehicle-content">
@@ -111,6 +109,70 @@ function VehicleCard({ vehicle }: { vehicle: RentalVehicle }) {
         </ul>
       </div>
     </article>
+  );
+}
+
+function ProviderFleetOverview({ provider }: { provider: RentalProvider }) {
+  return (
+    <div className="rental-detail-layout rental-overview-layout">
+      <aside className="rental-overview-provider">
+        <div className="rental-overview-image">
+          <Image
+            src={provider.image}
+            alt={`${provider.name} fleet`}
+            fill
+            sizes="(max-width: 760px) 100vw, 288px"
+            className="rental-card-image"
+          />
+          {provider.badge ? (
+            <span className={`rental-provider-badge rental-provider-badge-${provider.badge.tone}`}>
+              {provider.badge.label}
+            </span>
+          ) : null}
+        </div>
+        <div className="rental-overview-provider-info">
+          <span className="rental-provider-rating" aria-label={`Rated ${provider.rating} out of 5`}>
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="rental-star-icon">
+              <path d="m12 2.8 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3-4.6-4.5 6.3-.9z" />
+            </svg>
+            {provider.rating.toFixed(1)}
+          </span>
+          <p className="rental-provider-location">
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="rental-location-icon" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8">
+              <path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" />
+              <circle cx="12" cy="10" r="2.2" />
+            </svg>
+            {provider.location}
+          </p>
+        </div>
+      </aside>
+
+      <section className="rental-detail-main" aria-labelledby="rental-detail-title">
+        <header className="rental-detail-heading">
+          <p className="rental-detail-eyebrow">{provider.location}</p>
+          <h1 id="rental-detail-title">Fleet of {provider.name}</h1>
+          <p>{provider.description}</p>
+        </header>
+
+        <div className="rental-detail-results-heading">
+          <p>Fleet categories listed by this provider</p>
+        </div>
+
+        <div className="rental-overview-fleet-grid">
+          {provider.fleet.map((item) => (
+            <article className="rental-overview-fleet-card" key={item.label}>
+              <VehicleIcon icon={item.icon} />
+              <h2>{item.label}</h2>
+              <p>Ask the provider for available models and current rates.</p>
+            </article>
+          ))}
+        </div>
+
+        <p className="rental-detail-booking-note">
+          Vehicle-specific models, photos, and rates have not been supplied yet. Contact the provider to confirm details and availability.
+        </p>
+      </section>
+    </div>
   );
 }
 
@@ -184,188 +246,192 @@ export default function RentalProviderDetail({ provider, vehicles }: RentalProvi
         <span>{provider.name}</span>
       </div>
 
-      <div className="rental-detail-layout">
-        <aside className="rental-detail-sidebar" aria-label="Fleet filters">
-          <form className="rental-detail-filter-panel" onSubmit={handleApplyFilters}>
-            <div>
-              <h2>Filters</h2>
-              <p>Refine your search</p>
-            </div>
+      {vehicles.length === 0 ? (
+        <ProviderFleetOverview provider={provider} />
+      ) : (
+        <div className="rental-detail-layout">
+          <aside className="rental-detail-sidebar" aria-label="Fleet filters">
+            <form className="rental-detail-filter-panel" onSubmit={handleApplyFilters}>
+              <div>
+                <h2>Filters</h2>
+                <p>Refine your search</p>
+              </div>
 
-            <fieldset className="rental-detail-filter-group">
-              <legend>Rental Period</legend>
-              <label className="rental-detail-date-field">
-                <span>Pickup Date</span>
-                <input
-                  type="date"
-                  value={filters.pickupDate}
-                  onChange={(event) =>
-                    setFilters((current) => ({ ...current, pickupDate: event.target.value }))
-                  }
-                />
-              </label>
-              <label className="rental-detail-date-field">
-                <span>Return Date</span>
-                <input
-                  type="date"
-                  value={filters.returnDate}
-                  onChange={(event) =>
-                    setFilters((current) => ({ ...current, returnDate: event.target.value }))
-                  }
-                />
-              </label>
-            </fieldset>
+              <fieldset className="rental-detail-filter-group">
+                <legend>Rental Period</legend>
+                <label className="rental-detail-date-field">
+                  <span>Pickup Date</span>
+                  <input
+                    type="date"
+                    value={filters.pickupDate}
+                    onChange={(event) =>
+                      setFilters((current) => ({ ...current, pickupDate: event.target.value }))
+                    }
+                  />
+                </label>
+                <label className="rental-detail-date-field">
+                  <span>Return Date</span>
+                  <input
+                    type="date"
+                    value={filters.returnDate}
+                    onChange={(event) =>
+                      setFilters((current) => ({ ...current, returnDate: event.target.value }))
+                    }
+                  />
+                </label>
+              </fieldset>
 
-            <fieldset className="rental-detail-filter-group">
-              <legend>Vehicle Type</legend>
-              <div className="rental-detail-category-list">
-                {categoryOptions.map((option) => (
-                  <label
-                    className={`rental-detail-category ${filters.categories.includes(option.value) ? 'is-selected' : ''}`}
-                    key={option.value}
-                  >
+              <fieldset className="rental-detail-filter-group">
+                <legend>Vehicle Type</legend>
+                <div className="rental-detail-category-list">
+                  {categoryOptions.map((option) => (
+                    <label
+                      className={`rental-detail-category ${filters.categories.includes(option.value) ? 'is-selected' : ''}`}
+                      key={option.value}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={filters.categories.includes(option.value)}
+                        onChange={() =>
+                          setFilters((current) => ({
+                            ...current,
+                            categories: toggleOption(current.categories, option.value),
+                          }))
+                        }
+                      />
+                      <VehicleIcon icon={option.icon} />
+                      <span>{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
+              <fieldset className="rental-detail-filter-group">
+                <legend>Transmission</legend>
+                <div className="rental-detail-toggle-grid">
+                  {transmissionOptions.map((option) => {
+                    const selected = filters.transmissions.includes(option);
+
+                    return (
+                      <button
+                        type="button"
+                        key={option}
+                        className={selected ? 'is-selected' : ''}
+                        aria-pressed={selected}
+                        onClick={() =>
+                          setFilters((current) => ({
+                            ...current,
+                            transmissions: toggleOption(current.transmissions, option),
+                          }))
+                        }
+                      >
+                        {option}
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
+
+              <fieldset className="rental-detail-filter-group">
+                <legend>Delivery Option</legend>
+                {deliveryOptions.map((option) => (
+                  <label className="rental-detail-check-option" key={option.value}>
                     <input
                       type="checkbox"
-                      checked={filters.categories.includes(option.value)}
+                      checked={filters.deliveryOptions.includes(option.value)}
                       onChange={() =>
                         setFilters((current) => ({
                           ...current,
-                          categories: toggleOption(current.categories, option.value),
+                          deliveryOptions: toggleOption(current.deliveryOptions, option.value),
                         }))
                       }
                     />
-                    <VehicleIcon icon={option.icon} />
                     <span>{option.label}</span>
                   </label>
                 ))}
-              </div>
-            </fieldset>
+              </fieldset>
 
-            <fieldset className="rental-detail-filter-group">
-              <legend>Transmission</legend>
-              <div className="rental-detail-toggle-grid">
-                {transmissionOptions.map((option) => {
-                  const selected = filters.transmissions.includes(option);
-
-                  return (
-                    <button
-                      type="button"
-                      key={option}
-                      className={selected ? 'is-selected' : ''}
-                      aria-pressed={selected}
-                      onClick={() =>
+              <fieldset className="rental-detail-filter-group">
+                <legend>Driver Option</legend>
+                {driverOptions.map((option) => (
+                  <label className="rental-detail-check-option" key={option.value}>
+                    <input
+                      type="checkbox"
+                      checked={filters.driverOptions.includes(option.value)}
+                      onChange={() =>
                         setFilters((current) => ({
                           ...current,
-                          transmissions: toggleOption(current.transmissions, option),
+                          driverOptions: toggleOption(current.driverOptions, option.value),
                         }))
                       }
-                    >
-                      {option}
-                    </button>
-                  );
-                })}
-              </div>
-            </fieldset>
+                    />
+                    <span>{option.label}</span>
+                  </label>
+                ))}
+              </fieldset>
 
-            <fieldset className="rental-detail-filter-group">
-              <legend>Delivery Option</legend>
-              {deliveryOptions.map((option) => (
-                <label className="rental-detail-check-option" key={option.value}>
-                  <input
-                    type="checkbox"
-                    checked={filters.deliveryOptions.includes(option.value)}
-                    onChange={() =>
-                      setFilters((current) => ({
-                        ...current,
-                        deliveryOptions: toggleOption(current.deliveryOptions, option.value),
-                      }))
-                    }
-                  />
-                  <span>{option.label}</span>
-                </label>
-              ))}
-            </fieldset>
+              {filterError ? (
+                <p className="rental-detail-filter-error" role="alert">
+                  {filterError}
+                </p>
+              ) : null}
 
-            <fieldset className="rental-detail-filter-group">
-              <legend>Driver Option</legend>
-              {driverOptions.map((option) => (
-                <label className="rental-detail-check-option" key={option.value}>
-                  <input
-                    type="checkbox"
-                    checked={filters.driverOptions.includes(option.value)}
-                    onChange={() =>
-                      setFilters((current) => ({
-                        ...current,
-                        driverOptions: toggleOption(current.driverOptions, option.value),
-                      }))
-                    }
-                  />
-                  <span>{option.label}</span>
-                </label>
-              ))}
-            </fieldset>
+              <button type="submit" className="rental-detail-apply-button">
+                Apply Filters
+              </button>
+              <button type="button" className="rental-detail-clear-button" onClick={clearFilters}>
+                Clear filters
+              </button>
+            </form>
+          </aside>
 
-            {filterError ? (
-              <p className="rental-detail-filter-error" role="alert">
-                {filterError}
+          <section className="rental-detail-main" aria-labelledby="rental-detail-title">
+            <header className="rental-detail-heading">
+              <p className="rental-detail-eyebrow">{provider.location}</p>
+              <h1 id="rental-detail-title">Fleet of {provider.name}</h1>
+              <p>{provider.description}</p>
+            </header>
+
+            <div className="rental-detail-results-heading">
+              <p aria-live="polite">
+                Showing <strong>{filteredVehicles.length}</strong> of <strong>{vehicles.length}</strong> vehicles
+              </p>
+              <span className="rental-detail-provider-rating" aria-label={`Provider rating ${provider.rating} out of 5`}>
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="rental-star-icon">
+                  <path d="m12 2.8 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3-4.6-4.5 6.3-.9z" />
+                </svg>
+                {provider.rating.toFixed(1)} provider rating
+              </span>
+            </div>
+
+            {appliedFilters.pickupDate && appliedFilters.returnDate ? (
+              <p className="rental-detail-period-note">
+                Preferred dates: {appliedFilters.pickupDate} to {appliedFilters.returnDate}. Confirm availability with the provider.
               </p>
             ) : null}
 
-            <button type="submit" className="rental-detail-apply-button">
-              Apply Filters
-            </button>
-            <button type="button" className="rental-detail-clear-button" onClick={clearFilters}>
-              Clear filters
-            </button>
-          </form>
-        </aside>
+            {filteredVehicles.length > 0 ? (
+              <div className="rental-vehicle-grid">
+                {filteredVehicles.map((vehicle) => (
+                  <VehicleCard key={vehicle.id} providerId={provider.id} vehicle={vehicle} />
+                ))}
+              </div>
+            ) : (
+              <div className="rental-detail-empty-state">
+                <h2>No vehicles match these filters</h2>
+                <p>Try changing your vehicle, transmission, delivery, or driver options.</p>
+                <button type="button" className="rental-detail-clear-button" onClick={clearFilters}>
+                  Show all vehicles
+                </button>
+              </div>
+            )}
 
-        <section className="rental-detail-main" aria-labelledby="rental-detail-title">
-          <header className="rental-detail-heading">
-            <p className="rental-detail-eyebrow">{provider.location}</p>
-            <h1 id="rental-detail-title">Fleet of {provider.name}</h1>
-            <p>{provider.description}</p>
-          </header>
-
-          <div className="rental-detail-results-heading">
-            <p aria-live="polite">
-              Showing <strong>{filteredVehicles.length}</strong> of <strong>{vehicles.length}</strong> vehicles
+            <p className="rental-detail-booking-note" id="rental-detail-booking-note">
+              Online booking is not available yet. Rates and delivery or driver options are indicative; confirm current availability directly with the provider.
             </p>
-            <span className="rental-detail-provider-rating" aria-label={`Provider rating ${provider.rating} out of 5`}>
-              <svg aria-hidden="true" viewBox="0 0 24 24" className="rental-star-icon">
-                <path d="m12 2.8 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3-4.6-4.5 6.3-.9z" />
-              </svg>
-              {provider.rating.toFixed(1)} provider rating
-            </span>
-          </div>
-
-          {appliedFilters.pickupDate && appliedFilters.returnDate ? (
-            <p className="rental-detail-period-note">
-              Preferred dates: {appliedFilters.pickupDate} to {appliedFilters.returnDate}. Confirm availability with the provider.
-            </p>
-          ) : null}
-
-          {filteredVehicles.length > 0 ? (
-            <div className="rental-vehicle-grid">
-              {filteredVehicles.map((vehicle) => (
-                <VehicleCard key={vehicle.id} vehicle={vehicle} />
-              ))}
-            </div>
-          ) : (
-            <div className="rental-detail-empty-state">
-              <h2>No vehicles match these filters</h2>
-              <p>Try changing your vehicle, transmission, delivery, or driver options.</p>
-              <button type="button" className="rental-detail-clear-button" onClick={clearFilters}>
-                Show all vehicles
-              </button>
-            </div>
-          )}
-
-          <p className="rental-detail-booking-note" id="rental-detail-booking-note">
-            Online booking is not available yet. Rates and delivery or driver options are indicative; confirm current availability directly with the provider.
-          </p>
-        </section>
-      </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }

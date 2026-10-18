@@ -270,7 +270,7 @@ export default function RentalDirectory() {
         )}
 
         <p className="rental-booking-note" id="rental-booking-note">
-          More provider fleets and online booking will be available as profiles are added. Confirm sample rates and availability with providers.
+          Online booking and vehicle-level rates are not available yet. Confirm current vehicle details and availability directly with each provider.
         </p>
 
         {totalPages > 1 ? (

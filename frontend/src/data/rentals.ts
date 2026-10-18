@@ -74,6 +74,7 @@ export const rentalProviders: RentalProvider[] = [
       { label: '25 Scooters', icon: 'scooter' },
     ],
     actionLabel: 'View Rates',
+    profileAvailable: true,
   },
   {
     id: 'hill-country-expeditions',
@@ -92,6 +93,7 @@ export const rentalProviders: RentalProvider[] = [
       { label: '0 Scooters', icon: 'scooter' },
     ],
     actionLabel: 'Book Now',
+    profileAvailable: true,
   },
   {
     id: 'island-wide-rentals',
@@ -109,6 +111,7 @@ export const rentalProviders: RentalProvider[] = [
       { label: '12 Scooters', icon: 'scooter' },
     ],
     actionLabel: 'View Rates',
+    profileAvailable: true,
   },
   {
     id: 'translanka-logistics',
@@ -127,6 +130,7 @@ export const rentalProviders: RentalProvider[] = [
       { label: '4 SUVs', icon: 'suv' },
     ],
     actionLabel: 'Book Now',
+    profileAvailable: true,
   },
   {
     id: 'neodrive-ev-rentals',
@@ -145,6 +149,7 @@ export const rentalProviders: RentalProvider[] = [
       { label: '15 E-Scoots', icon: 'scooter' },
     ],
     actionLabel: 'View Rates',
+    profileAvailable: true,
   },
 ];
 
