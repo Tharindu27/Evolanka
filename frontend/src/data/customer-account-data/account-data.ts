@@ -22,13 +22,13 @@ export type AccountProfile = {
 
 export const navigationItems: NavigationItem[] = [
   { label: 'Home', href: '/', icon: 'home' },
-  { label: 'My account', href: '/customer/profile/account', icon: 'account', active: true },
-  { label: 'Bookings', href: '/customer/bookings', icon: 'bookings' },
-  { label: 'Wishlist', href: '/customer/wishlist', icon: 'wishlist' },
-  { label: 'My Post', href: '/customer/my-post', icon: 'post' },
-  { label: 'My Itinerary', href: '/customer/itinerary', icon: 'itinerary' },
-  { label: 'My Contributions', href: '/customer/contributions', icon: 'contribution' },
-  { label: 'Settings', href: '/customer/settings', icon: 'settings' },
+  { label: 'My account', href: '/customer/profile/account', icon: 'account' },
+  { label: 'Bookings', href: '/customer/profile/bookings', icon: 'bookings' },
+  { label: 'Wishlist', href: '/customer/profile/wishlist', icon: 'wishlist' },
+  { label: 'My Post', href: '/customer/profile/my-post', icon: 'post' },
+  { label: 'My Itinerary', href: '/customer/profile/itinerary', icon: 'itinerary' },
+  { label: 'My Contributions', href: '/customer/profile/contributions', icon: 'contribution' },
+  { label: 'Settings', href: '/customer/profile/settings', icon: 'settings' },
 ];
 
 export const accountProfile: AccountProfile = {

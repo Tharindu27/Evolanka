@@ -4,9 +4,9 @@
   --background: #ffffff;
   --foreground: #171717;
   --button-primary-bg: #001a43;   /* Primary button background color */
-  --button-primary-hover: #001a43;   /* Primary button hover background color */
-  --button-secondary-bg: #b08d1f;   /* Secondary button background color */
-  --button-secondary-hover: #b08d1f;   /* Secondary button hover background color */
+  --button-primary-hover: #002e77;   /* Primary button hover background color */
+  --button-secondary-bg: #a28116;   /* Secondary button background color */
+  --button-secondary-hover: #bb8f00;   /* Secondary button hover background color */
 }
 
 @theme inline {
