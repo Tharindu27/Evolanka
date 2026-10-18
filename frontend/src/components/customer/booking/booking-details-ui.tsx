@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 export const statusStyles: Record<string, string> = {
   Confirmed: 'bg-[#ebf3ff] text-[#0b4fc5]',
   Pending: 'bg-[#fff5dd] text-[#a56a00]',
+  'Active / On-Trip': 'bg-[#e0f2fe] text-[#0369a1]',
   Completed: 'bg-[#e6f4ea] text-[#0f9d58]',
   Cancelled: 'bg-[#fdecea] text-[#d93025]',
 };
@@ -11,6 +12,7 @@ export const paymentStyles: Record<string, string> = {
   Paid: 'bg-[#e6f4ea] text-[#0f9d58]',
   'Pay at Hotel': 'bg-[#fff5dd] text-[#a56a00]',
   'Pay on Arrival': 'bg-[#fff5dd] text-[#a56a00]',
+  'Pay on Pickup': 'bg-[#fff5dd] text-[#a56a00]',
   'Partially Paid': 'bg-[#fff5dd] text-[#a56a00]',
   Refunded: 'bg-[#ebf3ff] text-[#0b4fc5]',
 };
