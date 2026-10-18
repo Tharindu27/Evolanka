@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation';
 
 import HotelBookingDetails from '@/components/customer/booking/hotel-booking-details';
+import TourGuideBookingDetails from '@/components/customer/booking/tour-guide-booking-details';
 import Sidebar from '@/components/customer/common/sidebar';
 import { navigationItems } from '@/data/customer-account-data';
-import { getHotelBookingById } from '@/data/customer-booking-data';
+import { getHotelBookingById, getTourGuideBookingById } from '@/data/customer-booking-data';
 
 type BookingDetailsPageProps = {
   params: Promise<{ bookingId: string }>;
@@ -11,9 +12,10 @@ type BookingDetailsPageProps = {
 
 export default async function BookingDetailsPage({ params }: BookingDetailsPageProps) {
   const { bookingId } = await params;
-  const booking = getHotelBookingById(bookingId);
+  const hotelBooking = getHotelBookingById(bookingId);
+  const tourGuideBooking = getTourGuideBookingById(bookingId);
 
-  if (!booking) {
+  if (!hotelBooking && !tourGuideBooking) {
     notFound();
   }
 
@@ -23,7 +25,8 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
         <Sidebar items={navigationItems} />
 
         <main className="flex-1 bg-[#f3f5fa] px-8 py-8 lg:px-10">
-          <HotelBookingDetails booking={booking} />
+          {hotelBooking ? <HotelBookingDetails booking={hotelBooking} /> : null}
+          {tourGuideBooking ? <TourGuideBookingDetails booking={tourGuideBooking} /> : null}
         </main>
       </div>
     </div>
