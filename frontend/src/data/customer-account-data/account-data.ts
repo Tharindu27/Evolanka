@@ -25,7 +25,7 @@ export const navigationItems: NavigationItem[] = [
   { label: 'My account', href: '/customer/profile/account', icon: 'account' },
   { label: 'Bookings', href: '/customer/profile/bookings', icon: 'bookings' },
   { label: 'Wishlist', href: '/customer/profile/wishlist', icon: 'wishlist' },
-  { label: 'My Post', href: '/customer/profile/my-post', icon: 'post' },
+  { label: 'My Post', href: '/customer/profile/post', icon: 'post' },
   { label: 'My Itinerary', href: '/customer/profile/itinerary', icon: 'itinerary' },
   { label: 'My Contributions', href: '/customer/profile/contributions', icon: 'contribution' },
   { label: 'Settings', href: '/customer/profile/settings', icon: 'settings' },
