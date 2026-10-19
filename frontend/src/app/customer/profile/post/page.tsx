@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import AddPostModal from '@/components/customer/post/add-post-modal';
+import EditBioModal from '@/components/customer/post/edit-bio-modal';
 import PostCard from '@/components/customer/post/post-card';
 import PostPersonalInfo from '@/components/customer/post/post-personal-info';
 import PostProfileHeader from '@/components/customer/post/post-profile-header';
@@ -15,8 +16,33 @@ import {
   postTabs,
   type PostDraft,
   type PostItem,
+  type PostPersonalDetails,
   type PostTab,
 } from '@/data/customer-post-data';
+
+const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+
+// Converts "12 October 2003" to "2003-10-12".
+function toIsoDate(text: string) {
+  const [day, month, year] = text.split(' ');
+  const monthIndex = monthNames.indexOf(month?.toLowerCase());
+  if (monthIndex < 0) return '';
+
+  return `${year}-${String(monthIndex + 1).padStart(2, '0')}-${day.padStart(2, '0')}`;
+}
+
+function buildPersonalDetails(): PostPersonalDetails {
+  const detail = (label: string) => profileDetails.find((item) => item.label === label)?.value ?? '';
+
+  return {
+    dob: toIsoDate(detail('Date of Birth')),
+    email: accountProfile.email,
+    contact: detail('Mobile Number'),
+    gender: 'Male',
+    country: detail('Country / Nationality'),
+    nativeLanguage: 'Sinhala',
+  };
+}
 
 function toDraft(post: PostItem): PostDraft {
   const images = post.gallery?.length ? post.gallery : post.image ? [post.image] : [];
@@ -41,8 +67,27 @@ export default function CustomerPostPage() {
   const [composerOpen, setComposerOpen] = useState(false);
   const [draft, setDraft] = useState<PostDraft>(emptyPostDraft);
   const [editingPost, setEditingPost] = useState<PostItem | null>(null);
+  const [bio, setBio] = useState(postProfile.bio);
+  const [coverImage, setCoverImage] = useState(postProfile.coverImage);
+  const [personal, setPersonal] = useState<PostPersonalDetails>(buildPersonalDetails);
+  const [bioOpen, setBioOpen] = useState(false);
 
   const visiblePosts = activeTab === 'All Posts' ? posts : posts.filter((post) => post.kind === activeTab);
+
+  const changeCover = (file: File) => {
+    const url = URL.createObjectURL(file);
+
+    setCoverImage((previous) => {
+      if (previous.startsWith('blob:')) URL.revokeObjectURL(previous);
+      return url;
+    });
+  };
+
+  const removeCover = () =>
+    setCoverImage((previous) => {
+      if (previous.startsWith('blob:')) URL.revokeObjectURL(previous);
+      return '';
+    });
 
   const closeComposer = () => {
     setComposerOpen(false);
@@ -98,8 +143,13 @@ export default function CustomerPostPage() {
 
         <main className="flex-1 bg-[#f3f5fa] px-8 py-8 lg:px-10">
           <div className="max-w-[1120px]">
-            <PostProfileHeader account={accountProfile} profile={postProfile} />
-            <PostPersonalInfo account={accountProfile} details={profileDetails} />
+            <PostProfileHeader
+              account={accountProfile}
+              profile={{ ...postProfile, bio, coverImage }}
+              onCoverChange={changeCover}
+              onCoverRemove={removeCover}
+            />
+            <PostPersonalInfo info={personal} onEditBio={() => setBioOpen(true)} />
 
             <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-3">
@@ -158,6 +208,19 @@ export default function CustomerPostPage() {
           onClose={closeComposer}
           onPublish={publish}
           onSaveDraft={saveDraft}
+        />
+      ) : null}
+
+      {bioOpen ? (
+        <EditBioModal
+          initialBio={bio}
+          initialInfo={personal}
+          onClose={() => setBioOpen(false)}
+          onSave={(value, info) => {
+            setBio(value);
+            setPersonal(info);
+            setBioOpen(false);
+          }}
         />
       ) : null}
     </div>

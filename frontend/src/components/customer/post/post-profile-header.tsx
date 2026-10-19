@@ -4,6 +4,8 @@ import type { PostProfile } from '@/data/customer-post-data';
 type PostProfileHeaderProps = {
   account: AccountProfile;
   profile: PostProfile;
+  onCoverChange: (file: File) => void;
+  onCoverRemove: () => void;
 };
 
 const iconProps = {
@@ -16,22 +18,46 @@ const iconProps = {
   'aria-hidden': true,
 };
 
-export default function PostProfileHeader({ account, profile }: PostProfileHeaderProps) {
+export default function PostProfileHeader({ account, profile, onCoverChange, onCoverRemove }: PostProfileHeaderProps) {
   return (
     <section className="overflow-hidden rounded-[22px] border border-[#dfe4f2] bg-white shadow-[0_18px_45px_rgba(0,26,67,0.08)]">
-      <div className="relative h-[200px] w-full bg-[#edf3ff]">
-        <img src={profile.coverImage} alt="Profile cover" className="h-full w-full object-cover" />
-        <button
-          type="button"
-          className="btn-primary absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-lg border border-white/60 bg-white/90 px-3 py-1.5 text-xs font-semibold text-[#001a43] shadow-sm backdrop-blur-sm transition hover:bg-white"
-        >
-          <svg {...iconProps}>
-            <rect x="3" y="6" width="18" height="14" rx="2" />
-            <path d="M8 6l1.5-2h5L16 6" />
-            <circle cx="12" cy="13" r="3.2" />
-          </svg>
-          Edit Cover
-        </button>
+      <div className="relative h-[200px] w-full bg-gradient-to-br from-[#dfe9ff] to-[#f3f7ff]">
+        {profile.coverImage ? <img src={profile.coverImage} alt="Profile cover" className="h-full w-full object-cover" /> : null}
+
+        <div className="absolute right-4 top-4 flex items-center gap-2">
+          <label className="btn-primary inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-white/60 bg-white/90 px-3 py-1.5 text-xs font-semibold text-[#001a43] shadow-sm backdrop-blur-sm transition focus-within:ring-2 focus-within:ring-white hover:bg-white">
+            <svg {...iconProps}>
+              <rect x="3" y="6" width="18" height="14" rx="2" />
+              <path d="M8 6l1.5-2h5L16 6" />
+              <circle cx="12" cy="13" r="3.2" />
+            </svg>
+            {profile.coverImage ? 'Edit Cover' : 'Add Cover'}
+            <input
+              type="file"
+              accept="image/*"
+              className="sr-only"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file?.type.startsWith('image/')) onCoverChange(file);
+                event.target.value = '';
+              }}
+            />
+          </label>
+
+          {profile.coverImage ? (
+            <button
+              type="button"
+              aria-label="Delete cover photo"
+              title="Delete cover photo"
+              onClick={onCoverRemove}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/60 bg-white/90 text-[#c4161c] shadow-sm backdrop-blur-sm transition hover:bg-[#c4161c] hover:text-white"
+            >
+              <svg {...iconProps}>
+                <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
+              </svg>
+            </button>
+          ) : null}
+        </div>
       </div>
 
       <div className="px-6 pb-6">
@@ -78,7 +104,9 @@ export default function PostProfileHeader({ account, profile }: PostProfileHeade
           </div>
         </div>
 
-        <p className="brand-page-subtitle mt-5 whitespace-pre-line text-sm leading-relaxed">{profile.bio}</p>
+        {profile.bio ? (
+          <p className="brand-page-subtitle mt-5 whitespace-pre-line text-sm leading-relaxed">{profile.bio}</p>
+        ) : null}
 
         <div className="mt-5 grid grid-cols-2 gap-y-4 rounded-4xl border border-[#001a43] bg-[#ffffff] py-4 sm:grid-cols-3">
           {profile.stats.map((stat, index) => (

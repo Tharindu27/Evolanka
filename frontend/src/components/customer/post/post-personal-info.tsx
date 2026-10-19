@@ -1,8 +1,8 @@
-import type { AccountProfile, ProfileDetail } from '@/data/customer-account-data';
+import type { PostPersonalDetails } from '@/data/customer-post-data';
 
 type PostPersonalInfoProps = {
-  account: AccountProfile;
-  details: ProfileDetail[];
+  info: PostPersonalDetails;
+  onEditBio: () => void;
 };
 
 const iconProps = {
@@ -15,17 +15,21 @@ const iconProps = {
   'aria-hidden': true,
 };
 
-export default function PostPersonalInfo({ account, details }: PostPersonalInfoProps) {
-  const detail = (label: string) => details.find((item) => item.label === label)?.value;
+function formatDob(iso: string) {
+  const [year, month, day] = iso.split('-').map(Number);
+  if (!year || !month || !day) return '';
 
-  // Gender and native language are not in the account data yet.
+  return new Date(year, month - 1, day).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+export default function PostPersonalInfo({ info, onEditBio }: PostPersonalInfoProps) {
   const items = [
-    { label: 'DOB', value: detail('Date of Birth') },
-    { label: 'Email', value: account.email },
-    { label: 'Contact', value: detail('Mobile Number') },
-    { label: 'Gender', value: 'Male' },
-    { label: 'Country', value: detail('Country / Nationality') },
-    { label: 'Native Language', value: 'Sinhala' },
+    { label: 'DOB', value: formatDob(info.dob) },
+    { label: 'Email', value: info.email },
+    { label: 'Contact', value: info.contact },
+    { label: 'Gender', value: info.gender },
+    { label: 'Country', value: info.country },
+    { label: 'Native Language', value: info.nativeLanguage },
   ];
 
   return (
@@ -35,6 +39,7 @@ export default function PostPersonalInfo({ account, details }: PostPersonalInfoP
 
         <button
           type="button"
+          onClick={onEditBio}
           className="btn-primary inline-flex items-center gap-2 rounded-xl border border-[#dfe7f5] bg-white px-4 py-2 text-xs font-semibold text-[#001a43] transition hover:bg-[#f4f8ff]"
         >
           <svg {...iconProps}>

@@ -59,6 +59,17 @@ export type PostProfile = {
 
 export const postTabs: PostTab[] = ['All Posts', 'Photos', 'Videos', 'Travel Logs'];
 
+export type PostPersonalDetails = {
+  dob: string; // YYYY-MM-DD
+  email: string;
+  contact: string;
+  gender: string;
+  country: string;
+  nativeLanguage: string;
+};
+
+export const genderOptions = ['Male', 'Female', 'Other', 'Prefer not to say'];
+
 export const postCategoryTags = [
   'TravelAdvice',
   'HotelReview',
