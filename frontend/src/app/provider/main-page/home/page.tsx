@@ -89,7 +89,7 @@ export default function ProviderMainPage() {
         </div>
       </section>
 
-      <section id="overview" className="mx-auto max-w-[1440px] px-4 py-20 md:px-8 lg:px-12">
+      <section id="overview" className="mx-auto bg-[#f9f9ff] max-w-[1440px] px-4 py-20 md:px-8 lg:px-12">
         <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <span className="inline-flex rounded-full bg-[#eef3ff] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[#001a43]">
