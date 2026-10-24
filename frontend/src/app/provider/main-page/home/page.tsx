@@ -39,53 +39,61 @@ export default function ProviderMainPage() {
     <main className="bg-[#f7f6f2] text-[#001a43]">
       <ProviderNavbar />
 
-      <section className="relative isolate overflow-hidden pt-28 md:pt-32">
+      <section className="relative min-h-[620px] isolate overflow-hidden pt-28 md:pt-32">
         <div className="absolute inset-0 -z-20 bg-[#f3f0e8]">
           <img
             src="/images/provider/Main/provider-home.png"
             alt="Luxury villa property in Sri Lanka"
-            className="h-full w-full object-cover object-center"
+            className="h-full w-full scale-[1.02] object-cover object-center transition duration-700 ease-out"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#001a43]/80 via-[#001a43]/40 to-[#001a43]/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#001a43]/82 via-[#001a43]/58 to-[#001a43]/28" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.18),transparent_0%)]" />
         </div>
 
-        <div className="mx-auto max-w-[1440px] px-4 pb-24 pt-10 md:px-8 lg:px-12">
-          <div className="max-w-[660px] pt-10 md:pt-14">
-            <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#f5e6b8] backdrop-blur-sm">
+        <div className="mx-auto flex min-h-[540px] max-w-[1440px] items-center px-4 pb-24 pt-10 md:px-8 lg:px-12">
+          <div className="mx-auto w-full max-w-[1000px] text-center md:pt-8">
+            <span className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#f5e6b8] shadow-[0_8px_30px_rgba(0,26,67,0.15)] backdrop-blur-sm transition duration-300 hover:bg-white/14">
               Partner with EVOLANKA
             </span>
 
-            <h1 className="mt-7 max-w-[560px] text-4xl font-black leading-[1.04] tracking-[-0.06em] text-white md:text-6xl">
-              Turn your property into a standout Sri Lankan destination.
+            <h1 className="mt-7 text-4xl font-black leading-[1.02] tracking-[-0.06em] text-white md:text-6xl lg:text-[5rem]">
+              <span className="block transition duration-500 ease-out">Welcome to EVOLANKA</span>
+              <span className="mt-2 block text-[#d7b760] transition duration-500 ease-out md:text-4xl lg:text-[3rem]">
+                Provider Portal
+              </span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-base leading-8 text-white/80 md:text-lg">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#edf3ff] md:text-lg">
               Connect with travelers seeking authentic stays, unforgettable experiences, and trusted local hospitality across the island.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/provider/profile/account"
-                className="inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-bold text-white shadow-[0_18px_42px_rgba(0,26,67,0.28)] bg-[#001a43] border-2 border-[#345267] transition-all hover:-translate-y-0.5 hover:bg-[#b08d1f]"
+                className="inline-flex items-center justify-center rounded-full border-2 border-[#345267] bg-[#001a43] px-6 py-3 text-sm font-bold text-white shadow-[0_20px_48px_rgba(0,26,67,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#0b2d6d] hover:text-white"
               >
                 Go To Your Account
               </Link>
               <Link
                 href="/provider/profile/account/listings"
-                className="inline-flex items-center justify-center rounded-full border border-white/35 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white/15"
+                className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
               >
                 Manage Your Listings
               </Link>
             </div>
-          </div>
-          <div className="mt-40 flex flex-wrap gap-4 md:gap-16">
+
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4 md:gap-8">
               {trustStats.map((stat) => (
-                <div key={stat.label} className="min-w-[130px] rounded-2xl border border-white/15 bg-white/5 px-4 py-3 backdrop-blur-sm">
+                <div
+                  key={stat.label}
+                  className="min-w-[130px] rounded-2xl border border-white/15 bg-white/8 px-4 py-3 shadow-[0_12px_32px_rgba(0,26,67,0.12)] backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:bg-white/12"
+                >
                   <div className="text-2xl font-black tracking-[-0.05em] text-white">{stat.value}</div>
                   <div className="mt-1 text-[11px] uppercase tracking-[0.16em] text-white/70">{stat.label}</div>
                 </div>
               ))}
             </div>
+          </div>
         </div>
       </section>
 
