@@ -5,10 +5,10 @@ import { useState } from 'react';
 
 const navItems = [
   { label: 'home', href: '/provider/main-page/home' },
-  { label: 'Taxi Owner', href: '/provider/main-page/taxi-info' },
+  { label: 'Hotel Owner', href: '/provider/main-page/hotel-info' },
   { label: 'Tour Guide', href: '/provider/main-page/guide-info' },
   { label: 'Rental Owner', href: '/provider/main-page/rental-info' },
-  { label: 'Hotel Owner', href: '/provider/main-page/hotel-info' },
+  { label: 'Taxi Owner', href: '/provider/main-page/taxi-info' },
 ];
 
 export default function ProviderNavbar() {

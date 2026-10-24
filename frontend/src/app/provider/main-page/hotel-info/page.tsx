@@ -85,14 +85,6 @@ export default function HotelInfoPage() {
             Built to help your hotel business feel premium from the first click.
           </h2>
           </div>
-        
-        
-
-        <div className="rounded-[2rem] border border-[#dfe7f5] bg-white p-6 shadow-[0_24px_80px_rgba(0,26,67,0.08)]">
-            <p className="text-lg leading-8 text-[#475268]">
-            From boutique villas to luxury hotels, EVOLANKA gives hotel owners a refined place to stand out, connect with verified travelers, and build lasting bookings with transparent pricing.
-          </p>
-        </div>
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
