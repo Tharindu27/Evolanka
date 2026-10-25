@@ -21,7 +21,7 @@ export type AccountProfile = {
 };
 
 export const navigationItems: NavigationItem[] = [
-  { label: 'Home', href: '/provider/profile/home', icon: 'home' },
+  { label: 'Home', href: '/provider/main-page/home', icon: 'home' },
   { label: 'My account', href: '/provider/profile/account', icon: 'account' },
   { label: 'Services', href: '/provider/profile/services', icon: 'services' },
   { label: 'Listings', href: '/provider/profile/listings', icon: 'listings' },

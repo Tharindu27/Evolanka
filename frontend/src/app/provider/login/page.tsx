@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
-export default function ProviderLoginPage() {
+function ProviderLoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
@@ -150,5 +150,13 @@ export default function ProviderLoginPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function ProviderLoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#f9f9ff]" />}> 
+      <ProviderLoginContent />
+    </Suspense>
   );
 }
