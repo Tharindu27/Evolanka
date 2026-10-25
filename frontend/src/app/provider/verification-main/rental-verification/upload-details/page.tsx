@@ -152,8 +152,7 @@ export default function RentalVerificationPage() {
             href="/provider/profile/services"
             className="inline-flex items-center gap-2 rounded-full border border-[#dce3f1] bg-white px-4 py-2 text-sm font-semibold text-[#001a43] transition-colors hover:border-[#001a43]"
           >
-            <span>⌂</span>
-            Home
+            Save &amp; Exit
           </Link>
         </div>
       </header>

@@ -7,7 +7,7 @@ const serviceCards = [
     description: 'List your accommodations, room types, and amenities to attract travelers across Sri Lanka.',
     accent: '#edf4ff',
     icon: '🏨',
-    href: '/provider/verification-main/hotel-verification',
+    href: '/provider/verification-main/hotel-verification/property-category',
   },
   {
     title: 'Tour Guide',
