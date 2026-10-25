@@ -1,10 +1,24 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useState } from 'react';
 
-export default function ProviderLoginPage() {
+function ProviderLoginContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
+
+  const backRef = searchParams.get('backTo') ?? '/auth-main';
+
+  const handleBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push(backRef);
+  };
 
   return (
     <div
@@ -17,13 +31,13 @@ export default function ProviderLoginPage() {
           alt="Provider travel background"
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/30 backdrop-brightness-80" />
+        <div className="absolute inset-0 bg-black/30 backdrop-brightness-100" />
       </div>
 
       <header className="fixed top-0 z-40 flex h-16 w-full items-center justify-between px-6">
-        <Link href="/auth-main" className="btn-back">
+        <button type="button" onClick={handleBack} className="btn-back">
           <span>Back</span>
-        </Link>
+        </button>
       </header>
 
       <main className="relative z-20 flex h-[100dvh] items-center justify-center overflow-hidden px-4 pb-3 pt-14 md:px-6 md:pb-4 md:pt-20">
@@ -136,5 +150,13 @@ export default function ProviderLoginPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function ProviderLoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#f9f9ff]" />}> 
+      <ProviderLoginContent />
+    </Suspense>
   );
 }
