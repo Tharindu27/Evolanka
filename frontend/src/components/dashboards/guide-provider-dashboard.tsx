@@ -1055,7 +1055,6 @@ export default function GuideProviderDashboard() {
             <p>{pageContent.description}</p>
           </div>
           <div className="guide-header-actions">
-            <span className="guide-preview-chip"><span />Preview mode</span>
             <div className="guide-notification-wrap">
               <button className="guide-notification-button" type="button" aria-label="Show sample notifications" aria-expanded={notificationsOpen} onClick={() => setNotificationsOpen((open) => !open)}>
                 <Icon name="bell" size={19} />
@@ -1072,13 +1071,7 @@ export default function GuideProviderDashboard() {
           </div>
         </header>
 
-        <div className="guide-preview-banner" role="note">
-          <span className="guide-preview-banner-icon">i</span>
-          <p><strong>Preview data only.</strong> These bookings, reviews, and earnings are examples. Changes stay in this browser session and are not saved to a provider account.</p>
-        </div>
-
         <div className="guide-provider-content">{renderActiveSection()}</div>
-        <footer className="guide-dashboard-footer">EVOLANKA provider preview <span>·</span> No real bookings or payments are connected</footer>
       </main>
 
       <nav className="guide-mobile-nav" aria-label="Mobile provider dashboard">

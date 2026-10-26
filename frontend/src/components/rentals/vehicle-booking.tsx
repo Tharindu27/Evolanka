@@ -245,6 +245,11 @@ export default function VehicleBooking({ provider, vehicle }: VehicleBookingProp
             <p className="rental-payment-unavailable" id="rental-payment-unavailable">
               Payment setup is not connected yet. No charge will be taken.
             </p>
+            {vehicle.refundableDeposit ? (
+              <p className="rental-booking-deposit">
+                Refundable security deposit: {formatLkr(vehicle.refundableDeposit)}. This deposit is not included in the rental estimate.
+              </p>
+            ) : null}
             <p className="rental-booking-disclaimer">
               Estimate uses the lowest combination of 30-day, 7-day, and daily rates. Taxes, insurance, deposits, and provider availability are not included.
             </p>

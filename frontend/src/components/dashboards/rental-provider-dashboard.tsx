@@ -992,7 +992,6 @@ export default function RentalProviderDashboard() {
             <input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search fleet or rental requests" />
           </label>
           <div className="rental-provider-header-actions">
-            <span className="rental-provider-preview-chip"><i />Preview mode</span>
             <div className="rental-provider-notification-wrap">
               <IconButton icon="notifications" label="Show sample notifications" expanded={notificationsOpen} onClick={() => setNotificationsOpen((open) => !open)} />
               {notificationsOpen ? (
@@ -1014,18 +1013,9 @@ export default function RentalProviderDashboard() {
             {section === 'fleet' ? (
               <button className="rental-provider-button rental-provider-button-primary" type="button" onClick={() => setAddVehicleOpen(true)}><Icon name="add" size={17} />Add vehicle</button>
             ) : null}
-            {section === 'operations' ? (
-              <span className="rental-provider-preview-pill">Sample operations</span>
-            ) : null}
-          </div>
-
-          <div className="rental-provider-preview-banner" role="note">
-            <span>i</span>
-            <p><strong>Preview data only.</strong> Fleet records, rental requests, return alerts, and financial figures are examples. Actions stay in this browser session and do not notify customers or update public listings.</p>
           </div>
 
           <div className="rental-provider-section-content">{renderActiveSection()}</div>
-          <footer className="rental-provider-footer">EVOLANKA rental provider preview <span>·</span> No live bookings, tracking, payments, or verification are connected</footer>
         </main>
       </div>
 

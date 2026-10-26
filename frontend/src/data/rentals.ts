@@ -24,10 +24,11 @@ export type RentalVehicle = {
   id: string;
   name: string;
   category: RentalVehicleCategory;
-  rating: number;
+  rating?: number;
   dailyRate: number;
   weeklyRate: number;
   monthlyRate: number;
+  refundableDeposit?: number;
   seats: number;
   transmission: RentalTransmission;
   fuel: string;
@@ -69,7 +70,7 @@ export const rentalProviders: RentalProvider[] = [
     image: '/images/rentals/providers/lanka-wheels.jpg',
     badge: { label: 'Eco-Friendly', tone: 'eco' },
     fleet: [
-      { label: '15 Hybrids', icon: 'car' },
+      { label: '16 Hybrids', icon: 'car' },
       { label: '2 Jeeps', icon: 'suv' },
       { label: '25 Scooters', icon: 'scooter' },
     ],
@@ -252,6 +253,24 @@ export const rentalVehiclesByProvider: Record<string, RentalVehicle[]> = {
       imageAlt: 'Red Suzuki Swift on a winding road through tea country',
       deliveryOptions: ['home', 'pickup'],
       driverOptions: ['self-drive', 'with-driver'],
+    },
+  ],
+  'lanka-wheels': [
+    {
+      id: 'toyota-aqua',
+      name: 'Toyota Aqua',
+      category: 'car',
+      dailyRate: 4500,
+      weeklyRate: 15000,
+      monthlyRate: 40000,
+      refundableDeposit: 100000,
+      seats: 5,
+      transmission: 'Automatic',
+      fuel: 'Hybrid',
+      image: '/images/rentals/vehicles/lanka-wheels-toyota-aqua.jpg',
+      imageAlt: 'White Toyota Aqua hybrid hatchback',
+      deliveryOptions: ['pickup', 'home'],
+      driverOptions: ['self-drive'],
     },
   ],
 };

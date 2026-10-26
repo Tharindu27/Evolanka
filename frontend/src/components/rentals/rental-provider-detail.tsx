@@ -71,12 +71,14 @@ function VehicleCard({ providerId, vehicle }: { providerId: string; vehicle: Ren
           sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw"
           className="rental-vehicle-image"
         />
-        <span className="rental-vehicle-rating" aria-label={`Rated ${vehicle.rating} out of 5`}>
-          <svg aria-hidden="true" viewBox="0 0 24 24" className="rental-star-icon">
-            <path d="m12 2.8 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3-4.6-4.5 6.3-.9z" />
-          </svg>
-          {vehicle.rating.toFixed(1)}
-        </span>
+        {vehicle.rating !== undefined ? (
+          <span className="rental-vehicle-rating" aria-label={`Rated ${vehicle.rating} out of 5`}>
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="rental-star-icon">
+              <path d="m12 2.8 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3-4.6-4.5 6.3-.9z" />
+            </svg>
+            {vehicle.rating.toFixed(1)}
+          </span>
+        ) : null}
         <Link
           href={`/rentals/${providerId}/book/${vehicle.id}`}
           className="rental-vehicle-book-button"
@@ -107,6 +109,11 @@ function VehicleCard({ providerId, vehicle }: { providerId: string; vehicle: Ren
           <li>{vehicle.transmission}</li>
           <li>{vehicle.fuel}</li>
         </ul>
+        {vehicle.refundableDeposit ? (
+          <p className="rental-vehicle-deposit">
+            Refundable deposit: Rs. {vehicle.refundableDeposit.toLocaleString('en-LK')}
+          </p>
+        ) : null}
       </div>
     </article>
   );

@@ -529,26 +529,38 @@ body {
 
 /* Rental provider directory */
 .rental-directory {
-  width: min(100%, 1440px);
+  width: min(calc(100% - 3rem), 1440px);
   margin: 0 auto;
-  padding: 8.25rem 3rem 5rem;
+  padding: 8.25rem 0 5rem;
   color: #001a43;
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 .rental-page-heading {
-  max-width: 52rem;
-  margin-bottom: 2.5rem;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  max-width: none;
+  margin-bottom: 2.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.875rem;
+  background:
+    radial-gradient(circle at 88% 15%, rgba(201, 162, 39, 0.2), transparent 28%),
+    linear-gradient(110deg, #001534, #001a43 62%, #022d6f);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  box-shadow: 0 24px 60px rgba(0, 26, 67, 0.2);
 }
 
 .rental-page-eyebrow {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   margin-bottom: 1rem;
-  border: 1px solid rgba(176, 141, 31, 0.25);
+  border: 1px solid rgba(255, 226, 140, 0.35);
   border-radius: 9999px;
-  background: #fffaf0;
+  background: rgba(255, 255, 255, 0.1);
   padding: 0.5rem 0.875rem;
-  color: #735600;
+  color: #ffe28c;
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -556,9 +568,11 @@ body {
 }
 
 .rental-page-heading h1 {
+  position: relative;
+  z-index: 1;
   margin: 0;
-  color: #001a43;
-  font-size: clamp(2rem, 4vw, 3.25rem);
+  color: #ffffff;
+  font-size: clamp(2.25rem, 4.2vw, 3.75rem);
   font-weight: 900;
   letter-spacing: -0.045em;
   line-height: 1.08;
@@ -566,10 +580,12 @@ body {
 }
 
 .rental-page-heading p {
-  max-width: 44rem;
-  margin: 1rem 0 0;
-  color: #59637a;
-  font-size: 1rem;
+  position: relative;
+  z-index: 1;
+  max-width: 48rem;
+  margin: 1.25rem 0 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 1.0625rem;
   line-height: 1.75;
 }
 
@@ -577,13 +593,13 @@ body {
   display: grid;
   grid-template-columns: minmax(10rem, 0.9fr) minmax(10rem, 0.9fr) minmax(15rem, 1.5fr) auto;
   align-items: end;
-  gap: 1rem;
-  margin-bottom: 2.25rem;
+  gap: 1.125rem;
+  margin-bottom: 2.75rem;
   border: 1px solid #dce3f1;
-  border-radius: 1.5rem;
+  border-radius: 1.75rem;
   background: rgba(255, 255, 255, 0.96);
-  padding: 1.25rem;
-  box-shadow: 0 18px 42px rgba(0, 26, 67, 0.08);
+  padding: 1.375rem;
+  box-shadow: 0 20px 48px rgba(0, 26, 67, 0.09);
 }
 
 .rental-filter-field {
@@ -1014,8 +1030,7 @@ body {
 
 @media (max-width: 1050px) {
   .rental-directory {
-    padding-right: 2rem;
-    padding-left: 2rem;
+    width: min(calc(100% - 2rem), 1440px);
   }
 
   .rental-filter-panel {
@@ -1033,11 +1048,13 @@ body {
 
 @media (max-width: 640px) {
   .rental-directory {
-    padding: 7.25rem 1rem 3.5rem;
+    width: calc(100% - 2rem);
+    padding: 7.25rem 0 3.5rem;
   }
 
   .rental-page-heading {
     margin-bottom: 1.75rem;
+    border-radius: 1.5rem;
   }
 
   .rental-page-heading p {
@@ -1520,6 +1537,14 @@ body {
   font-size: 0.79rem;
   font-weight: 850;
   text-align: right;
+}
+
+.rental-vehicle-deposit,
+.rental-booking-deposit {
+  margin: 0.75rem 0 0;
+  color: #59637a;
+  font-size: 0.76rem;
+  line-height: 1.5;
 }
 
 .rental-vehicle-features {
@@ -7262,3 +7287,372 @@ body {
       transition: none;
     }
   }
+
+/* Provider dashboards: dark blue theme (guide + rental) */
+:root {
+  --brand-navy: #001a43;
+  --brand-navy-deep: #00112e;
+  --brand-navy-soft: #0b2a63;
+  --brand-gold: #b08d1f;
+  --brand-gold-light: #f3d675;
+}
+
+.guide-provider-app,
+.rental-provider-app {
+  --guide-navy: #001a43;
+  --guide-primary: #0b2a63;
+  --guide-primary-soft: #e6eefc;
+  --guide-muted: #5a6882;
+  --guide-line: #dbe4f3;
+  --guide-background: #eef3fb;
+  --rental-navy: #001a43;
+  --rental-primary: #0b2a63;
+  --rental-primary-soft: #e6eefc;
+  --rental-muted: #5a6882;
+  --rental-line: #dbe4f3;
+  --rental-bg: #eef3fb;
+}
+
+/* Sidebars */
+.guide-provider-sidebar,
+.rental-provider-sidebar {
+  border-right: 0;
+  background: linear-gradient(180deg, var(--brand-navy) 0%, var(--brand-navy-deep) 100%);
+  box-shadow: 4px 0 24px rgba(0, 26, 67, 0.18);
+  color: #fff;
+}
+
+.guide-brand strong,
+.rental-provider-brand strong {
+  color: #fff;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+}
+
+.guide-brand small,
+.rental-provider-brand small {
+  color: #9fb4da;
+  font-size: 0.76rem;
+}
+
+.guide-brand-mark,
+.rental-provider-brand-mark {
+  background: linear-gradient(145deg, var(--brand-gold), var(--brand-gold-light));
+  color: var(--brand-navy);
+  box-shadow: 0 6px 16px rgba(176, 141, 31, 0.35);
+}
+
+.guide-account-card,
+.rental-provider-business-card {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.guide-account-text strong,
+.rental-provider-business-card strong {
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.guide-account-text small,
+.rental-provider-business-card small {
+  color: #a9bbdd;
+  font-size: 0.76rem;
+}
+
+.guide-nav-section-label,
+.rental-provider-nav-label {
+  color: #7f96c4;
+  font-size: 0.72rem;
+}
+
+.guide-nav-item,
+.guide-sidebar-footer-link,
+.rental-provider-nav-item,
+.rental-provider-sidebar-link {
+  color: #c4d2ee;
+  border-radius: 0.75rem;
+}
+
+.guide-nav-item {
+  min-height: 3rem;
+}
+
+.guide-nav-item span {
+  font-size: 0.95rem;
+}
+
+.rental-provider-nav-item,
+.rental-provider-sidebar-link {
+  font-size: 0.9rem;
+}
+
+.guide-sidebar-footer-link {
+  font-size: 0.86rem;
+}
+
+.guide-nav-item svg,
+.rental-provider-nav-item svg,
+.guide-sidebar-footer-link svg,
+.rental-provider-sidebar-link svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.guide-nav-item:hover,
+.guide-sidebar-footer-link:hover,
+.rental-provider-nav-item:hover,
+.rental-provider-sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.guide-nav-item.is-active,
+.rental-provider-nav-item.is-active {
+  background: linear-gradient(90deg, rgba(176, 141, 31, 0.28), rgba(176, 141, 31, 0.08));
+  box-shadow: inset 3px 0 0 var(--brand-gold-light);
+  color: #fff;
+}
+
+.guide-nav-item small,
+.rental-provider-nav-item small {
+  background: var(--brand-gold);
+  color: #fff;
+}
+
+.guide-sidebar-footer,
+.rental-provider-sidebar-footer {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.guide-new-offer-button {
+  background: var(--brand-gold);
+  border-color: var(--brand-gold);
+  color: #fff;
+}
+
+.guide-new-offer-button:hover {
+  background: #c29d27;
+}
+
+/* Headers and typography */
+.guide-provider-header h1,
+.rental-provider-page-heading h1 {
+  color: var(--brand-navy);
+  font-size: clamp(1.8rem, 2.6vw, 2.35rem);
+  font-weight: 800;
+}
+
+.guide-provider-header > div:first-child > p:last-child,
+.rental-provider-page-heading p:last-child {
+  font-size: 1rem;
+  color: var(--guide-muted);
+}
+
+.guide-header-eyebrow,
+.guide-panel-eyebrow,
+.rental-provider-page-eyebrow,
+.rental-provider-eyebrow {
+  color: var(--brand-gold);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+}
+
+.guide-welcome-panel .guide-panel-eyebrow {
+  color: var(--brand-gold-light);
+}
+
+.guide-panel-heading h2,
+.guide-calendar-heading h2,
+.guide-quick-actions h2,
+.guide-date-details h2,
+.rental-provider-panel-heading h2 {
+  color: var(--brand-navy);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.guide-text-button {
+  font-size: 0.86rem;
+}
+
+.guide-text-button:hover {
+  color: var(--brand-gold);
+}
+
+/* Header controls */
+.rental-provider-header {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.guide-notification-button,
+.rental-provider-icon-button {
+  border-color: var(--guide-line);
+  background: #fff;
+  color: var(--brand-navy);
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.guide-notification-button:hover,
+.rental-provider-icon-button:hover {
+  background: var(--brand-navy);
+  color: #fff;
+}
+
+.guide-notification-button svg,
+.rental-provider-icon-button svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.guide-notification-dot {
+  background: var(--brand-gold);
+}
+
+/* Cards and panels */
+.guide-panel,
+.rental-provider-panel,
+.guide-stat-card,
+.rental-provider-stat-card {
+  border-color: var(--guide-line);
+  border-radius: 1rem;
+  box-shadow: 0 6px 22px rgba(0, 26, 67, 0.07);
+}
+
+.guide-stat-card,
+.rental-provider-stat-card {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.guide-stat-card::before,
+.rental-provider-stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--brand-navy);
+}
+
+.guide-stat-card:hover,
+.rental-provider-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0, 26, 67, 0.13);
+}
+
+.guide-stat-card {
+  padding: 1.25rem;
+}
+
+.guide-stat-top {
+  color: var(--guide-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.guide-stat-icon,
+.rental-provider-stat-icon {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 0.8rem;
+  background: linear-gradient(145deg, var(--brand-navy), var(--brand-navy-soft));
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(0, 26, 67, 0.25);
+}
+
+.guide-stat-icon svg,
+.rental-provider-stat-icon svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.guide-stat-card > strong {
+  font-size: 2rem;
+  color: var(--brand-navy);
+}
+
+.guide-stat-card > small {
+  color: var(--guide-muted);
+  font-size: 0.8rem;
+}
+
+.guide-welcome-panel {
+  background: linear-gradient(115deg, var(--brand-navy-deep), var(--brand-navy) 55%, #123a85);
+  box-shadow: 0 12px 30px rgba(0, 26, 67, 0.28);
+  padding: 1.6rem 1.8rem;
+}
+
+.guide-welcome-panel h2 {
+  font-size: 1.6rem;
+}
+
+.guide-welcome-panel p:last-child {
+  font-size: 0.95rem;
+  color: #d3e1f7;
+}
+
+.guide-primary-button,
+.rental-provider-button-primary {
+  border-color: var(--brand-navy);
+  background: var(--brand-navy);
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.guide-welcome-panel .guide-primary-button {
+  border-color: var(--brand-gold);
+  background: var(--brand-gold);
+  color: #fff;
+}
+
+.guide-primary-button:hover:not(:disabled),
+.rental-provider-button-primary:hover:not(:disabled) {
+  background: var(--brand-navy-soft);
+  box-shadow: 0 8px 20px rgba(0, 26, 67, 0.25);
+}
+
+.guide-welcome-panel .guide-primary-button:hover:not(:disabled) {
+  background: #c29d27;
+}
+
+.guide-booking-tabs button {
+  font-size: 0.9rem;
+}
+
+.rental-provider-table th,
+.guide-panel th {
+  background: #f1f5fc;
+  color: var(--brand-navy);
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+}
+
+.rental-provider-table td {
+  font-size: 0.9rem;
+}
+
+.rental-provider-nav-item > span {
+  font-size: 0.9rem;
+}
+
+.rental-provider-main,
+.guide-provider-main {
+  background: transparent;
+}
+
+.guide-profile-image {
+  border-radius: 1.1rem;
+}
+
+.guide-account-image {
+  border-radius: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .guide-provider-header h1,
+  .rental-provider-page-heading h1 {
+    font-size: 1.6rem;
+  }
+}
