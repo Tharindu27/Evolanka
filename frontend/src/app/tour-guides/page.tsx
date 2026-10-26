@@ -166,7 +166,7 @@ export default function TourGuidesPage() {
                 {filteredGuides.slice(0, visibleCount).map((guide) => (
                   <article key={guide.id} className="tour-guide-card group">
                     <div className="relative h-64 overflow-hidden">
-                      <div className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: `url("${guide.image}")` }} />
+                      <div className="h-full w-full bg-cover bg-[position:50%_8%] transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: `url("${guide.image}")` }} />
                       <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#001a43]/70 to-transparent" />
                       <span className="absolute left-4 top-4 rounded-full bg-[#001a43] px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-lg">
                         {guide.guideType}

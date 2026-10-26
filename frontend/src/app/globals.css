@@ -345,7 +345,7 @@ body {
   overflow: hidden;
   border: 4px solid #ffffff;
   border-radius: 1.5rem;
-  background-position: center;
+  background-position: 50% 8%;
   background-size: cover;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
 }
@@ -7869,4 +7869,10 @@ body {
 .rental-provider-header {
   background: var(--rental-bg);
   box-shadow: none;
+}
+
+/* Keep guide faces in frame when photos are cropped */
+.guide-profile-image,
+.guide-account-image {
+  object-position: 50% 8%;
 }
