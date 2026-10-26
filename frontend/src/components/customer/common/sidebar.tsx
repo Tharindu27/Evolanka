@@ -87,7 +87,7 @@ export default function Sidebar({ items = defaultNavigationItems }: SidebarProps
   const pathname = usePathname();
 
   return (
-    <aside className="w-full max-w-[270px] border-r border-[#dfe4f2] bg-[#f9fafc] px-5 py-6">
+    <aside className="h-full w-full max-w-[270px] shrink-0 overflow-y-auto border-r border-[#dfe4f2] bg-[#f9fafc] px-5 py-6">
       <div className="mb-7 flex items-center gap-3 px-2">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#001a43] text-white shadow-[0_10px_28px_rgba(0,26,67,0.2)]">
           <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[1.8]" aria-hidden="true">

@@ -1,7 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 
 import {  minPasswordLength } from '@/data/customer-settings-data';
 
@@ -101,25 +100,11 @@ function PasswordField({
 }
 
 export default function SettingsContent() {
-  const router = useRouter();
-
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<Partial<Record<'current' | 'next' | 'confirm', string>>>({});
   const [passwordUpdated, setPasswordUpdated] = useState(false);
-
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteConfirmText, setDeleteConfirmText] = useState('');
-
-  useEffect(() => {
-    if (!deleteOpen) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setDeleteOpen(false);
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [deleteOpen]);
 
   const resetPasswordForm = () => {
     setCurrentPassword('');
@@ -145,11 +130,6 @@ export default function SettingsContent() {
 
     resetPasswordForm();
     setPasswordUpdated(true);
-  };
-
-  const closeDelete = () => {
-    setDeleteOpen(false);
-    setDeleteConfirmText('');
   };
 
   return (
@@ -244,75 +224,6 @@ export default function SettingsContent() {
         </form>
       </section>
 
-      <section>
-        <h2 className="text-[0.72rem] font-bold uppercase tracking-[0.1em] text-[#c4161c]">Danger Zone</h2>
-
-        <div className={`${cardClass} mt-3 flex flex-wrap items-center justify-between gap-5 p-6`}>
-          <div className="flex items-center gap-4">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#fde9ea]">
-              <svg {...iconProps} className="h-5 w-5 stroke-[#c4161c]">
-                <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-base font-black text-[#001a43]">Delete account</h3>
-              <p className="mt-0.5 max-w-[420px] text-sm text-[#566277]">
-                Permanently remove your account and all associated data. This cannot be undone.
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setDeleteOpen(true)}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#f3b4b6] bg-white px-5 py-2.5 text-sm font-semibold text-[#c4161c] transition hover:bg-[#fff1f1]"
-          >
-            <svg {...iconProps} className="h-4 w-4 stroke-[#c4161c]">
-              <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
-            </svg>
-            Delete Account
-          </button>
-        </div>
-      </section>
-
-      {deleteOpen ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#001a43]/50 p-4 backdrop-blur-sm"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) closeDelete();
-          }}
-        >
-          <div role="alertdialog" aria-modal="true" className="w-full max-w-sm rounded-[22px] bg-white p-6 shadow-[0_30px_80px_rgba(0,26,67,0.35)]">
-            <h3 className="text-lg font-black tracking-[-0.03em] text-[#001a43]">Delete your account?</h3>
-            <p className="mt-2 text-sm text-[#566277]">
-              All bookings, posts, and contributions will be permanently removed. Type <strong className="text-[#001a43]">DELETE</strong> to confirm.
-            </p>
-            <input
-              value={deleteConfirmText}
-              onChange={(event) => setDeleteConfirmText(event.target.value)}
-              placeholder="DELETE"
-              className={`${inputClass} mt-4`}
-            />
-            <div className="mt-6 flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={closeDelete}
-                className="rounded-xl border border-[#dfe7f5] bg-white px-5 py-2.5 text-sm font-semibold text-[#001a43] transition hover:bg-[#f4f8ff]"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                disabled={deleteConfirmText !== 'DELETE'}
-                onClick={() => router.push('/')}
-                className="rounded-xl bg-[#c4161c] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#a31217] disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }
