@@ -315,6 +315,7 @@ function IconButton({
 export default function RentalProviderDashboard() {
   const [section, setSection] = useState<DashboardSection>('overview');
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
   const [fleetFilter, setFleetFilter] = useState<'all' | FleetStatus>('all');
   const [requestFilter, setRequestFilter] = useState<'all' | RequestStatus>('all');
   const [requests, setRequests] = useState(initialRequests);
@@ -957,11 +958,6 @@ export default function RentalProviderDashboard() {
           <span className="rental-provider-brand-mark">E</span>
           <span><strong>EVOLANKA</strong><small>Rental partner hub</small></span>
         </Link>
-        <div className="rental-provider-business-card">
-          <Image src={rentalPreviewProvider.image} alt="" width={46} height={46} className="rental-provider-business-image" />
-          <span><strong>{settings.businessName}</strong><small>Rental provider · preview</small></span>
-          <i aria-label="Preview account" />
-        </div>
         <nav className="rental-provider-sidebar-nav" aria-label="Rental provider dashboard">
           <span className="rental-provider-nav-label">WORKSPACE</span>
           {navigation.map((item) => (
@@ -986,12 +982,14 @@ export default function RentalProviderDashboard() {
 
       <div className="rental-provider-main">
         <header className="rental-provider-header">
-          <label className="rental-provider-search">
-            <Icon name="search" size={17} />
-            <span className="rental-provider-visually-hidden">Search sample fleet and requests</span>
-            <input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search fleet or rental requests" />
-          </label>
+          <div className="rental-provider-header-title"><strong>Rental partner hub</strong><small>Manage your fleet and bookings</small></div>
           <div className="rental-provider-header-actions">
+            <div className={`rental-provider-search-toggle${searchOpen || searchQuery ? ' is-open' : ''}`}>
+              {searchOpen || searchQuery ? (
+                <input autoFocus value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} onBlur={() => setSearchOpen(false)} placeholder="Search…" aria-label="Search fleet and requests" />
+              ) : null}
+              <IconButton icon="search" label="Search fleet and requests" onClick={() => setSearchOpen((open) => !open)} />
+            </div>
             <div className="rental-provider-notification-wrap">
               <IconButton icon="notifications" label="Show sample notifications" expanded={notificationsOpen} onClick={() => setNotificationsOpen((open) => !open)} />
               {notificationsOpen ? (

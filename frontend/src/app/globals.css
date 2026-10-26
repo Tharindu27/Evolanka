@@ -7656,3 +7656,217 @@ body {
     font-size: 1.6rem;
   }
 }
+
+/* Rental header (title + magnifier) and larger card text */
+.rental-provider-header {
+  min-height: 4.6rem;
+  border-bottom: 0;
+  background: linear-gradient(90deg, var(--brand-navy), var(--brand-navy-soft));
+  box-shadow: 0 4px 18px rgba(0, 26, 67, 0.2);
+  backdrop-filter: none;
+}
+
+.rental-provider-header-title strong,
+.rental-provider-header-title small {
+  display: block;
+}
+
+.rental-provider-header-title strong {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.rental-provider-header-title small {
+  margin-top: 0.15rem;
+  color: #a9bbdd;
+  font-size: 0.82rem;
+}
+
+.rental-provider-header .rental-provider-icon-button {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.rental-provider-header .rental-provider-icon-button:hover {
+  background: var(--brand-gold);
+  color: #fff;
+}
+
+.rental-provider-header-account strong {
+  color: #fff;
+  font-size: 0.92rem;
+}
+
+.rental-provider-header-account small {
+  color: #a9bbdd;
+  font-size: 0.76rem;
+}
+
+.rental-provider-search-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rental-provider-search-toggle input {
+  width: 14rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 0.8rem;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.rental-provider-search-toggle input::placeholder {
+  color: #b7c6e4;
+}
+
+.rental-provider-requests-panel .rental-provider-panel-heading h2,
+.rental-provider-overview-aside .rental-provider-panel-heading h2 {
+  font-size: 1.7rem;
+}
+
+.rental-provider-requests-panel .rental-provider-text-button,
+.rental-provider-overview-aside .rental-provider-text-button {
+  font-size: 1rem;
+}
+
+.rental-provider-request-renter strong {
+  font-size: 1rem;
+}
+
+.rental-provider-request-renter span,
+.rental-provider-request-amount span {
+  font-size: 0.8rem;
+}
+
+.rental-provider-request-amount strong {
+  font-size: 0.95rem;
+}
+
+.rental-provider-request-vehicle {
+  font-size: 0.88rem;
+}
+
+.rental-provider-request-date {
+  font-size: 0.8rem;
+}
+
+.rental-provider-request-actions .rental-provider-button {
+  font-size: 0.88rem;
+}
+
+.rental-provider-avatar {
+  width: 2.7rem;
+  height: 2.7rem;
+  font-size: 0.8rem;
+}
+
+.rental-provider-utilization-value strong {
+  font-size: 3rem;
+}
+
+.rental-provider-utilization-value span {
+  font-size: 0.85rem;
+}
+
+.rental-provider-utilization-legend span,
+.rental-provider-utilization-legend b {
+  font-size: 0.92rem;
+}
+
+.rental-provider-quick-actions button {
+  font-size: 0.95rem;
+}
+
+/* Rental header: white */
+.rental-provider-header {
+  background: #fff;
+  border-bottom: 1px solid var(--rental-line);
+  box-shadow: 0 2px 12px rgba(0, 26, 67, 0.08);
+}
+
+.rental-provider-header-title strong,
+.rental-provider-header-account strong {
+  color: var(--brand-navy);
+}
+
+.rental-provider-header-title small,
+.rental-provider-header-account small {
+  color: var(--rental-muted);
+}
+
+.rental-provider-header .rental-provider-icon-button {
+  border-color: var(--rental-line);
+  background: #fff;
+  color: var(--brand-navy);
+}
+
+.rental-provider-header .rental-provider-icon-button:hover {
+  background: var(--brand-navy);
+  color: #fff;
+}
+
+.rental-provider-search-toggle input {
+  border-color: var(--rental-line);
+  background: #f4f7fd;
+  color: var(--brand-navy);
+}
+
+.rental-provider-search-toggle input::placeholder {
+  color: var(--rental-muted);
+}
+
+/* Rental fleet + operations pages: font sizes aligned with dashboard */
+.rental-provider-table,
+.rental-provider-table td { font-size: 0.92rem; }
+.rental-provider-table th { font-size: 0.78rem; }
+.rental-provider-table-secondary,
+.rental-provider-table-footer,
+.rental-provider-empty { font-size: 0.84rem; }
+.rental-provider-status,
+.rental-provider-tracking-chip,
+.rental-provider-count-pill { font-size: 0.8rem; }
+.rental-provider-stat-heading { font-size: 0.9rem; }
+.rental-provider-stat-card > small { font-size: 0.82rem; }
+.rental-provider-request-toolbar select,
+.rental-provider-request-toolbar > span,
+.rental-provider-range-tabs button { font-size: 0.88rem; }
+.rental-provider-health-item > div:first-child,
+.rental-provider-fleet-location > div,
+.rental-provider-fleet-location > p:last-child,
+.rental-provider-insight span,
+.rental-provider-insight > div > p:not(.rental-provider-eyebrow) { font-size: 0.9rem; }
+.rental-provider-insight strong { font-size: 1rem; }
+.rental-provider-alert-card strong { font-size: 1rem; }
+.rental-provider-alert-card div > span,
+.rental-provider-alert-card small { font-size: 0.84rem; }
+.rental-provider-alert-count { font-size: 0.85rem; }
+.rental-provider-risk-banner p:last-child,
+.rental-provider-risk-stats article > span,
+.rental-provider-risk-stats article > small,
+.rental-provider-risk-checklist > div,
+.rental-provider-risk-checklist > div b,
+.rental-provider-financial-total > span,
+.rental-provider-financial-stat > small,
+.rental-provider-financial-stat > span,
+.rental-provider-deposit-caption,
+.rental-provider-deposit-change,
+.rental-provider-deposit-breakdown span,
+.rental-provider-payout-item span,
+.rental-provider-payout-item b,
+.rental-provider-modal > p:not(.rental-provider-eyebrow),
+.rental-provider-modal-form-row > label { font-size: 0.88rem; }
+.rental-provider-payout-item strong { font-size: 0.98rem; }
+.rental-provider-table-main { font-size: 0.98rem; }
+.rental-provider-button { font-size: 0.88rem; }
+
+/* Rental header: page body colour */
+.rental-provider-header {
+  background: var(--rental-bg);
+  box-shadow: none;
+}
