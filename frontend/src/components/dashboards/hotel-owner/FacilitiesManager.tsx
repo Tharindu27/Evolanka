@@ -1,603 +1,781 @@
 "use client";
 
 import { useState, useMemo } from "react";
-
-export interface Facility {
-  id: string;
-  name: string;
-  category: "Pool" | "Spa" | "Dining" | "Gym" | "Ballroom";
-  location: string;
-  status: "active" | "maintenance";
-  description: string;
-  hours: string;
-  metricLabel: string;
-  metricValue: string;
-  occupancyPercent: number;
-  maintenanceNotice?: string;
-  image: string;
-}
-
-const initialFacilities: Facility[] = [
-  {
-    id: "f1",
-    name: "Infinity Horizon Pool",
-    category: "Pool",
-    location: "Outdoor • 5th Floor Deck",
-    status: "active",
-    description: "Temperature-controlled freshwater pool overlooking the Indian Ocean.",
-    hours: "06:00 - 22:00",
-    metricLabel: "Live Occupancy",
-    metricValue: "28 / 40 (70%)",
-    occupancyPercent: 70,
-    image:
-      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "f2",
-    name: "Ayur Ayurvedic Spa & Wellness",
-    category: "Spa",
-    location: "Wellness • Ground Floor East Wing",
-    status: "active",
-    description: "Holistic healing treatments, steam rooms, and certified ayurvedic therapists.",
-    hours: "08:00 - 21:00",
-    metricLabel: "Treatment Beds",
-    metricValue: "12 / 16 (75% Booked)",
-    occupancyPercent: 75,
-    image:
-      "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "f3",
-    name: "Galle Face Fine Dining Restaurant",
-    category: "Dining",
-    location: "Dining • Mezzanine Level",
-    status: "active",
-    description: "Signature seafood and authentic Sri Lankan spiced fusion cuisine.",
-    hours: "06:30 - 23:00",
-    metricLabel: "Dinner Seating",
-    metricValue: "85 / 85 (Fully Booked)",
-    occupancyPercent: 100,
-    image:
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "f4",
-    name: "State-of-the-Art Fitness Center",
-    category: "Gym",
-    location: "Fitness • 3rd Floor",
-    status: "active",
-    description: "Technogym cardio stations, free weights, and dedicated yoga zone.",
-    hours: "24/7 (Keycard Access)",
-    metricLabel: "Live Occupancy",
-    metricValue: "8 / 25 (32%)",
-    occupancyPercent: 32,
-    image:
-      "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "f5",
-    name: "Lotus Grand Ballroom & Events",
-    category: "Ballroom",
-    location: "Conferences • Level 1 Wing",
-    status: "maintenance",
-    description: "Pillarless banquet hall with full AV equipment, hosting up to 450 guests.",
-    hours: "On-Demand Bookings",
-    metricLabel: "AV Inspection",
-    metricValue: "Undergoing Calibration",
-    occupancyPercent: 0,
-    maintenanceNotice: "Acoustics & chandelier maintenance until Oct 28",
-    image:
-      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80",
-  },
-];
+import {
+  type GroupKey,
+  type FacilityItem,
+  categoryMetaList,
+  masterOptionGroups,
+  masterRefundPolicies,
+  amenityIcons,
+  getInitialHotelFacilities,
+  toggleAmenityInState,
+  updateFacilityStatusInState,
+  addNewFacilityToState,
+  updateScheduleAndPolicy,
+  getAvailableAmenitiesCount,
+  computeFacilitiesHealth,
+} from "@/lib/hotel-facilities-logic";
 
 interface FacilitiesManagerProps {
   hotelId?: string;
 }
 
 export default function FacilitiesManager({ hotelId }: FacilitiesManagerProps) {
-  const [facilities, setFacilities] = useState<Facility[]>(initialFacilities);
-  const [filter, setFilter] = useState<"all" | "active" | "maintenance">("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [showAddModal, setShowAddModal] = useState(false);
+  // Logic state
+  const [hotelState, setHotelState] = useState(() => getInitialHotelFacilities(hotelId));
 
-  // Add form states
-  const [newFacilityName, setNewFacilityName] = useState("");
-  const [newFacilityCategory, setNewFacilityCategory] = useState<Facility["category"]>("Pool");
-  const [newFacilityHours, setNewFacilityHours] = useState("08:00 - 20:00");
-  const [newFacilityLocation, setNewFacilityLocation] = useState("");
+  // Active view tab: "facilities" | "amenities" | "policies"
+  const [activeTab, setActiveTab] = useState<"facilities" | "amenities" | "policies">("facilities");
 
+  // Facility filter
+  const [facilityFilter, setFacilityFilter] = useState<"all" | "active" | "maintenance">("all");
+
+  // Amenity filters
+  const [amenitySearch, setAmenitySearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<"all" | GroupKey>("all");
+
+  // Modals
+  const [showAddFacilityModal, setShowAddFacilityModal] = useState(false);
+  const [showManageAmenitiesModal, setShowManageAmenitiesModal] = useState(false);
+  const [showEditPoliciesModal, setShowEditPoliciesModal] = useState(false);
+
+  // New facility form
+  const [facName, setFacName] = useState("");
+  const [facCategory, setFacCategory] = useState<FacilityItem["category"]>("Pool");
+  const [facLocation, setFacLocation] = useState("");
+  const [facHours, setFacHours] = useState("08:00 - 22:00");
+  const [facImage, setFacImage] = useState(
+    "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80"
+  );
+
+  // Policy form
+  const [tempCheckIn, setTempCheckIn] = useState(hotelState.checkIn);
+  const [tempCheckOut, setTempCheckOut] = useState(hotelState.checkOut);
+  const [tempRefundId, setTempRefundId] = useState(hotelState.refundPolicyId);
+
+  // Metrics from logic layer
+  const health = useMemo(() => computeFacilitiesHealth(hotelState), [hotelState]);
+  const totalAmenities = useMemo(() => getAvailableAmenitiesCount(hotelState), [hotelState]);
+
+  // Current refund policy
+  const activePolicy = useMemo(() => {
+    return (
+      masterRefundPolicies.find((p) => p.id === hotelState.refundPolicyId) ||
+      masterRefundPolicies[1]
+    );
+  }, [hotelState.refundPolicyId]);
+
+  // Filtered facilities
   const filteredFacilities = useMemo(() => {
-    return facilities.filter((f) => {
-      if (filter === "all") return true;
-      return f.status === filter;
+    return hotelState.facilities.filter((f) => {
+      if (facilityFilter === "all") return true;
+      return f.status === facilityFilter;
     });
-  }, [facilities, filter]);
+  }, [hotelState.facilities, facilityFilter]);
+
+  // Amenity categories (excluding payment)
+  const amenityCategories = categoryMetaList.filter((c) => c.key !== "payment");
+
+  // Handlers
+  const handleToggleStatus = (id: string, current: "active" | "maintenance") => {
+    const next = current === "active" ? "maintenance" : "active";
+    setHotelState((prev) => updateFacilityStatusInState(prev, id, next));
+  };
 
   const handleAddFacility = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newFacilityName.trim()) return;
+    if (!facName.trim()) return;
 
-    const newFac: Facility = {
-      id: `f${facilities.length + 1}`,
-      name: newFacilityName.trim(),
-      category: newFacilityCategory,
-      location: newFacilityLocation.trim() || "Main Building",
-      status: "active",
-      description: "Newly added amenity available to registered in-house hotel guests.",
-      hours: newFacilityHours.trim() || "08:00 - 22:00",
-      metricLabel: "Operational",
-      metricValue: "Active Quota",
-      occupancyPercent: 0,
-      image:
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
-    };
+    setHotelState((prev) =>
+      addNewFacilityToState(prev, {
+        name: facName.trim(),
+        category: facCategory,
+        location: facLocation.trim() || "Main Building",
+        status: "active",
+        description: "Hotel amenity available to in-house guests.",
+        hours: facHours.trim() || "08:00 - 22:00",
+        metricLabel: "Status",
+        metricValue: "Operational",
+        occupancyPercent: 10,
+        image: facImage,
+      })
+    );
 
-    setFacilities((prev) => [...prev, newFac]);
-    setNewFacilityName("");
-    setNewFacilityLocation("");
-    setShowAddModal(false);
+    setFacName("");
+    setFacLocation("");
+    setShowAddFacilityModal(false);
+  };
+
+  const handleSavePolicies = (e: React.FormEvent) => {
+    e.preventDefault();
+    setHotelState((prev) => updateScheduleAndPolicy(prev, tempCheckIn, tempCheckOut, tempRefundId));
+    setShowEditPoliciesModal(false);
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
-      {/* ── Top Header Bar ── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-outline-variant">
+    <div className="space-y-6 pb-16 animate-in fade-in duration-200">
+      {/* ── Simple Clean Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-outline-variant">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-on-surface">
+          <h1 className="text-2xl font-black tracking-tight text-on-surface">
             Facilities &amp; Amenities
           </h1>
-          <p className="text-xs sm:text-sm text-on-surface-variant font-medium mt-1">
-            Manage hotel guest amenities, operating hours, capacity quotas, and maintenance status
+          <p className="text-xs sm:text-sm text-on-surface-variant font-medium mt-0.5">
+            Manage your hotel's available facilities, room amenities, and guest policies.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Grid/List View Switcher */}
-          <div className="inline-flex p-1 rounded-full bg-surface-container border border-outline-variant">
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                viewMode === "grid"
-                  ? "bg-[#001a43] text-white shadow-sm dark:bg-primary dark:text-on-primary"
-                  : "text-on-surface-variant hover:text-on-surface"
-              }`}
-            >
-              <span className="material-symbols-outlined text-[16px]">grid_view</span>
-              <span>Grid</span>
-            </button>
-            <button
-              onClick={() => setViewMode("list")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                viewMode === "list"
-                  ? "bg-[#001a43] text-white shadow-sm dark:bg-primary dark:text-on-primary"
-                  : "text-on-surface-variant hover:text-on-surface"
-              }`}
-            >
-              <span className="material-symbols-outlined text-[16px]">format_list_bulleted</span>
-              <span>List</span>
-            </button>
-          </div>
-
-          {/* Quick Filter Pills */}
-          <div className="inline-flex p-1 rounded-full bg-surface-container border border-outline-variant">
-            <button
-              onClick={() => setFilter("all")}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                filter === "all"
-                  ? "bg-[#001a43] text-white shadow-sm dark:bg-primary dark:text-on-primary"
-                  : "text-on-surface-variant hover:text-on-surface"
-              }`}
-            >
-              All ({facilities.length})
-            </button>
-            <button
-              onClick={() => setFilter("active")}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                filter === "active"
-                  ? "bg-[#001a43] text-white shadow-sm dark:bg-primary dark:text-on-primary"
-                  : "text-on-surface-variant hover:text-on-surface"
-              }`}
-            >
-              Active ({facilities.filter((f) => f.status === "active").length})
-            </button>
-            <button
-              onClick={() => setFilter("maintenance")}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                filter === "maintenance"
-                  ? "bg-[#c9a227] text-[#001a43] shadow-sm font-black"
-                  : "text-on-surface-variant hover:text-on-surface"
-              }`}
-            >
-              Maintenance ({facilities.filter((f) => f.status === "maintenance").length})
-            </button>
-          </div>
-
-          {/* Add New Facility Button */}
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2">
           <button
-            onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#c9a227] hover:bg-[#d8b030] active:scale-95 text-[#001a43] font-bold text-xs shadow-md shadow-[#c9a227]/20 transition-all cursor-pointer"
+            onClick={() => setShowManageAmenitiesModal(true)}
+            className="px-3.5 py-2 rounded-xl border border-outline-variant bg-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface transition cursor-pointer flex items-center gap-1.5"
           >
-            <span className="material-symbols-outlined text-[18px]">add</span>
-            <span>Add New Facility</span>
+            <span className="material-symbols-outlined text-[16px]">tune</span>
+            <span>Customize</span>
+          </button>
+          <button
+            onClick={() => setShowAddFacilityModal(true)}
+            className="px-4 py-2 rounded-xl bg-[#001a43] hover:bg-[#002766] text-white text-xs font-bold transition shadow-sm cursor-pointer flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-[16px]">add</span>
+            <span>Add Facility</span>
           </button>
         </div>
       </div>
 
-      {/* ── Facilities Cards (Grid or List View) ── */}
-      {viewMode === "grid" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredFacilities.map((fac) => (
-            <div
-              key={fac.id}
-              className={`rounded-[24px] border bg-surface-container-low shadow-[0_10px_30px_rgba(0,26,67,0.04)] overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:shadow-[0_18px_50px_rgba(0,26,67,0.11)] hover:-translate-y-1 ${
-                fac.status === "maintenance"
-                  ? "border-amber-500/40 hover:border-amber-500"
-                  : "border-outline-variant hover:border-[#001a43]/30"
-              }`}
-            >
-              {/* Media Header */}
-              <div className="relative h-48 w-full overflow-hidden bg-surface-container-high">
-                <img
-                  src={fac.image}
-                  alt={fac.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#001a43]/90 via-black/25 to-transparent" />
+      {/* ── Segmented Navigation Tabs (HCI: Low Cognitive Load) ── */}
+      <div className="flex items-center justify-between gap-4 border-b border-outline-variant pb-2">
+        <div className="inline-flex p-1 rounded-2xl bg-surface-container border border-outline-variant">
+          <button
+            onClick={() => setActiveTab("facilities")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+              activeTab === "facilities"
+                ? "bg-white dark:bg-surface-container-high text-[#001a43] dark:text-primary shadow-xs"
+                : "text-on-surface-variant hover:text-on-surface"
+            }`}
+          >
+            <span className="material-symbols-outlined text-[16px]">domain</span>
+            <span>Resort Facilities ({hotelState.facilities.length})</span>
+          </button>
 
-                {/* Status Badge */}
-                <div className="absolute top-3 right-3">
-                  {fac.status === "active" ? (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 backdrop-blur-md text-[11px] font-bold text-emerald-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      ACTIVE
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/50 backdrop-blur-md text-[11px] font-bold text-amber-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                      MAINTENANCE
-                    </span>
-                  )}
-                </div>
+          <button
+            onClick={() => setActiveTab("amenities")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+              activeTab === "amenities"
+                ? "bg-white dark:bg-surface-container-high text-[#001a43] dark:text-primary shadow-xs"
+                : "text-on-surface-variant hover:text-on-surface"
+            }`}
+          >
+            <span className="material-symbols-outlined text-[16px]">hotel_class</span>
+            <span>Available Amenities ({totalAmenities - hotelState.availableAmenities.payment.length})</span>
+          </button>
 
-                {/* Location */}
-                <div className="absolute bottom-3 left-4 flex items-center gap-1.5 text-white/90 text-xs font-semibold">
-                  <span className="material-symbols-outlined text-[16px] text-[#ffd977]">
-                    location_on
-                  </span>
-                  <span>{fac.location}</span>
-                </div>
-              </div>
+          <button
+            onClick={() => setActiveTab("policies")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+              activeTab === "policies"
+                ? "bg-white dark:bg-surface-container-high text-[#001a43] dark:text-primary shadow-xs"
+                : "text-on-surface-variant hover:text-on-surface"
+            }`}
+          >
+            <span className="material-symbols-outlined text-[16px]">policy</span>
+            <span>Policies &amp; Payments</span>
+          </button>
+        </div>
 
-              {/* Content Body */}
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                <div className="space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-base font-black text-on-surface leading-tight">
-                      {fac.name}
-                    </h3>
-                    <span className="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant border border-outline-variant text-[11px] font-bold">
-                      {fac.category}
-                    </span>
-                  </div>
-                  <p className="text-xs text-on-surface-variant line-clamp-2 font-medium">
-                    {fac.description}
-                  </p>
+        {/* Quick summary note on right */}
+        <div className="hidden md:flex items-center gap-2 text-xs text-on-surface-variant font-medium">
+          <span className="w-2 h-2 rounded-full bg-emerald-500" />
+          <span>{health.healthPercent}% Operational</span>
+        </div>
+      </div>
 
-                  {/* Hours & Capacity Box */}
-                  <div className="space-y-2.5 bg-surface-container p-3 rounded-2xl border border-outline-variant mt-3">
-                    {fac.maintenanceNotice && (
-                      <div className="flex items-center gap-2 text-xs text-amber-600 dark:text-amber-400 bg-amber-500/10 p-2 rounded-xl border border-amber-500/20 font-medium">
-                        <span className="material-symbols-outlined text-[16px]">build</span>
-                        <span className="truncate">{fac.maintenanceNotice}</span>
-                      </div>
-                    )}
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* ── TAB 1: RESORT FACILITIES                               ── */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      {activeTab === "facilities" && (
+        <div className="space-y-4">
+          {/* Simple Filter Strip */}
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setFacilityFilter("all")}
+                className={`px-3 py-1 rounded-lg font-bold transition cursor-pointer ${
+                  facilityFilter === "all"
+                    ? "bg-[#001a43] text-white"
+                    : "text-on-surface-variant hover:bg-surface-container"
+                }`}
+              >
+                All ({hotelState.facilities.length})
+              </button>
+              <button
+                onClick={() => setFacilityFilter("active")}
+                className={`px-3 py-1 rounded-lg font-bold transition cursor-pointer ${
+                  facilityFilter === "active"
+                    ? "bg-emerald-600 text-white"
+                    : "text-on-surface-variant hover:bg-surface-container"
+                }`}
+              >
+                Active ({health.active})
+              </button>
+              <button
+                onClick={() => setFacilityFilter("maintenance")}
+                className={`px-3 py-1 rounded-lg font-bold transition cursor-pointer ${
+                  facilityFilter === "maintenance"
+                    ? "bg-amber-600 text-white"
+                    : "text-on-surface-variant hover:bg-surface-container"
+                }`}
+              >
+                Maintenance ({health.maintenance})
+              </button>
+            </div>
 
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="flex items-center gap-1.5 text-on-surface-variant font-medium">
-                        <span className="material-symbols-outlined text-[16px] text-[#001a43] dark:text-primary">
-                          schedule
-                        </span>
-                        Operating Hours
+            <span className="text-on-surface-variant font-medium">
+              Showing {filteredFacilities.length} facilities
+            </span>
+          </div>
+
+          {/* Simple Clean Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredFacilities.map((fac) => {
+              const isActive = fac.status === "active";
+
+              return (
+                <div
+                  key={fac.id}
+                  className="rounded-2xl border border-outline-variant bg-surface-container-low overflow-hidden shadow-xs hover:shadow-md transition flex flex-col justify-between"
+                >
+                  {/* Photo Header */}
+                  <div className="relative h-40 w-full overflow-hidden bg-surface-container">
+                    <img
+                      src={fac.image}
+                      alt={fac.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+
+                    {/* Status Pill */}
+                    <div className="absolute top-3 right-3">
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold backdrop-blur-md ${
+                          isActive
+                            ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                            : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                        }`}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            isActive ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
+                          }`}
+                        />
+                        {isActive ? "OPEN" : "MAINTENANCE"}
                       </span>
-                      <span className="font-bold text-on-surface">
+                    </div>
+
+                    {/* Location */}
+                    <div className="absolute bottom-2.5 left-3 text-white/90 text-xs font-medium flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[15px] text-[#ffd977]">
+                        location_on
+                      </span>
+                      <span>{fac.location}</span>
+                    </div>
+                  </div>
+
+                  {/* Body */}
+                  <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between gap-2">
+                        <h3 className="font-bold text-sm text-on-surface truncate">{fac.name}</h3>
+                        <span className="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant text-[10px] font-bold shrink-0">
+                          {fac.category}
+                        </span>
+                      </div>
+                      <p className="text-xs text-on-surface-variant mt-1 line-clamp-2">
+                        {fac.description}
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t border-outline-variant/60 flex items-center justify-between text-xs">
+                      <span className="text-on-surface-variant font-medium flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[15px]">schedule</span>
                         {fac.hours}
                       </span>
-                    </div>
-
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-on-surface-variant font-medium">{fac.metricLabel}</span>
-                        <span className="font-bold text-[#001a43] dark:text-primary">{fac.metricValue}</span>
-                      </div>
-                      <div className="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
-                        <div
-                          className="h-full bg-[#001a43] dark:bg-primary rounded-full transition-all duration-700"
-                          style={{ width: `${fac.occupancyPercent}%` }}
-                        />
-                      </div>
+                      <button
+                        onClick={() => handleToggleStatus(fac.id, fac.status)}
+                        className={`text-xs font-bold px-2.5 py-1 rounded-lg border cursor-pointer transition ${
+                          isActive
+                            ? "border-outline-variant text-on-surface-variant hover:text-amber-600 hover:border-amber-500"
+                            : "border-emerald-500 text-emerald-600 hover:bg-emerald-50"
+                        }`}
+                      >
+                        {isActive ? "Set Maintenance" : "Set Active"}
+                      </button>
                     </div>
                   </div>
                 </div>
+              );
+            })}
 
-                {/* Card Actions */}
-                <div className="flex items-center gap-2 pt-2 border-t border-outline-variant">
-                  <button className="flex-1 py-2 px-3 rounded-xl border border-outline-variant text-on-surface hover:bg-[#001a43] hover:text-white dark:hover:bg-primary dark:hover:text-on-primary text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
-                    <span className="material-symbols-outlined text-[16px]">edit</span>
-                    <span>Edit Detail</span>
-                  </button>
-                  <button
-                    aria-label="Settings"
-                    className="p-2 rounded-xl border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">settings</span>
-                  </button>
-                </div>
+            {/* Simple Add Facility Card */}
+            <button
+              onClick={() => setShowAddFacilityModal(true)}
+              className="rounded-2xl border-2 border-dashed border-outline-variant hover:border-[#001a43] p-6 flex flex-col items-center justify-center text-center cursor-pointer transition group min-h-[220px]"
+            >
+              <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-[#001a43] mb-2">
+                <span className="material-symbols-outlined text-2xl">add</span>
               </div>
-            </div>
-          ))}
-
-          {/* Add New Facility Card (Dashed Border) */}
-          <div
-            onClick={() => setShowAddModal(true)}
-            className="border-2 border-dashed border-outline-variant hover:border-[#001a43] dark:hover:border-primary bg-surface-container-low/40 hover:bg-surface-container rounded-[24px] p-8 flex flex-col items-center justify-center text-center cursor-pointer min-h-[380px] transition-all group space-y-3"
-          >
-            <div className="w-14 h-14 rounded-full bg-surface-container group-hover:bg-[#001a43]/10 dark:group-hover:bg-primary/20 flex items-center justify-center transition-colors">
-              <span className="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-[#001a43] dark:group-hover:text-primary transition-colors">
-                add_circle
+              <span className="text-xs font-bold text-on-surface group-hover:text-[#001a43]">
+                Add Another Facility
               </span>
-            </div>
-            <h3 className="text-base font-black text-on-surface group-hover:text-[#001a43] dark:group-hover:text-primary transition-colors">
-              Add New Facility
-            </h3>
-            <p className="text-xs text-on-surface-variant max-w-xs leading-relaxed font-medium">
-              Register a recreational zone, dining area, or wellness space with capacity limits and operational staff.
-            </p>
-            <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface-container border border-outline-variant group-hover:border-[#001a43]/40 text-on-surface text-xs font-bold">
-              <span className="material-symbols-outlined text-[16px]">tune</span>
-              <span>Configure Spec</span>
-            </div>
-          </div>
-        </div>
-      ) : (
-        /* List View */
-        <div className="rounded-[24px] border border-outline-variant bg-surface-container-low overflow-hidden shadow-[0_10px_30px_rgba(0,26,67,0.04)]">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-outline-variant bg-surface-container/60 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-                  <th className="py-3 px-4">Facility</th>
-                  <th className="py-3 px-4">Category &amp; Location</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4">Operating Hours</th>
-                  <th className="py-3 px-4">Occupancy / Load</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-outline-variant">
-                {filteredFacilities.map((fac) => (
-                  <tr key={fac.id} className="hover:bg-surface-container/60 transition-colors">
-                    <td className="py-3 px-4">
-                      <div className="font-bold text-on-surface">{fac.name}</div>
-                      <div className="text-xs text-on-surface-variant truncate max-w-xs font-medium">{fac.description}</div>
-                    </td>
-                    <td className="py-3 px-4">
-                      <span className="px-2.5 py-0.5 rounded-full bg-surface-container border border-outline-variant text-xs font-bold text-on-surface-variant mr-2">
-                        {fac.category}
-                      </span>
-                      <span className="text-xs text-on-surface-variant font-medium">{fac.location}</span>
-                    </td>
-                    <td className="py-3 px-4">
-                      {fac.status === "active" ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/20">
-                          Active
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-xs font-bold border border-amber-500/20">
-                          Maintenance
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-3 px-4 text-xs font-semibold text-on-surface">{fac.hours}</td>
-                    <td className="py-3 px-4 text-xs text-[#001a43] dark:text-primary font-bold">
-                      {fac.metricValue}
-                    </td>
-                    <td className="py-3 px-4 text-right">
-                      <button className="px-3 py-1 rounded-xl border border-outline-variant text-xs font-bold hover:bg-surface-container cursor-pointer">
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              <span className="text-[11px] text-on-surface-variant mt-0.5">
+                Pool, Spa, Gym, Lounge, or Dining
+              </span>
+            </button>
           </div>
         </div>
       )}
 
-      {/* ── Bottom KPI Row ── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-        {/* KPI 1: Usage Rate */}
-        <div className="p-6 rounded-[22px] bg-surface-container-low border border-outline-variant shadow-[0_10px_30px_rgba(0,26,67,0.04)] flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">
-                Facility Usage Rate
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* ── TAB 2: AVAILABLE AMENITIES (CLEAN TAGS)                ── */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      {activeTab === "amenities" && (
+        <div className="space-y-5">
+          {/* Search + Category Filter Bar */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">
+                search
               </span>
-              <div className="w-9 h-9 rounded-xl bg-[#001a43]/10 dark:bg-primary/10 flex items-center justify-center text-[#001a43] dark:text-primary">
-                <span className="material-symbols-outlined text-[18px]">analytics</span>
-              </div>
+              <input
+                type="text"
+                placeholder="Search amenities (e.g. Wi-Fi, Air Conditioning, Breakfast)..."
+                value={amenitySearch}
+                onChange={(e) => setAmenitySearch(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 rounded-xl bg-surface-container border border-outline-variant text-xs text-on-surface focus:outline-none focus:border-[#001a43]"
+              />
+              {amenitySearch && (
+                <button
+                  onClick={() => setAmenitySearch("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant font-bold"
+                >
+                  Clear
+                </button>
+              )}
             </div>
-            <div className="flex items-baseline gap-3 mb-1">
-              <span className="text-3xl font-black text-on-surface">78.5%</span>
-              <span className="inline-flex items-center gap-0.5 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
-                <span className="material-symbols-outlined text-[14px]">trending_up</span>
-                +12% vs last mo
-              </span>
-            </div>
-            <p className="text-xs text-on-surface-variant font-medium mb-4">
-              Average peak-hour utilization across all 5 operational facilities.
-            </p>
-          </div>
-          <div className="space-y-1.5">
-            <div className="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
-              <div className="h-full bg-[#001a43] dark:bg-primary rounded-full" style={{ width: "78.5%" }} />
-            </div>
-            <div className="flex justify-between text-[11px] text-on-surface-variant font-medium">
-              <span>Target: 70%</span>
-              <span>Peak: 92% (19:00)</span>
-            </div>
-          </div>
-        </div>
 
-        {/* KPI 2: Maintenance Health */}
-        <div className="p-6 rounded-[22px] bg-surface-container-low border border-outline-variant shadow-[0_10px_30px_rgba(0,26,67,0.04)] flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">
-                Maintenance Health
-              </span>
-              <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                <span className="material-symbols-outlined text-[18px]">verified_user</span>
-              </div>
-            </div>
-            <div className="flex items-baseline gap-3 mb-1">
-              <span className="text-3xl font-black text-emerald-600 dark:text-emerald-400">All Clear (94%)</span>
-            </div>
-            <p className="text-xs text-on-surface-variant font-medium mb-4">
-              4 of 5 facilities 100% operational. Next scheduled audit: Oct 28.
-            </p>
-          </div>
-          <div className="space-y-1.5">
-            <div className="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
-              <div className="h-full bg-emerald-500 dark:bg-emerald-400 rounded-full" style={{ width: "94%" }} />
-            </div>
-            <div className="flex justify-between text-[11px] text-on-surface-variant font-medium">
-              <span>Routine Check: Passed</span>
-              <span>Safety Rating: A+</span>
-            </div>
-          </div>
-        </div>
-
-        {/* KPI 3: Direct Guest Revenue */}
-        <div className="p-6 rounded-[22px] bg-surface-container-low border border-outline-variant shadow-[0_10px_30px_rgba(0,26,67,0.04)] flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">
-                Direct Amenity Revenue
-              </span>
-              <div className="w-9 h-9 rounded-xl bg-[#c9a227]/15 flex items-center justify-center text-[#b08d1f] dark:text-[#ffd977]">
-                <span className="material-symbols-outlined text-[18px]">payments</span>
-              </div>
-            </div>
-            <div className="flex items-baseline gap-3 mb-1">
-              <span className="text-3xl font-black text-on-surface">LKR 842,000</span>
-              <span className="inline-flex items-center gap-0.5 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
-                <span className="material-symbols-outlined text-[14px]">trending_up</span>
-                +22.4% MoM
-              </span>
-            </div>
-            <p className="text-xs text-on-surface-variant font-medium mb-4">
-              Upsell revenue generated from spa therapies, private dining, and pool cabanas.
-            </p>
-          </div>
-          <div className="space-y-1.5">
-            <div className="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
-              <div className="h-full bg-[#c9a227] rounded-full" style={{ width: "84.2%" }} />
-            </div>
-            <div className="flex justify-between text-[11px] text-on-surface-variant font-medium">
-              <span>Spa: 58%</span>
-              <span>Dining: 42%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Add Facility Modal ── */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-[26px] border border-outline-variant bg-surface-container-low p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between border-b border-outline-variant pb-3">
-              <h3 className="text-lg font-black text-on-surface">Enroll New Facility</h3>
+            {/* Category Filter Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
               <button
-                onClick={() => setShowAddModal(false)}
-                className="p-1.5 text-on-surface-variant hover:text-on-surface rounded-full hover:bg-surface-container cursor-pointer"
+                onClick={() => setSelectedCategory("all")}
+                className={`px-3 py-1.5 rounded-lg font-bold transition whitespace-nowrap cursor-pointer ${
+                  selectedCategory === "all"
+                    ? "bg-[#001a43] text-white"
+                    : "bg-surface-container text-on-surface-variant hover:text-on-surface"
+                }`}
+              >
+                All
+              </button>
+              {amenityCategories.map((cat) => (
+                <button
+                  key={cat.key}
+                  onClick={() => setSelectedCategory(cat.key)}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition whitespace-nowrap cursor-pointer ${
+                    selectedCategory === cat.key
+                      ? "bg-[#001a43] text-white"
+                      : "bg-surface-container text-on-surface-variant hover:text-on-surface"
+                  }`}
+                >
+                  {cat.title} ({hotelState.availableAmenities[cat.key]?.length || 0})
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Simple Clean Categorized Tags */}
+          <div className="space-y-4">
+            {amenityCategories
+              .filter((cat) => selectedCategory === "all" || selectedCategory === cat.key)
+              .map((cat) => {
+                const list = hotelState.availableAmenities[cat.key] || [];
+                const filtered = amenitySearch.trim()
+                  ? list.filter((item) => item.toLowerCase().includes(amenitySearch.toLowerCase()))
+                  : list;
+
+                if (filtered.length === 0) return null;
+
+                return (
+                  <div
+                    key={cat.key}
+                    className="p-5 rounded-2xl bg-surface-container-low border border-outline-variant space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="material-symbols-outlined text-[18px] text-[#001a43] dark:text-primary">
+                          {cat.icon}
+                        </span>
+                        <h3 className="text-xs font-black uppercase tracking-wider text-on-surface">
+                          {cat.title}
+                        </h3>
+                      </div>
+                      <span className="text-[11px] font-bold text-on-surface-variant">
+                        {filtered.length} available
+                      </span>
+                    </div>
+
+                    {/* Simple Tags */}
+                    <div className="flex flex-wrap gap-2">
+                      {filtered.map((item) => {
+                        const icon = amenityIcons[item] || "check";
+                        return (
+                          <span
+                            key={item}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-xs font-semibold text-on-surface border border-outline-variant/70"
+                          >
+                            <span className="material-symbols-outlined text-[15px] text-[#001a43] dark:text-primary">
+                              {icon}
+                            </span>
+                            <span>{item}</span>
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+      )}
+
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* ── TAB 3: POLICIES & PAYMENTS (CLEAN & SIMPLE)            ── */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      {activeTab === "policies" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Check-in Schedule Card */}
+          <div className="p-5 rounded-2xl bg-surface-container-low border border-outline-variant space-y-4 flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase tracking-wider text-on-surface">
+                  Daily Guest Schedule
+                </span>
+                <span className="material-symbols-outlined text-[18px] text-sky-600">
+                  schedule
+                </span>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-black text-on-surface">{hotelState.checkIn}</span>
+                <span className="text-xs text-on-surface-variant font-bold">Check-in</span>
+                <span className="text-on-surface-variant/40 mx-2">•</span>
+                <span className="text-2xl font-black text-on-surface">{hotelState.checkOut}</span>
+                <span className="text-xs text-on-surface-variant font-bold">Check-out</span>
+              </div>
+              <p className="text-xs text-on-surface-variant">
+                Standard daily guest arrival and departure turnover window.
+              </p>
+            </div>
+
+            <button
+              onClick={() => {
+                setTempCheckIn(hotelState.checkIn);
+                setTempCheckOut(hotelState.checkOut);
+                setTempRefundId(hotelState.refundPolicyId);
+                setShowEditPoliciesModal(true);
+              }}
+              className="text-xs font-bold text-[#001a43] dark:text-primary hover:underline text-left cursor-pointer"
+            >
+              Change Hours →
+            </button>
+          </div>
+
+          {/* Cancellation Policy Card */}
+          <div className="p-5 rounded-2xl bg-surface-container-low border border-outline-variant space-y-4 flex flex-col justify-between">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase tracking-wider text-on-surface">
+                  Cancellation Rule
+                </span>
+                {activePolicy.recommended && (
+                  <span className="px-2 py-0.5 rounded bg-[#fbf6e4] text-[#b08d1f] text-[10px] font-black border border-[#e6d9a8]">
+                    RECOMMENDED
+                  </span>
+                )}
+              </div>
+              <h4 className="text-sm font-bold text-on-surface">{activePolicy.title}</h4>
+              <p className="text-xs text-on-surface-variant leading-relaxed">
+                {activePolicy.description}
+              </p>
+            </div>
+
+            <button
+              onClick={() => {
+                setTempCheckIn(hotelState.checkIn);
+                setTempCheckOut(hotelState.checkOut);
+                setTempRefundId(hotelState.refundPolicyId);
+                setShowEditPoliciesModal(true);
+              }}
+              className="text-xs font-bold text-[#001a43] dark:text-primary hover:underline text-left cursor-pointer"
+            >
+              Change Policy →
+            </button>
+          </div>
+
+          {/* Accepted Payments Card (Full Width) */}
+          <div className="md:col-span-2 p-5 rounded-2xl bg-surface-container-low border border-outline-variant space-y-3">
+            <span className="text-xs font-black uppercase tracking-wider text-on-surface block">
+              Accepted Payment Methods
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {hotelState.availableAmenities.payment.map((pay) => (
+                <span
+                  key={pay}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container border border-outline-variant text-xs font-bold text-on-surface"
+                >
+                  <span className="material-symbols-outlined text-[16px] text-emerald-600">
+                    {pay === "Cash" ? "payments" : "credit_card"}
+                  </span>
+                  <span>{pay}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* ── MODAL: CUSTOMIZE AVAILABLE AMENITIES                   ── */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      {showManageAmenitiesModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+          <div className="w-full max-w-2xl max-h-[80vh] flex flex-col rounded-2xl border border-outline-variant bg-surface-container-low shadow-xl">
+            <div className="flex items-center justify-between p-4 border-b border-outline-variant">
+              <div>
+                <h3 className="text-base font-bold text-on-surface">Manage Available Amenities</h3>
+                <p className="text-xs text-on-surface-variant">Toggle features available at your property.</p>
+              </div>
+              <button
+                onClick={() => setShowManageAmenitiesModal(false)}
+                className="p-1 text-on-surface-variant hover:text-on-surface rounded-lg cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[20px]">close</span>
               </button>
             </div>
 
-            <form onSubmit={handleAddFacility} className="space-y-4 text-xs">
+            <div className="p-4 overflow-y-auto space-y-4 flex-1">
+              {categoryMetaList.map((cat) => {
+                const options = masterOptionGroups[cat.key];
+                const activeList = hotelState.availableAmenities[cat.key] || [];
+
+                return (
+                  <div key={cat.key} className="space-y-2 pb-3 border-b border-outline-variant/50 last:border-0">
+                    <h4 className="text-xs font-bold text-on-surface flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-[16px]">{cat.icon}</span>
+                      <span>{cat.title}</span>
+                    </h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {options.map((opt) => {
+                        const isSelected = activeList.includes(opt);
+                        return (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() =>
+                              setHotelState((prev) => toggleAmenityInState(prev, cat.key, opt))
+                            }
+                            className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition cursor-pointer ${
+                              isSelected
+                                ? "bg-[#001a43] text-white border-[#001a43] dark:bg-primary dark:text-on-primary"
+                                : "bg-surface-container text-on-surface-variant border-outline-variant hover:border-on-surface-variant"
+                            }`}
+                          >
+                            {isSelected ? "✓ " : "+ "}
+                            {opt}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="p-3 border-t border-outline-variant flex justify-end">
+              <button
+                onClick={() => setShowManageAmenitiesModal(false)}
+                className="px-4 py-1.5 rounded-xl text-xs font-bold bg-[#001a43] text-white cursor-pointer"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* ── MODAL: ADD FACILITY                                    ── */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      {showAddFacilityModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+          <div className="w-full max-w-md rounded-2xl border border-outline-variant bg-surface-container-low p-5 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-outline-variant pb-2">
+              <h3 className="text-base font-bold text-on-surface">Add Facility</h3>
+              <button
+                onClick={() => setShowAddFacilityModal(false)}
+                className="p-1 text-on-surface-variant hover:text-on-surface rounded-lg cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleAddFacility} className="space-y-3 text-xs">
               <div className="space-y-1">
-                <label className="font-bold text-on-surface-variant uppercase tracking-wider">
-                  Facility Name
-                </label>
+                <label className="font-bold text-on-surface-variant">Facility Name</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Lagoon Water Sports Pavilion"
-                  value={newFacilityName}
-                  onChange={(e) => setNewFacilityName(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-surface-container border border-outline-variant text-on-surface text-xs focus:outline-none focus:border-[#001a43] dark:focus:border-primary"
+                  placeholder="e.g. Infinity Horizon Pool"
+                  value={facName}
+                  onChange={(e) => setFacName(e.target.value)}
+                  className="w-full p-2 rounded-xl bg-surface-container border border-outline-variant text-xs text-on-surface"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
-                  <label className="font-bold text-on-surface-variant uppercase tracking-wider">
-                    Category
-                  </label>
+                  <label className="font-bold text-on-surface-variant">Category</label>
                   <select
-                    value={newFacilityCategory}
-                    onChange={(e) => setNewFacilityCategory(e.target.value as Facility["category"])}
-                    className="w-full p-2.5 rounded-xl bg-surface-container border border-outline-variant text-on-surface text-xs"
+                    value={facCategory}
+                    onChange={(e) => setFacCategory(e.target.value as FacilityItem["category"])}
+                    className="w-full p-2 rounded-xl bg-surface-container border border-outline-variant text-xs text-on-surface"
                   >
                     <option value="Pool">Pool</option>
                     <option value="Spa">Spa</option>
                     <option value="Dining">Dining</option>
                     <option value="Gym">Gym</option>
                     <option value="Ballroom">Ballroom</option>
+                    <option value="Lounge">Lounge</option>
                   </select>
                 </div>
+
                 <div className="space-y-1">
-                  <label className="font-bold text-on-surface-variant uppercase tracking-wider">
-                    Operating Hours
-                  </label>
+                  <label className="font-bold text-on-surface-variant">Hours</label>
                   <input
                     type="text"
-                    value={newFacilityHours}
-                    onChange={(e) => setNewFacilityHours(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-surface-container border border-outline-variant text-on-surface text-xs"
+                    value={facHours}
+                    onChange={(e) => setFacHours(e.target.value)}
+                    className="w-full p-2 rounded-xl bg-surface-container border border-outline-variant text-xs text-on-surface"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-on-surface-variant uppercase tracking-wider">
-                  Location within Property
-                </label>
+                <label className="font-bold text-on-surface-variant">Location</label>
                 <input
                   type="text"
-                  placeholder="e.g. West Wing Beachside"
-                  value={newFacilityLocation}
-                  onChange={(e) => setNewFacilityLocation(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-surface-container border border-outline-variant text-on-surface text-xs"
+                  placeholder="e.g. 5th Floor Deck"
+                  value={facLocation}
+                  onChange={(e) => setFacLocation(e.target.value)}
+                  className="w-full p-2 rounded-xl bg-surface-container border border-outline-variant text-xs text-on-surface"
                 />
               </div>
 
               <div className="flex justify-end gap-2 pt-2 border-t border-outline-variant">
                 <button
                   type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-on-surface-variant hover:bg-surface-container cursor-pointer"
+                  onClick={() => setShowAddFacilityModal(false)}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold text-on-surface-variant hover:bg-surface-container cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl text-xs font-bold bg-[#001a43] text-white hover:bg-[#002766] dark:bg-primary dark:text-on-primary shadow-sm cursor-pointer"
+                  className="px-4 py-1.5 rounded-xl text-xs font-bold bg-[#001a43] text-white hover:bg-[#002766] cursor-pointer"
                 >
-                  Create Facility
+                  Save Facility
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ──────────────────────────────────────────────────────────── */}
+      {/* ── MODAL: EDIT POLICIES                                   ── */}
+      {/* ──────────────────────────────────────────────────────────── */}
+      {showEditPoliciesModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+          <div className="w-full max-w-md rounded-2xl border border-outline-variant bg-surface-container-low p-5 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-outline-variant pb-2">
+              <h3 className="text-base font-bold text-on-surface">Edit Check-in &amp; Policies</h3>
+              <button
+                onClick={() => setShowEditPoliciesModal(false)}
+                className="p-1 text-on-surface-variant hover:text-on-surface rounded-lg cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleSavePolicies} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="font-bold text-on-surface-variant">Check-in Time</label>
+                  <input
+                    type="time"
+                    value={tempCheckIn}
+                    onChange={(e) => setTempCheckIn(e.target.value)}
+                    className="w-full p-2 rounded-xl bg-surface-container border border-outline-variant text-xs text-on-surface font-bold"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="font-bold text-on-surface-variant">Check-out Time</label>
+                  <input
+                    type="time"
+                    value={tempCheckOut}
+                    onChange={(e) => setTempCheckOut(e.target.value)}
+                    className="w-full p-2 rounded-xl bg-surface-container border border-outline-variant text-xs text-on-surface font-bold"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="font-bold text-on-surface-variant">Cancellation Policy</label>
+                <div className="space-y-1.5">
+                  {masterRefundPolicies.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setTempRefundId(p.id)}
+                      className={`w-full p-2.5 rounded-xl border text-left text-xs transition cursor-pointer ${
+                        tempRefundId === p.id
+                          ? "border-[#001a43] bg-[#f0f4ff] text-[#001a43] font-bold dark:border-primary dark:bg-primary/20 dark:text-on-surface"
+                          : "border-outline-variant text-on-surface-variant hover:border-on-surface-variant"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span>{p.title}</span>
+                        {p.recommended && (
+                          <span className="text-[9px] font-black uppercase text-[#b08d1f]">Rec</span>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-outline-variant">
+                <button
+                  type="button"
+                  onClick={() => setShowEditPoliciesModal(false)}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold text-on-surface-variant hover:bg-surface-container cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-1.5 rounded-xl text-xs font-bold bg-[#001a43] text-white hover:bg-[#002766] cursor-pointer"
+                >
+                  Save
                 </button>
               </div>
             </form>
