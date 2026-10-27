@@ -1,10 +1,24 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useState } from 'react';
 
-export default function ProviderRegisterPage() {
+function ProviderRegisterContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
+
+  const backRef = searchParams.get('backTo') ?? '/auth-main';
+
+  const handleBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push(backRef);
+  };
 
   return (
     <div
@@ -17,13 +31,13 @@ export default function ProviderRegisterPage() {
           alt="Sri Lankan provider journey background"
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/30 backdrop-brightness-80" />
+        <div className="absolute inset-0 bg-black/30 backdrop-brightness-100" />
       </div>
 
       <main className="relative z-20 flex h-[100dvh] items-center justify-center overflow-hidden px-4 pb-3 pt-14 md:px-6 md:pb-4 md:pt-20">
-        <Link href="/auth-main" className="btn-back absolute left-4 top-4 md:left-8 md:top-8">
+        <button type="button" onClick={handleBack} className="btn-back absolute left-4 top-4 md:left-8 md:top-8">
           <span>Back</span>
-        </Link>
+        </button>
 
         <div className="w-full max-w-[500px] -translate-y-3 md:-translate-y-4">
           <div
@@ -183,5 +197,13 @@ export default function ProviderRegisterPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function ProviderRegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#f9f9ff]" />}>
+      <ProviderRegisterContent />
+    </Suspense>
   );
 }
