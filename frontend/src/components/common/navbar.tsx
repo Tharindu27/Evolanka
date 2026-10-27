@@ -10,6 +10,7 @@ const navItems = [
   { label: 'Tour Guides', href: '/tour-guides' },
   { label: 'Rentals', href: '/rentals' },
   { label: 'Taxis', href: '/taxis' },
+  { label: 'Social Feed', href: '/social-feed' },
 ];
 
 export default function Navbar() {
