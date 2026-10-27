@@ -3,6 +3,51 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --button-primary-bg: #001a43;
+  /* Primary button background color */
+  --button-primary-hover: #002d6b;
+  /* Primary button hover background color */
+  --button-secondary-bg: #b08d1f;
+  /* Secondary button background color */
+  --button-secondary-hover: #c9a227;
+  /* Secondary button hover background color */
+
+  /* ── Hotel-Owner Dashboard: Material Design 3 tokens (Dark Mode default fallback) ── */
+  --ds-surface: #0a101d;
+  --ds-surface-dim: #070b14;
+  --ds-surface-bright: #162238;
+  --ds-surface-container-lowest: #060b14;
+  --ds-surface-container-low: #0f172a;
+  --ds-surface-container: #152238;
+  --ds-surface-container-high: #1c2c48;
+  --ds-surface-container-highest: #243759;
+  --ds-surface-variant: #1e2c47;
+  --ds-on-surface: #f8fbff;
+  --ds-on-surface-variant: #94a3b8;
+  --ds-primary: #8cb5ff;
+  --ds-primary-container: #002d6b;
+  --ds-primary-fixed: #d8e2ff;
+  --ds-primary-fixed-dim: #aec6ff;
+  --ds-on-primary: #001a43;
+  --ds-on-primary-container: #ffffff;
+  --ds-on-primary-fixed: #001a43;
+  --ds-secondary: #c9a227;
+  --ds-secondary-container: #473a10;
+  --ds-on-secondary: #001a43;
+  --ds-on-secondary-container: #ffd977;
+  --ds-tertiary: #003d9b;
+  --ds-tertiary-container: #002d6b;
+  --ds-tertiary-fixed: #cce0ff;
+  --ds-on-tertiary: #ffffff;
+  --ds-on-tertiary-container: #ffffff;
+  --ds-outline: #64748b;
+  --ds-outline-variant: #1e2d4a;
+  --ds-error: #f87171;
+  --ds-error-container: #7f1d1d;
+  --ds-on-error: #ffffff;
+  --ds-inverse-surface: #e2e8f0;
+  --ds-inverse-on-surface: #0f172a;
+  --ds-inverse-primary: #001a43;
   --button-primary-bg: #001a43;   /* Primary button background color */
   --button-primary-hover: #002e77;   /* Primary button hover background color */
   --button-secondary-bg: #a28116;   /* Secondary button background color */
@@ -14,6 +59,43 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* ── Hotel-Owner Dashboard: Material Design 3 tokens ── */
+  --color-surface: var(--ds-surface, #0a101d);
+  --color-surface-dim: var(--ds-surface-dim, #070b14);
+  --color-surface-bright: var(--ds-surface-bright, #162238);
+  --color-surface-container-lowest: var(--ds-surface-container-lowest, #060b14);
+  --color-surface-container-low: var(--ds-surface-container-low, #0f172a);
+  --color-surface-container: var(--ds-surface-container, #152238);
+  --color-surface-container-high: var(--ds-surface-container-high, #1c2c48);
+  --color-surface-container-highest: var(--ds-surface-container-highest, #243759);
+  --color-surface-variant: var(--ds-surface-variant, #1e2c47);
+  --color-on-surface: var(--ds-on-surface, #f8fbff);
+  --color-on-surface-variant: var(--ds-on-surface-variant, #94a3b8);
+  --color-primary: var(--ds-primary, #8cb5ff);
+  --color-primary-container: var(--ds-primary-container, #002d6b);
+  --color-primary-fixed: var(--ds-primary-fixed, #d8e2ff);
+  --color-primary-fixed-dim: var(--ds-primary-fixed-dim, #aec6ff);
+  --color-on-primary: var(--ds-on-primary, #001a43);
+  --color-on-primary-container: var(--ds-on-primary-container, #ffffff);
+  --color-on-primary-fixed: var(--ds-on-primary-fixed, #001a43);
+  --color-secondary: var(--ds-secondary, #c9a227);
+  --color-secondary-container: var(--ds-secondary-container, #473a10);
+  --color-on-secondary: var(--ds-on-secondary, #001a43);
+  --color-on-secondary-container: var(--ds-on-secondary-container, #ffd977);
+  --color-tertiary: var(--ds-tertiary, #003d9b);
+  --color-tertiary-container: var(--ds-tertiary-container, #002d6b);
+  --color-tertiary-fixed: var(--ds-tertiary-fixed, #cce0ff);
+  --color-on-tertiary: var(--ds-on-tertiary, #ffffff);
+  --color-on-tertiary-container: var(--ds-on-tertiary-container, #ffffff);
+  --color-outline: var(--ds-outline, #64748b);
+  --color-outline-variant: var(--ds-outline-variant, #1e2d4a);
+  --color-error: var(--ds-error, #f87171);
+  --color-error-container: var(--ds-error-container, #7f1d1d);
+  --color-on-error: var(--ds-on-error, #ffffff);
+  --color-inverse-surface: var(--ds-inverse-surface, #e2e8f0);
+  --color-inverse-on-surface: var(--ds-inverse-on-surface, #0f172a);
+  --color-inverse-primary: var(--ds-inverse-primary, #001a43);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,6 +103,45 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+/* ── Dashboard Light-mode overrides (100% consistent with Evolanka Brand: Navy #001a43 & Gold #c9a227 / #b08d1f) ── */
+.ds-light {
+  --ds-surface: #f8fbff;
+  --ds-surface-dim: #eef3fc;
+  --ds-surface-bright: #ffffff;
+  --ds-surface-container-lowest: #ffffff;
+  --ds-surface-container-low: #ffffff;
+  --ds-surface-container: #f4f7fb;
+  --ds-surface-container-high: #edf2fa;
+  --ds-surface-container-highest: #e2e8f2;
+  --ds-surface-variant: #edf2fa;
+  --ds-on-surface: #001a43;
+  --ds-on-surface-variant: #4e5568;
+  --ds-primary: #001a43;
+  --ds-primary-container: #e8effc;
+  --ds-primary-fixed: #001a43;
+  --ds-primary-fixed-dim: #002e6b;
+  --ds-on-primary: #ffffff;
+  --ds-on-primary-container: #001a43;
+  --ds-on-primary-fixed: #ffffff;
+  --ds-secondary: #b08d1f;
+  --ds-secondary-container: #fcf4dd;
+  --ds-on-secondary: #ffffff;
+  --ds-on-secondary-container: #5c470a;
+  --ds-tertiary: #003d9b;
+  --ds-tertiary-container: #e5efff;
+  --ds-tertiary-fixed: #cce0ff;
+  --ds-on-tertiary: #ffffff;
+  --ds-on-tertiary-container: #001a43;
+  --ds-outline: #8b9cb5;
+  --ds-outline-variant: #dfe4f2;
+  --ds-error: #dc2626;
+  --ds-error-container: #fee2e2;
+  --ds-on-error: #ffffff;
+  --ds-inverse-surface: #001a43;
+  --ds-inverse-on-surface: #f8fbff;
+  --ds-inverse-primary: #8cb5ff;
 }
 
 @keyframes location-float {
@@ -46,11 +167,27 @@
   }
 }
 
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Material Symbols icon helper */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
 }
 
 /*-------------------------------------------------------------------------------------------------
@@ -132,6 +269,7 @@ body {
   transform: translateY(-6px);
   box-shadow: 0 24px 60px rgba(0, 26, 67, 0.18);
 }
+
 /*-------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------*/
 
