@@ -123,7 +123,7 @@ export default function HotelSubmissionCompletePage() {
         </section>
 
         <Link
-          href="/provider/profile/services"
+          href="/provider/profile/listings"
           className="ml-70 btn-primary inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-bold shadow-lg shadow-[#001a43]/15 transition hover:-translate-y-0.5"
         >
           Go to Dashboard

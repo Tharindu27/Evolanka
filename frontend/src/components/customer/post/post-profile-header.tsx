@@ -6,6 +6,7 @@ type PostProfileHeaderProps = {
   profile: PostProfile;
   onCoverChange: (file: File) => void;
   onCoverRemove: () => void;
+  memberLabel?: string;
 };
 
 const iconProps = {
@@ -18,7 +19,7 @@ const iconProps = {
   'aria-hidden': true,
 };
 
-export default function PostProfileHeader({ account, profile, onCoverChange, onCoverRemove }: PostProfileHeaderProps) {
+export default function PostProfileHeader({ account, profile, onCoverChange, onCoverRemove, memberLabel = 'Traveler Member' }: PostProfileHeaderProps) {
   return (
     <section className="overflow-hidden rounded-[22px] border border-[#dfe4f2] bg-white shadow-[0_18px_45px_rgba(0,26,67,0.08)]">
       <div className="relative h-[200px] w-full bg-gradient-to-br from-[#dfe9ff] to-[#f3f7ff]">
@@ -90,7 +91,7 @@ export default function PostProfileHeader({ account, profile, onCoverChange, onC
                 ) : null}
               </div>
               <p className="brand-page-subtitle mt-1 text-xs">
-                Traveler Member &middot; Registered on EVOLANKA since {profile.memberSince}
+                {memberLabel} &middot; Registered on EVOLANKA since {profile.memberSince}
               </p>
               <div className="mt-2 flex items-center gap-5 text-xs text-[#6d7280]">
                 <span>

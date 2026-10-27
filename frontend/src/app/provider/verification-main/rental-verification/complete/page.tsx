@@ -111,7 +111,7 @@ export default function RentalRegistrationCompletePage() {
           )}
 
           <Link
-            href="/provider/profile/services"
+           href="/provider/profile/listings"
             className="btn-primary mt-7 flex w-full items-center justify-center gap-2 rounded-xl px-6 py-4 text-sm font-bold shadow-lg shadow-[#001a43]/15 transition hover:-translate-y-0.5"
           >
             Return to Dashboard
