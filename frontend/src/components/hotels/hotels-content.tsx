@@ -631,7 +631,7 @@ export default function HotelsContent() {
                       </div>
 
                       <Link
-                        href={`/dashboard/hotel-owner/${hotel.id === "grand-azure" ? "grand-azure" : "h1"}/overview`}
+                        href={`/hotels/${hotel.id}`}
                         className="px-5 py-2.5 rounded-xl bg-[#001a43] hover:bg-[#002766] text-white font-bold text-xs shadow-sm transition active:scale-95 cursor-pointer"
                       >
                         View Hotel
@@ -647,4 +647,5 @@ export default function HotelsContent() {
     </div>
   );
 }
+
 
