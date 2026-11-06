@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import AuthMenu from '@/components/common/auth-menu';
 
 const navItems = [
   { label: 'home', href: '/provider/main-page/home' },
@@ -36,12 +37,7 @@ export default function ProviderNavbar() {
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
-            <Link
-              href="/provider/login?backTo=/provider/main-page/home"
-              className="btn-primary inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-bold text-white transition-all hover:text-white"
-            >
-              Sign in
-            </Link>
+            <AuthMenu role="provider" signInHref="/provider/login?backTo=/provider/main-page/home" />
           </div>
 
           <button
@@ -72,13 +68,12 @@ export default function ProviderNavbar() {
               ))}
             </div>
             <div className="mt-3 grid gap-2">
-              <Link
-                href="/provider/login?backTo=/provider/main-page/home"
-                onClick={() => setMobileMenuOpen(false)}
-                className="btn-primary inline-flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-sm font-bold text-white transition-all hover:text-white"
-              >
-                Sign in
-              </Link>
+              <AuthMenu
+                role="provider"
+                variant="mobile"
+                signInHref="/provider/login?backTo=/provider/main-page/home"
+                onNavigate={() => setMobileMenuOpen(false)}
+              />
             </div>
           </div>
         ) : null}

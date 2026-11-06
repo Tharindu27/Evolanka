@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import Footer from '@/components/common/footer';
 import ProviderNavbar from '@/components/common/provider-common/navbar';
+import ProviderAuthLink from '@/components/common/provider-common/auth-link';
 
 const reasons = [
   {
@@ -66,18 +67,18 @@ export default function RentalInfoPage() {
             </p>
 
             <div className="mt-20 flex flex-wrap items-center gap-4">
-              <Link
+              <ProviderAuthLink
                 href="/provider/profile/account?backTo=/provider/main-page/rental-info"
                 className="btn-primary inline-flex items-center justify-center rounded-full border-2 border-[#345267] px-6 py-3 text-sm font-bold text-white shadow-[0_18px_42px_rgba(0,26,67,0.28)] transition-all hover:-translate-y-0.5 hover:text-white"
               >
                 Go To Your Account
-              </Link>
-              <Link
+              </ProviderAuthLink>
+              <ProviderAuthLink
                 href="/provider/profile/services?backTo=/provider/main-page/rental-info"
                 className="inline-flex items-center justify-center rounded-full border border-white/35 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white/15"
               >
                 Add Your Services
-              </Link>
+              </ProviderAuthLink>
             </div>
           </div>
         </div>
