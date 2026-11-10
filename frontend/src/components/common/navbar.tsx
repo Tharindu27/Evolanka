@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import AuthMenu from '@/components/common/auth-menu';
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -38,9 +39,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
-            <Link href="/auth-main" className="btn-primary rounded-full px-6 py-2 text-sm font-bold text-white transition-all hover:text-white">
-              Sign In
-            </Link>
+            <AuthMenu role="tourist" signInHref="/auth-main" />
           </div>
 
           <button
@@ -70,13 +69,9 @@ export default function Navbar() {
                 </Link>
               ))}
             </div>
-            <Link
-              href="/auth-main"
-              onClick={() => setMobileMenuOpen(false)}
-              className="btn-primary mt-3 inline-flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-sm font-bold text-white transition-all hover:text-white"
-            >
-              Sign In
-            </Link>
+            <div className="mt-3">
+              <AuthMenu role="tourist" variant="mobile" signInHref="/auth-main" onNavigate={() => setMobileMenuOpen(false)} />
+            </div>
           </div>
         ) : null}
       </div>

@@ -1,11 +1,75 @@
+"use client";
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState, type MouseEvent } from 'react';
+import { logout, type AuthRole } from '@/lib/api';
+import { useAuthUser } from '@/lib/use-auth-user';
+
+const roleLabel = { tourist: 'Traveler', provider: 'Provider' } as const;
+
+const dashboardHref = { tourist: '/', provider: '/provider/main-page/home' } as const;
 
 export default function AuthMainPage() {
+	const router = useRouter();
+	const tourist = useAuthUser('tourist');
+	const provider = useAuthUser('provider');
+	const [pending, setPending] = useState<{ role: AuthRole; href: string } | null>(null);
+
+	const users = { tourist: tourist.user, provider: provider.user };
+	const pendingUser = pending ? users[pending.role] : null;
+
+	// Ask before opening login/register when that role is already signed in.
+	const guard = (role: AuthRole, href: string) => (event: MouseEvent) => {
+		if (!users[role]) return;
+		event.preventDefault();
+		setPending({ role, href });
+	};
+
+	const confirmLogout = () => {
+		if (!pending) return;
+		logout(pending.role);
+		router.push(pending.href);
+	};
+
+	const cancel = () => {
+		if (!pending) return;
+		router.push(dashboardHref[pending.role]);
+	};
+
 	return (
 		<div
 			className="brand-backdrop relative flex h-[100dvh] flex-col overflow-hidden text-white antialiased"
 			style={{ fontFamily: 'Inter, sans-serif' }}
 		>
+			{pending && pendingUser ? (
+				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" role="dialog" aria-modal="true">
+					<div className="w-full max-w-md rounded-2xl bg-white p-6 text-center text-[#001a43] shadow-2xl">
+						<h3 className="text-lg font-extrabold">Already signed in</h3>
+						<p className="mt-2 text-sm leading-relaxed text-slate-700">
+							You are currently logged in as <strong>{pendingUser.name}</strong> ({roleLabel[pending.role]}). Do you want to log
+							out and continue with a different account?
+						</p>
+						<div className="mt-5 flex flex-col gap-2 sm:flex-row">
+							<button
+								type="button"
+								onClick={confirmLogout}
+								className="flex-1 rounded-xl bg-[#001a43] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#020f2d]"
+							>
+								Continue / Logout
+							</button>
+							<button
+								type="button"
+								onClick={cancel}
+								className="flex-1 rounded-xl border border-[#dce3f1] px-4 py-2.5 text-sm font-bold text-[#001a43] transition-colors hover:bg-[#f1f5ff]"
+							>
+								{pending.role === 'provider' ? 'Cancel & Go to Dashboard' : 'Cancel & Go to Home'}
+							</button>
+						</div>
+					</div>
+				</div>
+			) : null}
+
 			<div className="fixed inset-0 -z-10 h-full w-full">
 				<div className="absolute inset-0 z-[1] bg-black/30" />
 				<img
@@ -56,13 +120,14 @@ export default function AuthMainPage() {
 						<div className="mt-auto flex w-full flex-col gap-3">
 							<Link
 								href="/auth/login"
+								onClick={guard('tourist', '/auth/login')}
 								className="flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl bg-[#041b3c] px-4 py-3 text-base font-semibold text-white shadow-lg shadow-blue-950/30 transition-colors duration-300 hover:bg-[#020f2d]"
 							>
 								Sign In as Traveler
 							</Link>
 							<p className="text-sm text-slate-900/95">
 								Don't have an account?{' '}
-								<Link href="/auth/register" className="font-bold text-[#0b357f] underline underline-offset-2 transition-colors duration-200 hover:text-[#072455]">
+								<Link href="/auth/register" onClick={guard('tourist', '/auth/register')} className="font-bold text-[#0b357f] underline underline-offset-2 transition-colors duration-200 hover:text-[#072455]">
 									Sign Up
 								</Link>
 							</p>
@@ -90,13 +155,14 @@ export default function AuthMainPage() {
 						<div className="mt-auto flex w-full flex-col gap-3">
 							<Link
 								href="/provider/login"
+								onClick={guard('provider', '/provider/login')}
 								className="flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl bg-[#b08d1f] px-4 py-3 text-base font-semibold text-white shadow-lg shadow-amber-700/25 transition-colors duration-300 hover:bg-[#b08d1f]"
 							>
 								Become a Provider
 							</Link>
 							<p className="text-sm text-slate-900/95">
 								Don't have an account?{' '}
-								<Link href="/provider/register" className="font-bold text-[#844700] underline underline-offset-2 transition-colors duration-200 hover:text-[#5e3200]">
+								<Link href="/provider/register" onClick={guard('provider', '/provider/register')} className="font-bold text-[#844700] underline underline-offset-2 transition-colors duration-200 hover:text-[#5e3200]">
 									Sign Up
 								</Link>
 							</p>
