@@ -6,6 +6,9 @@ import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from './auth.service';
 
+// @nestjs/jwt v12 is ESM-only and jest runs CommonJS.
+jest.mock('@nestjs/jwt', () => ({ JwtService: class JwtService {} }));
+
 describe('AuthService', () => {
   let service: AuthService;
   const prisma = {
