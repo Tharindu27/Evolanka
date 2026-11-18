@@ -36,3 +36,22 @@ model Provider {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+enum AdminRole {
+  SUPER_ADMIN
+  CONTENT_MODERATOR
+  SUPPORT_AGENT
+  FINANCE_MANAGER
+}
+
+model Admin {
+  adminId     Int       @id @default(autoincrement())
+  email       String    @unique
+  name        String
+  password    String
+  role        AdminRole
+  // The seeded default account; it is deleted when the first real Super Admin is added.
+  isBootstrap Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}

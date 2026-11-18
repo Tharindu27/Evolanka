@@ -37,11 +37,6 @@ export type FeedStory = {
   frames: StoryFrame[];
 };
 
-export const feedTabs: { value: FeedRole; label: string; placeholder: string }[] = [
-  { value: 'tourist', label: 'Tourists', placeholder: 'Search tourist posts, places or tags' },
-  { value: 'provider', label: 'Service Providers', placeholder: 'Search hotels, rentals, guides or places' },
-];
-
 export const feedAuthors: FeedAuthor[] = [
   { id: 'amaya', name: 'Amaya Perera', role: 'tourist', country: 'Sri Lanka' },
   { id: 'liam', name: 'Liam Carter', role: 'tourist', country: 'United Kingdom' },

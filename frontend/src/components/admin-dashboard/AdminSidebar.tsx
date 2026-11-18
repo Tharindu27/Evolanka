@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAdminData } from "./AdminDataProvider";
+import { useAdminSession } from "./AdminSessionProvider";
+import { adminRoleLabels } from "@/lib/admin-api";
 
 const BASE = "/dashboard/admin";
 
@@ -26,6 +28,7 @@ interface AdminSidebarProps {
 export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const { pending } = useAdminData();
+  const { admin: currentAdmin, signOut } = useAdminSession();
 
   return (
     <>
@@ -89,18 +92,18 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
           </Link>
           <details className="group relative border-t border-outline-variant pt-3">
             <summary className="flex cursor-pointer list-none items-center gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-surface-container-high [&::-webkit-details-marker]:hidden">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#001a43] text-xs font-black text-white ring-2 ring-[#c9a227]/40">SF</span>
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#001a43] text-xs font-black uppercase text-white ring-2 ring-[#c9a227]/40">{currentAdmin.name.slice(0, 2)}</span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-bold text-on-surface">Sarah Fernando</span>
-                <span className="mt-0.5 block text-[10px] text-on-surface-variant">Super Admin</span>
+                <span className="block truncate text-sm font-bold text-on-surface">{currentAdmin.name}</span>
+                <span className="mt-0.5 block text-[10px] text-on-surface-variant">{adminRoleLabels[currentAdmin.role]}</span>
               </span>
               <span className="material-symbols-outlined text-base text-on-surface-variant transition group-open:rotate-180" aria-hidden="true">expand_more</span>
             </summary>
             <div className="mt-1 overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest p-1.5">
-              <Link href="/admin/admin-login" className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-semibold text-rose-400 transition hover:bg-rose-500/10">
+              <button type="button" onClick={() => signOut()} className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-semibold text-rose-400 transition hover:bg-rose-500/10">
                 <span className="material-symbols-outlined text-base" aria-hidden="true">logout</span>
                 Log Out
-              </Link>
+              </button>
             </div>
           </details>
         </div>

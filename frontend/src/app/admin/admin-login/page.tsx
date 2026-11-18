@@ -1,15 +1,44 @@
 "use client";
 
 import Link from 'next/link';
-import { useState, type SyntheticEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState, type SyntheticEvent } from 'react';
+import { getErrorMessage } from '@/lib/api';
+import { adminLogin, getAdminToken, takeAdminLoginNotice } from '@/lib/admin-api';
 
 export default function AdminLoginPage() {
+	const router = useRouter();
 	const [showPassword, setShowPassword] = useState(false);
 	const [notice, setNotice] = useState('');
+	const [isError, setIsError] = useState(false);
+	const [submitting, setSubmitting] = useState(false);
 
-	const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
+	useEffect(() => {
+		if (getAdminToken()) {
+			router.replace('/dashboard/admin/overview');
+			return;
+		}
+		const flash = takeAdminLoginNotice();
+		if (flash) setNotice(flash);
+	}, [router]);
+
+	const handleSubmit = async (event: SyntheticEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setNotice('Admin sign-in is not connected yet. Please contact your system administrator.');
+		const form = new FormData(event.currentTarget);
+		setSubmitting(true);
+		setNotice('');
+		setIsError(false);
+		try {
+			await adminLogin({
+				email: String(form.get('email') ?? '').trim(),
+				password: String(form.get('password') ?? ''),
+			});
+			router.replace('/dashboard/admin/overview');
+		} catch (error) {
+			setNotice(getErrorMessage(error));
+			setIsError(true);
+			setSubmitting(false);
+		}
 	};
 
 	return (
@@ -99,16 +128,22 @@ export default function AdminLoginPage() {
 							</div>
 
 							{notice ? (
-								<p role="alert" className="rounded-xl border border-[#eadcae] bg-[#fff9e8] px-4 py-3 text-sm leading-5 text-[#6b5310]">
+								<p
+									role={isError ? 'alert' : 'status'}
+									className={`rounded-xl border px-4 py-3 text-sm leading-5 ${
+										isError ? 'border-rose-200 bg-rose-50 text-rose-700' : 'border-[#eadcae] bg-[#fff9e8] text-[#6b5310]'
+									}`}
+								>
 									{notice}
 								</p>
 							) : null}
 
 							<button
 								type="submit"
-								className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#001a43] px-5 py-3.5 text-sm font-bold text-white shadow-[0_10px_24px_rgba(0,26,67,0.2)] transition hover:-translate-y-0.5 hover:bg-[#082b5f] focus:outline-none focus:ring-4 focus:ring-[#315b96]/25"
+								disabled={submitting}
+								className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#001a43] px-5 py-3.5 text-sm font-bold text-white shadow-[0_10px_24px_rgba(0,26,67,0.2)] transition hover:-translate-y-0.5 hover:bg-[#082b5f] focus:outline-none focus:ring-4 focus:ring-[#315b96]/25 disabled:cursor-not-allowed disabled:opacity-60"
 							>
-								Sign in to admin
+								{submitting ? 'Signing in…' : 'Sign in to admin'}
 								<svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2 transition-transform group-hover:translate-x-1"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
 							</button>
 						</form>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AdminDataProvider } from "./AdminDataProvider";
+import { AdminSessionProvider } from "./AdminSessionProvider";
 import AdminSidebar from "./AdminSidebar";
 import AdminTopbar from "./AdminTopbar";
 
@@ -9,6 +10,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
+    <AdminSessionProvider>
     <AdminDataProvider>
       <div className="flex min-h-screen flex-col bg-[#0a101d] font-sans text-[#f8fbff]">
         <AdminTopbar onOpenMenu={() => setMenuOpen(true)} />
@@ -18,5 +20,6 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         </div>
       </div>
     </AdminDataProvider>
+    </AdminSessionProvider>
   );
 }

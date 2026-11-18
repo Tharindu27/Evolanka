@@ -153,11 +153,4 @@ export interface SupportTicket {
   receivedOn: string;
 }
 
-export type AdminRole = "Super Admin" | "Content Moderator" | "Support Agent" | "Finance Manager";
 
-export interface AdminUser {
-  id: string;
-  name: string;
-  email: string;
-  role: AdminRole;
-}
