@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /node_modules.nosync
+/.old-node-modules-delete-me
 /.pnp
 .pnp.*
 .yarn/*
