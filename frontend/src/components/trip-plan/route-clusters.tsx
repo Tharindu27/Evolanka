@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { getCategoryById, getPlaceById } from '@/data/location-data/location-mock-data';
 import { getClusterHotels, hotelSlug } from '@/lib/itinerary';
+import type { Place } from '@/lib/places';
+import { usePlaces } from '@/lib/use-places';
 
 type RouteClustersProps = {
   startLabel: string;
@@ -29,18 +30,20 @@ function TransitLink() {
 }
 
 function ClusterCard({
+  places,
   number,
   placeIds,
   addedHotels,
   onToggleHotel,
 }: {
+  places: Place[];
   number: number;
   placeIds: string[];
   addedHotels: string[];
   onToggleHotel?: (name: string) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const hotels = getClusterHotels(placeIds);
+  const hotels = getClusterHotels(places, placeIds);
   const chosen = hotels.filter((hotel) => addedHotels.includes(hotel.name)).slice(0, 1);
   const editable = Boolean(onToggleHotel);
   // Once a hotel is picked it is the only one shown; removing it brings the full list back.
@@ -55,7 +58,7 @@ function ClusterCard({
       <p className={`${eyebrow} mt-5`}>Clustered locations</p>
       <div className="mt-3 grid gap-3 md:grid-cols-2">
         {placeIds.map((id, index) => {
-          const place = getPlaceById(id);
+          const place = places.find((item) => item.id === id);
           if (!place) return null;
           return (
             <Link
@@ -70,7 +73,7 @@ function ClusterCard({
               <span className="min-w-0">
                 <span className="block truncate text-sm font-black text-[#001a43]">{place.name}</span>
                 <span className="block truncate text-xs text-[#6d7280]">
-                  {getCategoryById(place.categoryId)?.name} · {place.district} District
+                  {[place.categories.map((item) => item.name).join(', '), place.district && `${place.district} District`].filter(Boolean).join(' · ')}
                 </span>
               </span>
             </Link>
@@ -139,6 +142,8 @@ function ClusterCard({
 }
 
 export default function RouteClusters({ startLabel, startTag, clusters, addedHotels, onToggleHotel }: RouteClustersProps) {
+  const { places } = usePlaces();
+
   return (
     <div>
       <section className={cardClass}>
@@ -159,7 +164,7 @@ export default function RouteClusters({ startLabel, startTag, clusters, addedHot
       {clusters.map((placeIds, index) => (
         <div key={placeIds.join('|')}>
           <TransitLink />
-          <ClusterCard number={index + 2} placeIds={placeIds} addedHotels={addedHotels} onToggleHotel={onToggleHotel} />
+          <ClusterCard places={places ?? []} number={index + 2} placeIds={placeIds} addedHotels={addedHotels} onToggleHotel={onToggleHotel} />
         </div>
       ))}
     </div>

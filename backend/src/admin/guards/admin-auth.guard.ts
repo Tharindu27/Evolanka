@@ -19,6 +19,18 @@ export class AdminAuthGuard implements CanActivate {
   }
 }
 
+// Locations are moderated by Super Admins and Content Moderators only.
+@Injectable()
+export class ContentModeratorGuard implements CanActivate {
+  canActivate(context: ExecutionContext) {
+    const { admin } = context.switchToHttp().getRequest<AdminRequest>();
+    if (admin?.role !== AdminRole.SUPER_ADMIN && admin?.role !== AdminRole.CONTENT_MODERATOR) {
+      throw new ForbiddenException('Only Super Admins and Content Moderators can manage locations');
+    }
+    return true;
+  }
+}
+
 @Injectable()
 export class SuperAdminGuard implements CanActivate {
   canActivate(context: ExecutionContext) {

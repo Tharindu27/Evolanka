@@ -2,6 +2,15 @@ import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common'
 import * as nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
 
+export type LocationDecisionMail = {
+  to: string;
+  recipientName: string;
+  locationName: string;
+  approved: boolean;
+  reason?: string | null;
+  contributionsUrl: string;
+};
+
 export type AdminCredentialsMail = {
   to: string;
   roleLabel: string;
@@ -68,6 +77,51 @@ export class MailService {
     } catch (error) {
       this.logger.error(`Failed to send admin credentials email to ${to}`, error instanceof Error ? error.stack : undefined);
       throw new ServiceUnavailableException('Could not send the credentials email, so the admin was not created. Please try again.');
+    }
+  }
+
+  // Never throws: the review decision is already saved, so a mail problem is only reported back as `false`.
+  async sendLocationDecision({ to, recipientName, locationName, approved, reason, contributionsUrl }: LocationDecisionMail) {
+    const subject = approved
+      ? `Your location "${locationName}" has been approved`
+      : `Update on your location "${locationName}"`;
+    const text = [
+      `Hi ${recipientName},`,
+      '',
+      approved
+        ? `Good news! Your location "${locationName}" was approved by the EVOLANKA team and is now live.`
+        : `Thank you for suggesting "${locationName}". Unfortunately the EVOLANKA team could not approve it this time.`,
+      ...(!approved && reason ? ['', `Reason: ${reason}`] : []),
+      '',
+      `You can see the status of all your contributions here: ${contributionsUrl}`,
+    ].join('\n');
+    const html = `
+      <p>Hi ${escapeHtml(recipientName)},</p>
+      <p>${
+        approved
+          ? `Good news! Your location <strong>${escapeHtml(locationName)}</strong> was approved by the EVOLANKA team and is now live.`
+          : `Thank you for suggesting <strong>${escapeHtml(locationName)}</strong>. Unfortunately the EVOLANKA team could not approve it this time.`
+      }</p>
+      ${!approved && reason ? `<p><strong>Reason:</strong> ${escapeHtml(reason)}</p>` : ''}
+      <p><a href="${escapeHtml(contributionsUrl)}">View your contributions</a></p>`;
+
+    if (!this.transporter) {
+      this.logger.warn(`SMTP_HOST is not set, so no email was sent. Message for ${to}:\n${text}`);
+      return false;
+    }
+
+    try {
+      await this.transporter.sendMail({
+        from: process.env.MAIL_FROM || process.env.SMTP_USER || 'EVOLANKA <no-reply@evolanka.com>',
+        to,
+        subject,
+        text,
+        html,
+      });
+      return true;
+    } catch (error) {
+      this.logger.error(`Failed to send location decision email to ${to}`, error instanceof Error ? error.stack : undefined);
+      return false;
     }
   }
 }

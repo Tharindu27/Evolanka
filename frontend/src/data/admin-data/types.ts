@@ -75,40 +75,10 @@ export interface Listing {
   featured: boolean;
 }
 
-export type LocationRequestStatus = "Pending" | "Approved" | "Rejected";
-export type LocationSubmissionType = "Tourist" | "Provider" | "Admin";
-
-export interface LocationRequest {
-  id: string;
-  name: string;
-  province?: string;
-  district: string;
-  nearestTown?: string;
-  categories?: string[];
-  description: string;
-  highlights?: string[];
-  bestTime?: string;
-  openingDays?: string;
-  localAdultPrice?: string;
-  localChildPrice?: string;
-  foreignAdultPrice?: string;
-  foreignChildPrice?: string;
-  address?: string;
-  latitude?: string;
-  longitude?: string;
-  nearbyStays?: string[];
-  travelTips?: string[];
-  photos?: string[];
-  submittedBy: string;
-  type: LocationSubmissionType;
-  submittedOn: string;
-  status: LocationRequestStatus;
-}
-
 export interface Destination {
   name: string;
   district: string;
-  source: "Admin" | "Tourist";
+  source: "Admin" | "Tourist" | "Provider";
 }
 
 export type TransactionStatus = "Paid" | "Pending" | "Failed" | "Refunded";

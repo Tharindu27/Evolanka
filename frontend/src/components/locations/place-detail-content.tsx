@@ -1,54 +1,38 @@
 'use client';
 
 import Link from 'next/link';
-import type { Place } from '@/data/location-data/location-mock-data';
+import type { Place } from '@/lib/places';
 
 type PlaceDetailContentProps = {
   place: Place;
   backHref?: string;
 };
 
+// Plain numbers are rupee amounts; anything else was typed with its own currency.
+const formatPrice = (value: string | null) => (value && /^[\d,.]+$/.test(value) ? `LKR ${value}` : value);
+
 export default function PlaceDetailContent({ place, backHref = '/locations' }: PlaceDetailContentProps) {
-  const latOffset = 0.08;
-  const lngOffset = 0.08;
-  const bbox = [
-    place.coordinates.lng - lngOffset,
-    place.coordinates.lat - latOffset,
-    place.coordinates.lng + lngOffset,
-    place.coordinates.lat + latOffset,
-  ].join('%2C');
-  const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${place.coordinates.lat}%2C${place.coordinates.lng}`;
-  const mapLink = `https://www.openstreetmap.org/?mlat=${place.coordinates.lat}&mlon=${place.coordinates.lng}#map=13/${place.coordinates.lat}/${place.coordinates.lng}`;
-
-
+  const { coordinates } = place;
+  const mapSrc = coordinates
+    ? `https://www.openstreetmap.org/export/embed.html?bbox=${[coordinates.lng - 0.08, coordinates.lat - 0.08, coordinates.lng + 0.08, coordinates.lat + 0.08].join('%2C')}&layer=mapnik&marker=${coordinates.lat}%2C${coordinates.lng}`
+    : null;
+  const mapLink = coordinates
+    ? `https://www.openstreetmap.org/?mlat=${coordinates.lat}&mlon=${coordinates.lng}#map=13/${coordinates.lat}/${coordinates.lng}`
+    : `https://www.openstreetmap.org/search?query=${encodeURIComponent(place.address || place.mapLabel)}`;
 
   const galleryImages = [place.image, ...place.gallery].filter((image, index, array) => array.indexOf(image) === index);
 
-
-  const hotelToSlug = (hotelName: string) =>
-    hotelName
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .trim()
-      .replace(/\s+/g, '-');
-
   const pricingRows = [
-    { label: 'Local Adults', value: place.ticketPricing.localAdults },
-    { label: 'Local Children', value: place.ticketPricing.localChildren },
-    { label: 'Foreign Adults', value: place.ticketPricing.foreignAdults },
-    { label: 'Foreign Children', value: place.ticketPricing.foreignChildren },
-  ];
+    { label: 'Local Adults', value: formatPrice(place.prices.localAdults) },
+    { label: 'Local Children', value: formatPrice(place.prices.localChildren) },
+    { label: 'Foreign Adults', value: formatPrice(place.prices.foreignAdults) },
+    { label: 'Foreign Children', value: formatPrice(place.prices.foreignChildren) },
+  ].filter((row) => row.value);
 
   const visitRows = [
-    { label: 'Days', value: place.visitTime.days },
-    { label: 'Open Time', value: place.visitTime.openTime },
-    { label: 'Close Time', value: place.visitTime.closeTime },
-    {
-      label: place.visitTime.access === 'Seasonal' ? 'Time Period' : 'Access',
-      value: place.visitTime.access === 'Seasonal' ? place.visitTime.timePeriod ?? 'Seasonal' : 'Normal',
-    },
-  ];
-
+    { label: 'Opening', value: place.openingDays },
+    { label: 'Best Time', value: place.bestTime },
+  ].filter((row) => row.value);
 
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-[#dfe4f2] bg-[#f4f7fb] px-4 py-8 shadow-[0_30px_90px_rgba(0,26,67,0.08)] sm:px-6 lg:px-10 lg:py-10">
@@ -72,9 +56,22 @@ export default function PlaceDetailContent({ place, backHref = '/locations' }: P
 
         <div className="absolute bottom-0 left-0 w-full p-8 text-white md:p-12">
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.26em] text-[#ffd977]">
-            {place.district}, {place.city}
+            {[place.district, place.city].filter(Boolean).join(', ')}
           </p>
           <h1 className="mb-3 text-5xl font-black tracking-tight md:text-6xl">{place.name}</h1>
+          {place.categories.length > 0 ? (
+            <div className="mb-4 flex flex-wrap gap-2">
+              {place.categories.map((category) => (
+                <Link
+                  key={category.id}
+                  href={`/locations/category/${category.id}`}
+                  className="rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs font-bold text-[#ffd977] backdrop-blur transition hover:bg-white/25"
+                >
+                  {category.name}
+                </Link>
+              ))}
+            </div>
+          ) : null}
           <p className="max-w-2xl text-white/90">{place.shortDescription}</p>
         </div>
       </section>
@@ -82,7 +79,7 @@ export default function PlaceDetailContent({ place, backHref = '/locations' }: P
       <section className="mb-8 overflow-hidden rounded-[28px] border border-[#dce3f1] bg-white/90 p-6 shadow-[0_14px_40px_rgba(0,26,67,0.08)] backdrop-blur md:p-8">
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-3xl font-black tracking-tight text-[#001a43]">Gallery</h2>
-          <span className="text-sm font-medium text-[#5f6577]">Scroll to view more</span>
+          {galleryImages.length > 1 ? <span className="text-sm font-medium text-[#5f6577]">Scroll to view more</span> : null}
         </div>
         <div className="-mx-2 flex gap-4 overflow-x-auto px-2 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {galleryImages.map((image, index) => (
@@ -96,12 +93,15 @@ export default function PlaceDetailContent({ place, backHref = '/locations' }: P
         </div>
       </section>
 
+      {place.overview ? (
       <section className="mb-8 rounded-[28px] border border-[#dce3f1] bg-white/90 p-8 shadow-[0_14px_40px_rgba(0,26,67,0.08)] backdrop-blur">
         <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-[#c9a227]">Overview</p>
         <h2 className="mb-4 text-3xl font-black tracking-tight text-[#001a43]">About This Place</h2>
-        <p className="leading-8 text-[#4e5568]">{place.overview}</p>
+        <p className="whitespace-pre-line leading-8 text-[#4e5568]">{place.overview}</p>
       </section>
+      ) : null}
 
+      {place.highlights.length > 0 ? (
       <section className="mb-8 rounded-[28px] border border-[#dce3f1] bg-white/90 p-8 shadow-[0_14px_40px_rgba(0,26,67,0.08)] backdrop-blur">
         <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-[#c9a227]">Highlights</p>
         <h2 className="mb-5 text-3xl font-black tracking-tight text-[#001a43]">Top Picks</h2>
@@ -114,62 +114,48 @@ export default function PlaceDetailContent({ place, backHref = '/locations' }: P
           ))}
         </div>
       </section>
+      ) : null}
 
       <section className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2">
         <article className="rounded-[28px] border border-[#dce3f1] bg-white/90 p-8 shadow-[0_14px_40px_rgba(0,26,67,0.08)] backdrop-blur">
           <h2 className="mb-4 text-2xl font-black tracking-tight text-[#001a43]">Tickets and Pricing</h2>
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-[#6a7184]">Ticket Categories</p>
-          <div className="space-y-3">
-            {pricingRows.map((row) => (
-              <div key={row.label} className="flex items-center justify-between rounded-[16px] bg-[#f4f7ff] px-4 py-3">
-                <span className="text-sm font-semibold text-[#5b6172]">{row.label}</span>
-                <span className="text-sm font-black text-[#001a43]">{row.value}</span>
-              </div>
-            ))}
-          </div>
-          {place.ticketPricing.note ? <p className="mt-4 text-sm leading-6 text-[#6a7184]">{place.ticketPricing.note}</p> : null}
+          {place.freeEntry ? (
+            <p className="rounded-[16px] bg-[#f4f7ff] px-4 py-3 text-sm font-black text-[#001a43]">Free entry</p>
+          ) : pricingRows.length > 0 ? (
+            <div className="space-y-3">
+              {pricingRows.map((row) => (
+                <div key={row.label} className="flex items-center justify-between rounded-[16px] bg-[#f4f7ff] px-4 py-3">
+                  <span className="text-sm font-semibold text-[#5b6172]">{row.label}</span>
+                  <span className="text-sm font-black text-[#001a43]">{row.value}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-[#6a7184]">Ticket prices have not been shared yet.</p>
+          )}
+          {place.ticketNote ? <p className="mt-4 text-sm leading-6 text-[#6a7184]">{place.ticketNote}</p> : null}
         </article>
 
         <article className="rounded-[28px] border border-[#dce3f1] bg-white/90 p-8 shadow-[0_14px_40px_rgba(0,26,67,0.08)] backdrop-blur">
           <h2 className="mb-4 text-2xl font-black tracking-tight text-[#001a43]">Visit Time</h2>
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-[#6a7184]">Visiting Details</p>
-          <div className="space-y-3">
-            {visitRows.map((row) => (
-              <div key={row.label} className="flex items-center justify-between rounded-[16px] bg-[#f8fafc] px-4 py-3">
-                <span className="text-sm font-semibold text-[#5b6172]">{row.label}</span>
-                <span className="text-right text-sm font-black text-[#001a43]">{row.value}</span>
-              </div>
-            ))}
-          </div>
-          {place.visitTime.note ? <p className="mt-4 text-sm leading-6 text-[#6a7184]">{place.visitTime.note}</p> : null}
+          {visitRows.length > 0 ? (
+            <div className="space-y-3">
+              {visitRows.map((row) => (
+                <div key={row.label} className="flex items-center justify-between gap-4 rounded-[16px] bg-[#f8fafc] px-4 py-3">
+                  <span className="text-sm font-semibold text-[#5b6172]">{row.label}</span>
+                  <span className="text-right text-sm font-black text-[#001a43]">{row.value}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-[#6a7184]">Visiting details have not been shared yet.</p>
+          )}
         </article>
       </section>
 
-      <section className="mb-8 rounded-[28px] border border-[#dce3f1] bg-white/90 p-8 shadow-[0_14px_40px_rgba(0,26,67,0.08)] backdrop-blur">
-        <h2 className="mb-5 text-2xl font-black tracking-tight text-[#001a43]">Nearby Hotels</h2>
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {place.nearbyHotels.map((hotel) => (
-            <Link
-              key={hotel.name}
-              href={`/hotels/${hotelToSlug(hotel.name)}`}
-              className="overflow-hidden rounded-[20px] border border-[#e2e8f3] bg-[#f9fbff] text-slate-700 transition hover:-translate-y-1 hover:border-[#003d9b]/35 hover:shadow-[0_16px_35px_rgba(0,26,67,0.12)]"
-            >
-              <div className="h-28 w-full overflow-hidden md:h-32">
-                <img
-                  src={hotel.image}
-                  alt={hotel.name}
-                  className="h-full w-full object-cover transition duration-500 hover:scale-105"
-                />
-              </div>
-              <div className="px-3 py-3 md:px-4">
-                <p className="line-clamp-2 text-sm font-bold leading-5 text-[#001a43] md:text-base">{hotel.name}</p>
-                <p className="mt-1 text-xs font-semibold text-[#003d9b]">View hotel</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
+      {place.travelTips.length > 0 ? (
       <section className="mb-8 rounded-[28px] border border-[#dce3f1] bg-white/90 p-8 shadow-[0_14px_40px_rgba(0,26,67,0.08)] backdrop-blur">
         <h2 className="mb-5 text-2xl font-black tracking-tight text-[#001a43]">Travel Tips</h2>
         <ul className="space-y-3 text-[#4e5568]">
@@ -180,17 +166,20 @@ export default function PlaceDetailContent({ place, backHref = '/locations' }: P
           ))}
         </ul>
       </section>
+      ) : null}
 
       <section className="mb-8 overflow-hidden rounded-[28px] border border-[#dce3f1] bg-white/90 shadow-[0_14px_40px_rgba(0,26,67,0.08)] backdrop-blur">
         <div className="border-b border-[#e4e9f3] px-6 py-5">
           <p className="text-sm font-bold uppercase tracking-[0.24em] text-[#c9a227]">Map</p>
           <h2 className="mt-2 text-3xl font-black tracking-tight text-[#001a43]">Find This Place</h2>
-          <p className="mt-2 text-[#5f6577]">{place.mapLabel}</p>
+          <p className="mt-2 text-[#5f6577]">{place.address || place.mapLabel}</p>
         </div>
 
-        <div className="h-[460px] w-full overflow-hidden">
-          <iframe title={`${place.name} map`} src={mapSrc} className="h-full w-full" loading="lazy" />
-        </div>
+        {mapSrc ? (
+          <div className="h-[460px] w-full overflow-hidden">
+            <iframe title={`${place.name} map`} src={mapSrc} className="h-full w-full" loading="lazy" />
+          </div>
+        ) : null}
 
         <div className="flex flex-col items-start justify-between gap-4 bg-[#001a43] px-6 py-5 text-white md:flex-row md:items-center">
           <div>
@@ -203,7 +192,7 @@ export default function PlaceDetailContent({ place, backHref = '/locations' }: P
             rel="noreferrer"
             className="rounded-full bg-[#c9a227] px-5 py-3 text-sm font-bold text-[#001a43] transition hover:bg-[#dcb13a]"
           >
-            Open Map
+            {coordinates ? 'Open Map' : 'Search on Map'}
           </Link>
         </div>
       </section>

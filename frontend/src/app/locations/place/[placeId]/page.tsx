@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Footer from '@/components/common/footer';
 import Navbar from '@/components/common/navbar';
 import PlaceDetailContent from '@/components/locations/place-detail-content';
-import { getPlaceById } from '@/data/location-data/location-mock-data';
+import { fetchPlace } from '@/lib/places';
 
 type PlaceDetailPageProps = {
   params: Promise<{ placeId: string }>;
@@ -13,7 +13,7 @@ type PlaceDetailPageProps = {
 export default async function PlaceDetailPage({ params, searchParams }: PlaceDetailPageProps) {
   const { placeId } = await params;
   const resolvedSearchParams = searchParams ? await searchParams : {};
-  const place = getPlaceById(placeId);
+  const place = await fetchPlace(placeId);
 
   if (!place) {
     notFound();

@@ -44,4 +44,43 @@ export class CloudinaryService {
       throw new ServiceUnavailableException('Could not upload the image. Please try again.');
     }
   }
+
+  // Location photos are kept large enough for a gallery but capped so a huge original is not stored as-is.
+  async uploadLocationImage(buffer: Buffer): Promise<{ url: string; publicId: string }> {
+    const { cloud_name, api_key, api_secret } = cloudinary.config();
+    if (!cloud_name || !api_key || !api_secret) {
+      throw new ServiceUnavailableException('Image uploads are not configured');
+    }
+
+    try {
+      const result = await new Promise<{ secure_url: string; public_id: string }>((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              folder: 'evolanka/locations',
+              resource_type: 'image',
+              allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+              transformation: [{ width: 1920, height: 1920, crop: 'limit', quality: 'auto' }],
+            },
+            (error, uploaded) => (error || !uploaded ? reject(error) : resolve(uploaded)),
+          )
+          .end(buffer);
+      });
+      return { url: result.secure_url, publicId: result.public_id };
+    } catch (error) {
+      this.logger.error(`Location image upload failed: ${(error as { message?: string })?.message ?? error}`);
+      throw new ServiceUnavailableException('Could not upload the images. Please try again.');
+    }
+  }
+
+  // Best effort: a failed clean-up must never fail the request that triggered it.
+  async deleteImages(publicIds: string[]) {
+    await Promise.all(
+      publicIds.map((publicId) =>
+        cloudinary.uploader.destroy(publicId, { invalidate: true }).catch((error: unknown) => {
+          this.logger.warn(`Could not delete image ${publicId}: ${(error as { message?: string })?.message ?? error}`);
+        }),
+      ),
+    );
+  }
 }

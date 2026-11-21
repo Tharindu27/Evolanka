@@ -12,29 +12,31 @@ datasource db {
 }
 
 model Tourist {
-  touristId       Int      @id @default(autoincrement())
-  email           String   @unique
-  name            String
-  gender          String
-  country         String
-  passportNumber  String?  // Optional 
-  nic             String?  // Optional 
-  password        String
-  mobileNumber    String
-  profilePicture  String?  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  touristId      Int        @id @default(autoincrement())
+  email          String     @unique
+  name           String
+  gender         String
+  country        String
+  passportNumber String? // Optional 
+  nic            String? // Optional 
+  password       String
+  mobileNumber   String
+  profilePicture String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  locations      Location[]
 }
 
 model Provider {
-  providerId      Int      @id @default(autoincrement())
-  email           String   @unique
-  name            String
-  password        String
-  mobileNumber    String
-  profilePicture  String?  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  providerId     Int        @id @default(autoincrement())
+  email          String     @unique
+  name           String
+  password       String
+  mobileNumber   String
+  profilePicture String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  locations      Location[]
 }
 
 enum AdminRole {
@@ -45,13 +47,91 @@ enum AdminRole {
 }
 
 model Admin {
-  adminId     Int       @id @default(autoincrement())
-  email       String    @unique
-  name        String
-  password    String
-  role        AdminRole
+  adminId           Int        @id @default(autoincrement())
+  email             String     @unique
+  name              String
+  password          String
+  role              AdminRole
   // The seeded default account; it is deleted when the first real Super Admin is added.
-  isBootstrap Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  isBootstrap       Boolean    @default(false)
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  createdLocations  Location[] @relation("LocationCreator")
+  reviewedLocations Location[] @relation("LocationReviewer")
+}
+
+enum LocationStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LocationSubmitter {
+  TOURIST
+  PROVIDER
+  ADMIN
+}
+
+model Location {
+  locationId        Int      @id @default(autoincrement())
+  name              String
+  province          String?
+  district          String?
+  nearestTown       String?
+  categories        String[]
+  description       String?
+  highlights        String[]
+  bestTime          String?
+  openingDays       String?
+  freeEntry         Boolean  @default(false)
+  localAdultPrice   String?
+  localChildPrice   String?
+  foreignAdultPrice String?
+  foreignChildPrice String?
+  ticketNote        String?
+  address           String?
+  latitude          Float?
+  longitude         Float?
+  travelTips        String[]
+
+  status          LocationStatus @default(PENDING)
+  rejectionReason String?
+  reviewedAt      DateTime?
+
+  submitterType LocationSubmitter
+  // Kept even if the account is later deleted, so the history of the submission is not lost.
+  submitterName String
+  touristId     Int?
+  providerId    Int?
+  adminId       Int?
+  reviewedById  Int?
+
+  tourist    Tourist?  @relation(fields: [touristId], references: [touristId], onDelete: SetNull)
+  provider   Provider? @relation(fields: [providerId], references: [providerId], onDelete: SetNull)
+  admin      Admin?    @relation("LocationCreator", fields: [adminId], references: [adminId], onDelete: SetNull)
+  reviewedBy Admin?    @relation("LocationReviewer", fields: [reviewedById], references: [adminId], onDelete: SetNull)
+
+  photos      LocationPhoto[]
+  submittedAt DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([status])
+  @@index([touristId])
+  @@index([providerId])
+}
+
+model LocationPhoto {
+  photoId    Int      @id @default(autoincrement())
+  locationId Int
+  url        String
+  // Cloudinary id, needed to delete the image when the location is removed.
+  publicId   String
+  isCover    Boolean  @default(false)
+  position   Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  location Location @relation(fields: [locationId], references: [locationId], onDelete: Cascade)
+
+  @@index([locationId])
 }

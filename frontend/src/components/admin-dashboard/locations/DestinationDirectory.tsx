@@ -17,8 +17,8 @@ export default function DestinationDirectory() {
             <span className="material-symbols-outlined text-[15px] text-[#c9a227]" aria-hidden="true">location_on</span>
             {destination.name}
             <span className="text-on-surface-variant">· {destination.district}</span>
-            {destination.source === "Tourist" ? (
-              <span className="rounded-full bg-[#c9a227]/15 px-1.5 py-0.5 text-[10px] font-bold text-[#ffd977]">Tourist</span>
+            {destination.source !== "Admin" ? (
+              <span className="rounded-full bg-[#c9a227]/15 px-1.5 py-0.5 text-[10px] font-bold text-[#ffd977]">{destination.source}</span>
             ) : null}
           </li>
         ))}

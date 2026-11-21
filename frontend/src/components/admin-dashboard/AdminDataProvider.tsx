@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { bookings as initialBookings } from "@/data/admin-data/bookings";
 import { listings as initialListings } from "@/data/admin-data/listings";
-import { initialDestinations, locationRequests as initialRequests } from "@/data/admin-data/locations";
+import { initialDestinations } from "@/data/admin-data/locations";
 import { providers as initialProviders } from "@/data/admin-data/providers";
 import type {
   Booking,
@@ -11,85 +11,125 @@ import type {
   Destination,
   Listing,
   ListingStatus,
-  LocationRequest,
   Provider,
   ProviderStatus,
 } from "@/data/admin-data/types";
+import {
+  approveLocation,
+  createAdminLocation,
+  fetchAdminLocations,
+  rejectLocation,
+  reviseLocation,
+  type LocationDecision,
+} from "@/lib/admin-api";
+import { getErrorMessage } from "@/lib/api";
+import type { ApiLocation, LocationInput } from "@/lib/locations-api";
 
 interface AdminDataValue {
   providers: Provider[];
   listings: Listing[];
   bookings: Booking[];
-  locationRequests: LocationRequest[];
+  locations: ApiLocation[];
+  locationsLoading: boolean;
+  locationsError: string;
   destinations: Destination[];
   pending: { providers: number; listings: number; locations: number };
   setProviderStatus: (id: string, status: ProviderStatus) => void;
   setListingStatus: (id: string, status: ListingStatus) => void;
   toggleFeatured: (id: string) => void;
   setBookingStatus: (id: string, status: BookingStatus) => void;
-  reviewLocationRequest: (id: string, status: "Approved" | "Rejected") => void;
-  submitLocation: (request: Omit<LocationRequest, "id" | "submittedOn" | "status">) => boolean;
-  addDestination: (name: string, district: string) => boolean;
+  reloadLocations: () => Promise<void>;
+  approveLocation: (id: number) => Promise<LocationDecision>;
+  rejectLocation: (id: number, reason?: string) => Promise<LocationDecision>;
+  reviseLocation: (id: number) => Promise<void>;
+  addLocation: (input: LocationInput, photos: File[]) => Promise<void>;
 }
 
 const AdminDataContext = createContext<AdminDataValue | null>(null);
+
+const sourceOf = (location: ApiLocation): Destination["source"] =>
+  location.submitterType === "TOURIST" ? "Tourist" : location.submitterType === "PROVIDER" ? "Provider" : "Admin";
 
 export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   const [providers, setProviders] = useState(initialProviders);
   const [listings, setListings] = useState(initialListings);
   const [bookings, setBookings] = useState(initialBookings);
-  const [locationRequests, setLocationRequests] = useState(initialRequests);
-  const [destinations, setDestinations] = useState(initialDestinations);
+  const [locations, setLocations] = useState<ApiLocation[]>([]);
+  const [locationsLoading, setLocationsLoading] = useState(true);
+  const [locationsError, setLocationsError] = useState("");
 
-  const addDestination = useCallback(
-    (name: string, district: string, source: Destination["source"] = "Admin") => {
-      const exists = destinations.some((item) => item.name.toLowerCase() === name.toLowerCase());
-      if (exists) return false;
-      setDestinations((items) => [...items, { name, district, source }]);
-      return true;
-    },
-    [destinations],
+  const reloadLocations = useCallback(async () => {
+    try {
+      setLocations(await fetchAdminLocations());
+      setLocationsError("");
+    } catch (error) {
+      setLocationsError(getErrorMessage(error));
+    } finally {
+      setLocationsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void reloadLocations();
+  }, [reloadLocations]);
+
+  // The server's copy of a location replaces the local one after every action.
+  const replaceLocation = useCallback(
+    (updated: ApiLocation) => setLocations((items) => items.map((item) => (item.id === updated.id ? updated : item))),
+    [],
   );
 
-  const reviewLocationRequest = useCallback(
-    (id: string, status: "Approved" | "Rejected") => {
-      const request = locationRequests.find((item) => item.id === id);
-      if (!request) return;
-      setLocationRequests((items) => items.map((item) => (item.id === id ? { ...item, status } : item)));
-      if (status === "Approved") addDestination(request.name, request.district, "Tourist");
+  const approve = useCallback(
+    async (id: number) => {
+      const decision = await approveLocation(id);
+      replaceLocation(decision.location);
+      return decision;
     },
-    [locationRequests, addDestination],
+    [replaceLocation],
   );
 
-  const submitLocation = useCallback(
-    (request: Omit<LocationRequest, "id" | "submittedOn" | "status">) => {
-      const exists = destinations.some((item) => item.name.toLowerCase() === request.name.toLowerCase());
-      if (exists) return false;
-      const today = new Date().toISOString().slice(0, 10);
-      const entry: LocationRequest = {
-        ...request,
-        id: `LC-${String(Date.now()).slice(-6)}`,
-        submittedOn: today,
-        status: "Approved",
-      };
-      setLocationRequests((items) => [entry, ...items]);
-      addDestination(request.name, request.district, "Admin");
-      return true;
+  const reject = useCallback(
+    async (id: number, reason?: string) => {
+      const decision = await rejectLocation(id, reason);
+      replaceLocation(decision.location);
+      return decision;
     },
-    [destinations, addDestination],
+    [replaceLocation],
   );
+
+  const revise = useCallback(
+    async (id: number) => {
+      replaceLocation((await reviseLocation(id)).location);
+    },
+    [replaceLocation],
+  );
+
+  const addLocation = useCallback(async (input: LocationInput, photos: File[]) => {
+    const created = await createAdminLocation(input, photos);
+    setLocations((items) => [created, ...items]);
+  }, []);
+
+  const destinations = useMemo(() => {
+    const live: Destination[] = locations
+      .filter((item) => item.status === "APPROVED")
+      .map((item) => ({ name: item.name, district: item.district ?? "", source: sourceOf(item) }));
+    const known = new Set(live.map((item) => item.name.toLowerCase()));
+    return [...initialDestinations.filter((item) => !known.has(item.name.toLowerCase())), ...live];
+  }, [locations]);
 
   const value = useMemo<AdminDataValue>(
     () => ({
       providers,
       listings,
       bookings,
-      locationRequests,
+      locations,
+      locationsLoading,
+      locationsError,
       destinations,
       pending: {
         providers: providers.filter((item) => item.status === "Pending").length,
         listings: listings.filter((item) => item.status === "Pending").length,
-        locations: locationRequests.filter((item) => item.status === "Pending").length,
+        locations: locations.filter((item) => item.status === "PENDING").length,
       },
       setProviderStatus: (id, status) =>
         setProviders((items) => items.map((item) => (item.id === id ? { ...item, status } : item))),
@@ -99,11 +139,13 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         setListings((items) => items.map((item) => (item.id === id ? { ...item, featured: !item.featured } : item))),
       setBookingStatus: (id, status) =>
         setBookings((items) => items.map((item) => (item.id === id ? { ...item, status } : item))),
-      reviewLocationRequest,
-      submitLocation,
-      addDestination: (name, district) => addDestination(name, district),
+      reloadLocations,
+      approveLocation: approve,
+      rejectLocation: reject,
+      reviseLocation: revise,
+      addLocation,
     }),
-    [providers, listings, bookings, locationRequests, destinations, reviewLocationRequest, submitLocation, addDestination],
+    [providers, listings, bookings, locations, locationsLoading, locationsError, destinations, reloadLocations, approve, reject, revise, addLocation],
   );
 
   return <AdminDataContext.Provider value={value}>{children}</AdminDataContext.Provider>;

@@ -11,5 +11,6 @@ import { AdminAuthGuard, SuperAdminGuard } from './guards/admin-auth.guard';
   imports: [AuthModule, MailModule, ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }])],
   controllers: [AdminAuthController, AdminsController],
   providers: [AdminService, AdminAuthGuard, SuperAdminGuard],
+  exports: [AdminService, AdminAuthGuard],
 })
 export class AdminModule {}

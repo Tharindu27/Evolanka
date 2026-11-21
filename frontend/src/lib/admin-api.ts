@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { api } from './api';
+import { buildLocationFormData, type ApiLocation, type LocationInput } from './locations-api';
 
 export type AdminRoleCode = 'SUPER_ADMIN' | 'CONTENT_MODERATOR' | 'SUPPORT_AGENT' | 'FINANCE_MANAGER';
 
@@ -87,3 +88,25 @@ export const updateAdminRole = async (id: number, role: AdminRoleCode) =>
   (await adminApi.patch<AdminAccount>(`/admin/admins/${id}/role`, { role })).data;
 
 export const removeAdmin = async (id: number) => (await adminApi.delete<{ message: string }>(`/admin/admins/${id}`)).data;
+
+export type LocationDecision = { location: ApiLocation; emailSent: boolean | null; recipientEmail: string | null };
+
+export const fetchAdminLocations = async () => (await adminApi.get<ApiLocation[]>('/admin/locations')).data;
+
+// Admin locations go live immediately; the first photo is the cover.
+export const createAdminLocation = async (input: LocationInput, photos: File[]) =>
+  (
+    await adminApi.post<ApiLocation>('/admin/locations', buildLocationFormData(input, photos[0], photos.slice(1)), {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  ).data;
+
+export const approveLocation = async (id: number) =>
+  (await adminApi.patch<LocationDecision>(`/admin/locations/${id}/approve`)).data;
+
+export const rejectLocation = async (id: number, reason?: string) =>
+  (await adminApi.patch<LocationDecision>(`/admin/locations/${id}/reject`, { reason })).data;
+
+// Undoes an approval so the location goes back to Pending.
+export const reviseLocation = async (id: number) =>
+  (await adminApi.patch<{ location: ApiLocation }>(`/admin/locations/${id}/revise`)).data;
