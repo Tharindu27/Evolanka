@@ -53,7 +53,7 @@ export default function LocationSearchModal({
         if (categoryFilter === 'airport') return loc.type === 'airport';
         if (categoryFilter === 'hotel') return loc.type === 'hotel';
         if (categoryFilter === 'transit') return loc.type === 'transit';
-        if (categoryFilter === 'attraction') return loc.type === 'attraction';
+        if (categoryFilter === 'attraction') return loc.type === 'landmark';
         return true;
       });
     }

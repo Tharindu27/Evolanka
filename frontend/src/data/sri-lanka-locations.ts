@@ -6,7 +6,7 @@ export interface SriLankaLocation {
   district: string;
   lat: number;
   lng: number;
-  type: 'home' | 'work' | 'recent' | 'airport' | 'landmark' | 'transit' | 'hotel' | 'university';
+  type: 'home' | 'work' | 'recent' | 'airport' | 'landmark' | 'transit' | 'hotel' | 'university' | 'attraction';
   isFavorite?: boolean;
 }
 
