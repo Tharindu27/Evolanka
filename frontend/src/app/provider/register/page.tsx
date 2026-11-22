@@ -4,12 +4,33 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
 
+import { getErrorMessage, registerProvider } from '@/lib/api';
+
 function ProviderRegisterContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const backRef = searchParams.get('backTo') ?? '/auth-main';
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError('');
+    setSubmitting(true);
+    try {
+      await registerProvider({ name: name.trim(), email: email.trim(), mobileNumber: mobileNumber.trim(), password });
+      router.push('/provider/main-page/home');
+    } catch (err) {
+      setError(getErrorMessage(err));
+      setSubmitting(false);
+    }
+  };
 
   const handleBack = () => {
     if (typeof window !== 'undefined' && window.history.length > 1) {
@@ -48,7 +69,7 @@ function ProviderRegisterContent() {
               <p className="brand-page-subtitle text-xs text-slate-700 md:text-sm">Join Sri Lanka&apos;s leading tourism network and grow your business.</p>
             </div>
 
-            <form className="mx-auto flex w-full flex-col gap-3.5" action="#">
+            <form className="mx-auto flex w-full flex-col gap-3.5" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-0.5">
                 <label htmlFor="fullname" className="pl-1 text-xs font-medium text-white md:text-sm">
                   Full Name
@@ -64,6 +85,8 @@ function ProviderRegisterContent() {
                     id="fullname"
                     type="text"
                     required
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
                     placeholder="John Perera"
                     className="w-full rounded-xl border border-slate-300 bg-white/85 px-3.5 py-3.5 pl-10 text-xs text-slate-800 outline-none transition focus:border-[#003d9b] md:text-sm"
                   />
@@ -85,6 +108,8 @@ function ProviderRegisterContent() {
                     id="email"
                     type="email"
                     required
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                     placeholder="business@example.com"
                     className="w-full rounded-xl border border-slate-300 bg-white/85 px-3.5 py-3.5 pl-10 text-xs text-slate-800 outline-none transition focus:border-[#003d9b] md:text-sm"
                   />
@@ -106,6 +131,8 @@ function ProviderRegisterContent() {
                     id="mobile"
                     type="tel"
                     required
+                    value={mobileNumber}
+                    onChange={(event) => setMobileNumber(event.target.value)}
                     placeholder="+94 XX XXX XXXX"
                     className="w-full rounded-xl border border-slate-300 bg-white/85 px-3.5 py-3.5 pl-10 text-xs text-slate-800 outline-none transition focus:border-[#003d9b] md:text-sm"
                   />
@@ -127,6 +154,9 @@ function ProviderRegisterContent() {
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     required
+                    minLength={8}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                     placeholder="Create a strong password"
                     className="w-full rounded-xl border border-slate-300 bg-white/85 px-3.5 py-3.5 pl-10 pr-12 text-xs text-slate-800 outline-none transition focus:border-[#003d9b] md:text-sm"
                   />
@@ -176,11 +206,18 @@ function ProviderRegisterContent() {
                 </label>
               </div>
 
+              {error ? (
+                <p role="alert" className="rounded-lg bg-[#fdecea] px-3 py-2 text-xs font-semibold text-[#d93025]">
+                  {error}
+                </p>
+              ) : null}
+
               <button
                 type="submit"
-                className="btn-primary mt-1.5 inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition md:text-sm"
+                disabled={submitting}
+                className="btn-primary mt-1.5 inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition disabled:opacity-60 md:text-sm"
               >
-                <span>Create Provider Account</span>
+                <span>{submitting ? 'Creating account...' : 'Create Provider Account'}</span>
                 <span aria-hidden="true">&#8594;</span>
               </button>
             </form>
