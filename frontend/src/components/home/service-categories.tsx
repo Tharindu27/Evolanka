@@ -98,7 +98,7 @@ export default function ServiceCategories() {
 
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
               <Link
-                href="/provider/register"
+                href="/provider/main-page/home "
                 className="inline-flex items-center justify-center rounded-xl bg-[#c9a227] px-6 py-3 text-sm font-bold text-[#001a43] shadow-[0_12px_28px_rgba(201,162,39,0.3)] transition-transform duration-300 hover:-translate-y-0.5"
               >
                 Join as Provider

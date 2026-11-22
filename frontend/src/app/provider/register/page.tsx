@@ -1,10 +1,45 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useState } from 'react';
 
-export default function ProviderRegisterPage() {
+import { getErrorMessage, registerProvider } from '@/lib/api';
+
+function ProviderRegisterContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const backRef = searchParams.get('backTo') ?? '/auth-main';
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError('');
+    setSubmitting(true);
+    try {
+      await registerProvider({ name: name.trim(), email: email.trim(), mobileNumber: mobileNumber.trim(), password });
+      router.push('/provider/main-page/home');
+    } catch (err) {
+      setError(getErrorMessage(err));
+      setSubmitting(false);
+    }
+  };
+
+  const handleBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push(backRef);
+  };
 
   return (
     <div
@@ -17,13 +52,13 @@ export default function ProviderRegisterPage() {
           alt="Sri Lankan provider journey background"
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/30 backdrop-brightness-80" />
+        <div className="absolute inset-0 bg-black/30 backdrop-brightness-100" />
       </div>
 
       <main className="relative z-20 flex h-[100dvh] items-center justify-center overflow-hidden px-4 pb-3 pt-14 md:px-6 md:pb-4 md:pt-20">
-        <Link href="/auth-main" className="btn-back absolute left-4 top-4 md:left-8 md:top-8">
+        <button type="button" onClick={handleBack} className="btn-back absolute left-4 top-4 md:left-8 md:top-8">
           <span>Back</span>
-        </Link>
+        </button>
 
         <div className="w-full max-w-[500px] -translate-y-3 md:-translate-y-4">
           <div
@@ -34,7 +69,7 @@ export default function ProviderRegisterPage() {
               <p className="brand-page-subtitle text-xs text-slate-700 md:text-sm">Join Sri Lanka&apos;s leading tourism network and grow your business.</p>
             </div>
 
-            <form className="mx-auto flex w-full flex-col gap-3.5" action="#">
+            <form className="mx-auto flex w-full flex-col gap-3.5" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-0.5">
                 <label htmlFor="fullname" className="pl-1 text-xs font-medium text-white md:text-sm">
                   Full Name
@@ -50,6 +85,8 @@ export default function ProviderRegisterPage() {
                     id="fullname"
                     type="text"
                     required
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
                     placeholder="John Perera"
                     className="w-full rounded-xl border border-slate-300 bg-white/85 px-3.5 py-3.5 pl-10 text-xs text-slate-800 outline-none transition focus:border-[#003d9b] md:text-sm"
                   />
@@ -71,6 +108,8 @@ export default function ProviderRegisterPage() {
                     id="email"
                     type="email"
                     required
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                     placeholder="business@example.com"
                     className="w-full rounded-xl border border-slate-300 bg-white/85 px-3.5 py-3.5 pl-10 text-xs text-slate-800 outline-none transition focus:border-[#003d9b] md:text-sm"
                   />
@@ -92,6 +131,8 @@ export default function ProviderRegisterPage() {
                     id="mobile"
                     type="tel"
                     required
+                    value={mobileNumber}
+                    onChange={(event) => setMobileNumber(event.target.value)}
                     placeholder="+94 XX XXX XXXX"
                     className="w-full rounded-xl border border-slate-300 bg-white/85 px-3.5 py-3.5 pl-10 text-xs text-slate-800 outline-none transition focus:border-[#003d9b] md:text-sm"
                   />
@@ -113,6 +154,9 @@ export default function ProviderRegisterPage() {
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     required
+                    minLength={8}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                     placeholder="Create a strong password"
                     className="w-full rounded-xl border border-slate-300 bg-white/85 px-3.5 py-3.5 pl-10 pr-12 text-xs text-slate-800 outline-none transition focus:border-[#003d9b] md:text-sm"
                   />
@@ -162,11 +206,18 @@ export default function ProviderRegisterPage() {
                 </label>
               </div>
 
+              {error ? (
+                <p role="alert" className="rounded-lg bg-[#fdecea] px-3 py-2 text-xs font-semibold text-[#d93025]">
+                  {error}
+                </p>
+              ) : null}
+
               <button
                 type="submit"
-                className="btn-primary mt-1.5 inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition md:text-sm"
+                disabled={submitting}
+                className="btn-primary mt-1.5 inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-xs font-bold text-white shadow-lg shadow-blue-700/20 transition disabled:opacity-60 md:text-sm"
               >
-                <span>Create Provider Account</span>
+                <span>{submitting ? 'Creating account...' : 'Create Provider Account'}</span>
                 <span aria-hidden="true">&#8594;</span>
               </button>
             </form>
@@ -183,5 +234,13 @@ export default function ProviderRegisterPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function ProviderRegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#f9f9ff]" />}>
+      <ProviderRegisterContent />
+    </Suspense>
   );
 }

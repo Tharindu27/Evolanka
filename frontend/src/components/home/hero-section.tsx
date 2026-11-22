@@ -55,7 +55,7 @@ export default function HeroSection() {
                   Hotels, guides, rentals, and transport partners can now join and grow through Evolanka.
                 </p>
                 <Link
-                  href="/provider/register"
+                  href="/provider/main-page/home"
                   className="inline-flex shrink-0 items-center justify-center rounded-xl border border-white/35 bg-[#001a43]/70 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#c9a227] hover:text-[#001a43]"
                 >
                   Join as Provider

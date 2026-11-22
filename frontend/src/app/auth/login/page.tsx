@@ -1,10 +1,32 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { getErrorMessage, loginTourist } from '@/lib/api';
+import SocialAuthButtons from '@/components/auth/social-auth-buttons';
+
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError('');
+    setSubmitting(true);
+    try {
+      await loginTourist({ email: email.trim(), password });
+      router.push('/');
+    } catch (err) {
+      setError(getErrorMessage(err));
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="brand-backdrop relative flex min-h-[100dvh] flex-col overflow-hidden bg-[#f4f5f7] font-[Inter,sans-serif] text-[#041b3c]">
@@ -32,20 +54,12 @@ export default function LoginPage() {
           </div>
 
           <div className="mb-6 flex flex-col gap-3">
-            <button
-              type="button"
-              className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
-            >
-              <img src="/images/Auth/google.png" alt="Google" className="h-5 w-5 object-contain" />
-              Continue with Google
-            </button>
-            <button
-              type="button"
-              className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
-            >
-              <img src="/images/Auth/apple.png" alt="Apple" className="h-5 w-5 object-contain" />
-              Continue with Apple
-            </button>
+            <SocialAuthButtons
+              buttonClassName="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50 disabled:opacity-60"
+              iconClassName="h-5 w-5 object-contain"
+              onSuccess={() => router.push('/')}
+              onError={setError}
+            />
           </div>
 
           <div className="mb-6 flex items-center gap-3">
@@ -54,7 +68,7 @@ export default function LoginPage() {
             <div className="h-px flex-1 bg-slate-300/80" />
           </div>
 
-          <form action="#" className="flex flex-col gap-4" method="POST">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-1">
               <label htmlFor="email" className="px-1 text-sm font-medium text-white">
                 Email Address
@@ -71,6 +85,8 @@ export default function LoginPage() {
                   name="email"
                   type="email"
                   required
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                   placeholder="name@example.com"
                   className="w-full rounded-xl border border-slate-300 bg-white/85 py-3 pl-11 pr-4 text-sm text-slate-800 outline-none transition focus:border-[#003d9b] focus:bg-white"
                 />
@@ -99,6 +115,8 @@ export default function LoginPage() {
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
                   placeholder="********"
                   className="w-full rounded-xl border border-slate-300 bg-white/85 py-3 pl-11 pr-11 text-sm text-slate-800 outline-none transition focus:border-[#003d9b] focus:bg-white"
                 />
@@ -125,8 +143,18 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button type="submit" className="btn-primary mt-1 w-full rounded-xl py-3 text-sm font-semibold shadow-sm transition-all active:scale-[0.98]">
-              Sign In
+            {error ? (
+              <p role="alert" className="rounded-lg bg-[#fdecea] px-3 py-2 text-sm font-semibold text-[#d93025]">
+                {error}
+              </p>
+            ) : null}
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="btn-primary mt-1 w-full rounded-xl py-3 text-sm font-semibold shadow-sm transition-all active:scale-[0.98] disabled:opacity-60"
+            >
+              {submitting ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
