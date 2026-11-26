@@ -28,7 +28,7 @@ export default function RegisterPage() {
         email: form.email.trim(),
         password: form.password,
       });
-      router.push('/');
+      router.push('/auth/login');
     } catch (err) {
       setError(getErrorMessage(err));
       setSubmitting(false);

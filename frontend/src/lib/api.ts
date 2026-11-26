@@ -89,11 +89,14 @@ export type ProviderRegisterInput = {
 
 export type LoginInput = { email: string; password: string };
 
-export const registerTourist = async (input: TouristRegisterInput) =>
-  saveSession((await api.post<AuthResponse>('/auth/tourist/register', input)).data);
+// Registration does not start a session; the user signs in afterwards.
+export const registerTourist = async (input: TouristRegisterInput) => {
+  await api.post<AuthResponse>('/auth/tourist/register', input);
+};
 
-export const registerProvider = async (input: ProviderRegisterInput) =>
-  saveSession((await api.post<AuthResponse>('/auth/provider/register', input)).data);
+export const registerProvider = async (input: ProviderRegisterInput) => {
+  await api.post<AuthResponse>('/auth/provider/register', input);
+};
 
 export const loginTourist = async (input: LoginInput) =>
   saveSession((await api.post<AuthResponse>('/auth/tourist/login', input)).data);
