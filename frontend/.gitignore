@@ -3,7 +3,6 @@
 # dependencies
 /node_modules
 /node_modules.nosync
-/.old-node-modules-delete-me
 /.pnp
 .pnp.*
 .yarn/*
@@ -43,3 +42,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# iCloud/node_modules and Next.js workaround folders
+/node_modules.nosync
+/.node-modules.nosync
+/.next.nosync
