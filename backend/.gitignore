@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+/node_modules.nosync
+/.old-node-modules-delete-me
 /build
 
 # Logs

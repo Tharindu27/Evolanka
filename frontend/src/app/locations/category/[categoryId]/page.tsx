@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import Footer from '@/components/common/footer';
 import Navbar from '@/components/common/navbar';
 import CategoryContent from '@/components/locations/category-content';
-import { getCategoryById, places } from '@/data/location-data/location-mock-data';
+import { getCategoryById } from '@/data/location-data/location-taxonomy';
+import { fetchPlaces } from '@/lib/places';
 
 type CategoryPageProps = {
   params: Promise<{ categoryId: string }>;
@@ -17,7 +18,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const categoryPlaces = places.filter((place) => place.categoryId === category.id);
+  const categoryPlaces = (await fetchPlaces()).filter((place) => place.categoryIds.includes(category.id));
 
   return (
     <div className="bg-white text-[#001a43]">

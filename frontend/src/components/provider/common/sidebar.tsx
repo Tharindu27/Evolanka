@@ -48,6 +48,14 @@ function Icon({ type }: { type: string }) {
           <path d="M8 9h8M8 13h8M8 17h5" />
         </svg>
       );
+    case 'contribution':
+      return (
+        <svg viewBox="0 0 24 24" className={common} fill="none" strokeWidth="1.8" aria-hidden="true">
+          <path d="M7 18V8.5A2.5 2.5 0 0 1 9.5 6H18v12" />
+          <path d="M7 18h10a2 2 0 0 0 2-2V9.5A2.5 2.5 0 0 0 16.5 7H9.5A2.5 2.5 0 0 0 7 9.5V18Z" />
+          <path d="M11 11h6M11 15h6" />
+        </svg>
+      );
     case 'settings':
       return (
         <svg viewBox="0 0 24 24" className={common} fill="none" strokeWidth="1.8" aria-hidden="true">

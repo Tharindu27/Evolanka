@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import Sidebar from '@/components/customer/common/sidebar';
-import PersonalInformationCard from '@/components/customer/account/personal-information-card';
+import AvatarUploader from '@/components/common/account/avatar-uploader';
+import PersonalInfoEditor from '@/components/common/account/personal-info-editor';
 import ProfileSummary from '@/components/customer/account/profile-summary';
 import { navigationItems } from '@/data/customer-account-data';
+import { updateProfile } from '@/lib/api';
 import { useProfile } from '@/lib/use-profile';
 
 export default function CustomerAccountPage() {
@@ -48,16 +50,29 @@ export default function CustomerAccountPage() {
                     email: state.profile.email,
                     isVerified: false,
                   }}
+                  avatar={
+                    <AvatarUploader
+                      role="tourist"
+                      name={state.profile.name}
+                      picture={state.profile.profilePicture}
+                      onUploaded={state.setProfile}
+                      className="h-20 w-20"
+                      fallbackClassName="bg-[radial-gradient(circle_at_30%_30%,#f9d2a1,#d99162_45%,#a85a3d_75%)] text-[2rem] text-[#2b1d16]"
+                    />
+                  }
                 />
-                <PersonalInformationCard
-                  details={[
-                    { label: 'Full Name', value: state.profile.name },
-                    { label: 'Email Address', value: state.profile.email },
-                    { label: 'Mobile Number', value: state.profile.mobileNumber, tag: 'Primary' },
-                    { label: 'Gender', value: state.profile.gender ?? '' },
-                    { label: 'Country / Nationality', value: state.profile.country ?? '' },
-                    { label: 'Passport Number', value: state.profile.passportNumber || 'Not provided' },
-                    { label: 'NIC Number', value: state.profile.nic || 'Not provided' },
+                <PersonalInfoEditor
+                  variant="customer"
+                  subtitle="Primary travel identity and contact details used for trip bookings."
+                  onSave={async (changes) => state.setProfile(await updateProfile('tourist', changes))}
+                  fields={[
+                    { key: 'name', label: 'Full Name', value: state.profile.name, required: true, maxLength: 100 },
+                    { key: 'email', label: 'Email Address', value: state.profile.email, locked: true },
+                    { key: 'mobileNumber', label: 'Mobile Number', value: state.profile.mobileNumber, tag: 'Primary', required: true, maxLength: 20 },
+                    { key: 'gender', label: 'Gender', value: state.profile.gender ?? '', options: ['Male', 'Female', 'Other'], required: true },
+                    { key: 'country', label: 'Country / Nationality', value: state.profile.country ?? '', required: true, maxLength: 100 },
+                    { key: 'passportNumber', label: 'Passport Number', value: state.profile.passportNumber ?? '', emptyText: 'Not provided', maxLength: 30 },
+                    { key: 'nic', label: 'NIC Number', value: state.profile.nic ?? '', emptyText: 'Not provided', maxLength: 30 },
                   ]}
                 />
               </>

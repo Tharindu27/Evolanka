@@ -15,7 +15,9 @@ export class JwtAuthGuard implements CanActivate {
     if (scheme !== 'Bearer' || !token) throw new UnauthorizedException();
 
     try {
-      const payload = await this.jwt.verifyAsync<{ sub: number; role: AuthRole }>(token);
+      const payload = await this.jwt.verifyAsync<{ sub: number; role: string }>(token);
+      // Admin tokens share the signing secret but must never act as a tourist or provider.
+      if (payload.role !== 'tourist' && payload.role !== 'provider') throw new Error('Unsupported role');
       request.user = { id: payload.sub, role: payload.role };
       return true;
     } catch {

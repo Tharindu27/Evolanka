@@ -15,7 +15,7 @@ export default function CustomerSettingsPage() {
               Manage your account preferences, personal details, security, and data privacy.
             </p>
 
-            <SettingsContent />
+            <SettingsContent role="tourist" />
           </div>
         </main>
       </div>

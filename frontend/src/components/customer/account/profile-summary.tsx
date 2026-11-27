@@ -1,21 +1,16 @@
+import type { ReactNode } from 'react';
 import type { AccountProfile } from '@/data/customer-account-data';
 
 type ProfileSummaryProps = {
   profile: AccountProfile;
+  avatar: ReactNode;
 };
 
-export default function ProfileSummary({ profile }: ProfileSummaryProps) {
+export default function ProfileSummary({ profile, avatar }: ProfileSummaryProps) {
   return (
     <section className="mt-8 rounded-[22px] border border-[#dfe4f2] bg-white/80 p-5 shadow-[0_18px_45px_rgba(0,26,67,0.08)] backdrop-blur-sm">
       <div className="flex items-center gap-5">
-        <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-[#eef3ff] shadow-inner ring-4 ring-white">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#f9d2a1,#d99162_45%,#a85a3d_75%)] text-[2rem] text-[#2b1d16]">
-            {profile.name.charAt(0)}
-          </div>
-          <div className="absolute -bottom-1 right-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-[#f3f7ff] text-[0.6rem] text-[#001a43]">
-            ✓
-          </div>
-        </div>
+        {avatar}
 
         <div className="flex-1">
           <div className="flex items-center gap-3">

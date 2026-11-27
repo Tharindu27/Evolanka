@@ -19,6 +19,7 @@ export type FeedPost = {
   location: string;
   caption: string;
   images: string[];
+  video?: string;
   tags: string[];
   featuredService?: string;
   likes: number;
@@ -36,11 +37,6 @@ export type FeedStory = {
   authorId: string;
   frames: StoryFrame[];
 };
-
-export const feedTabs: { value: FeedRole; label: string; placeholder: string }[] = [
-  { value: 'tourist', label: 'Tourists', placeholder: 'Search tourist posts, places or tags' },
-  { value: 'provider', label: 'Service Providers', placeholder: 'Search hotels, rentals, guides or places' },
-];
 
 export const feedAuthors: FeedAuthor[] = [
   { id: 'amaya', name: 'Amaya Perera', role: 'tourist', country: 'Sri Lanka' },
@@ -66,7 +62,7 @@ export const feedPosts: FeedPost[] = [
     location: 'Colombo',
     caption: 'Just added two brand new Toyota Aqua hybrids to our fleet. Airport pickup and island-wide drop-off now available.',
     images: ['/images/rentals/vehicles/lanka-wheels-toyota-aqua.jpg', '/images/rentals/vehicles/toyota-prius.jpg'],
-    tags: ['VehicleRental', 'TravelAdvice'],
+    tags: ['VehicleRental', 'TravelAdvice', 'RoadTrip'],
     featuredService: 'Toyota Aqua - Colombo',
     likes: 42,
     comments: 6,
@@ -93,7 +89,7 @@ export const feedPosts: FeedPost[] = [
     location: 'Ella',
     caption: 'Misty mornings with a view of Nine Arch Bridge from the terrace. Three rooms free this weekend.',
     images: ['/images/landing-page/sigiriya.png', '/images/landing-page/gallefort.png'],
-    tags: ['HotelReview'],
+    tags: ['HotelReview', 'HillCountry'],
     featuredService: 'Ella Cloud Villa',
     likes: 87,
     comments: 9,
@@ -106,7 +102,7 @@ export const feedPosts: FeedPost[] = [
     location: 'Mirissa Beach',
     caption: 'Whale watching out of Mirissa, saw two blue whales in under an hour! Book the early boat if you can.',
     images: ['/images/landing-page/mirissabeach.png'],
-    tags: ['Wildlife', 'Beach'],
+    tags: ['Wildlife', 'Beach', 'BeachVibes'],
     likes: 214,
     comments: 31,
   },
@@ -118,7 +114,7 @@ export const feedPosts: FeedPost[] = [
     location: 'Galle Fort',
     caption: 'Walking tour through Galle Fort ramparts at golden hour. History, street food and the best sunset spot in the south.',
     images: ['/images/landing-page/gallefort.png'],
-    tags: ['Culture', 'FoodTrail'],
+    tags: ['Culture', 'FoodTrail', 'BudgetTravel'],
     featuredService: 'Kasun Wijesinghe',
     likes: 96,
     comments: 12,
@@ -131,7 +127,7 @@ export const feedPosts: FeedPost[] = [
     location: 'Galle Fort',
     caption: 'Coffee, colonial streets and the sea breeze. Galle Fort is the calm I needed after Colombo.',
     images: ['/images/landing-page/gallefort.png', '/images/landing-page/mirissabeach.png'],
-    tags: ['Photography', 'Culture'],
+    tags: ['Photography', 'Culture', 'BeachVibes'],
     likes: 154,
     comments: 18,
   },
@@ -143,7 +139,7 @@ export const feedPosts: FeedPost[] = [
     location: 'Kandy',
     caption: 'Hill country ready: Mitsubishi Montero with a driver for the Kandy to Nuwara Eliya road. Weekly rates on request.',
     images: ['/images/rentals/vehicles/mitsubishi-montero.jpg'],
-    tags: ['VehicleRental'],
+    tags: ['VehicleRental', 'RoadTrip', 'HillCountry'],
     featuredService: 'Mitsubishi Montero',
     likes: 61,
     comments: 5,
@@ -168,7 +164,7 @@ export const feedPosts: FeedPost[] = [
     location: 'Nuwara Eliya',
     caption: 'Tea country trails with a local guide: Pedro Estate, Lover\'s Leap and the best scones in the hills.',
     images: ['/images/landing-page/sigiriya.png'],
-    tags: ['Hiking', 'TravelAdvice'],
+    tags: ['Hiking', 'TravelAdvice', 'HillCountry'],
     featuredService: 'Hill Country Expeditions',
     likes: 73,
     comments: 8,
@@ -181,7 +177,7 @@ export const feedPosts: FeedPost[] = [
     location: 'Ella',
     caption: 'Nine Arch Bridge, a train at 9:30 and the whole valley in green. Take the Kandy to Ella train for the views.',
     images: ['/images/landing-page/sigiriya.png'],
-    tags: ['Photography', 'TravelAdvice'],
+    tags: ['Photography', 'TravelAdvice', 'HillCountry', 'BudgetTravel'],
     likes: 189,
     comments: 22,
   },

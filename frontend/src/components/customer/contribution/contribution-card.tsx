@@ -1,7 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
+import ContributionViewModal from '@/components/customer/contribution/contribution-view-modal';
 import type { Contribution } from '@/data/customer-contribution-data';
 
 type ContributionCardProps = {
@@ -52,6 +54,18 @@ function StatusBadge({ item }: { item: Contribution }) {
     );
   }
 
+  if (item.status === 'rejected') {
+    return (
+      <span className="flex items-center gap-1.5 rounded-md bg-white/95 px-2.5 py-1 text-[0.68rem] font-bold text-[#c4161c] shadow-sm">
+        <svg {...iconProps} className="h-3.5 w-3.5 stroke-[#c4161c]">
+          <circle cx="12" cy="12" r="9" />
+          <path d="m9 9 6 6M15 9l-6 6" />
+        </svg>
+        {item.statusLabel}
+      </span>
+    );
+  }
+
   return (
     <span className="flex items-center gap-1.5 rounded-md bg-white/95 px-2.5 py-1 text-[0.68rem] font-bold text-[#4f586e] shadow-sm">
       <svg {...iconProps} className="h-3.5 w-3.5 stroke-current">
@@ -65,6 +79,7 @@ function StatusBadge({ item }: { item: Contribution }) {
 export default function ContributionCard({ item, onWithdraw, onDelete }: ContributionCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [viewOpen, setViewOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -152,7 +167,14 @@ export default function ContributionCard({ item, onWithdraw, onDelete }: Contrib
         ) : null}
 
         {item.note ? (
-            <p className="mt-3 flex items-start gap-2 rounded-xl border border-[#f3c66b] bg-[#ffffff] px-3 py-2.5 text-[0.72rem] font-medium leading-snug text-[#8a5a00]">
+            <p className={[
+              'mt-3 flex items-start gap-2 rounded-xl border px-3 py-2.5 text-[0.72rem] font-medium leading-snug',
+              item.noteTone === 'red'
+                ? 'border-[#f1b8bb] bg-[#fff1f1] text-[#c4161c]'
+                : item.noteTone === 'neutral'
+                  ? 'border-[#bfe5cf] bg-[#effaf3] text-[#0b6b3a]'
+                  : 'border-[#f3c66b] bg-[#ffffff] text-[#8a5a00]',
+            ].join(' ')}>
               <svg {...iconProps} className="mt-0.5 h-3.5 w-3.5 shrink-0 stroke-current">
                 <circle cx="12" cy="12" r="9" />
                 <path d="M12 8v5M12 16.5v.01" />
@@ -164,33 +186,18 @@ export default function ContributionCard({ item, onWithdraw, onDelete }: Contrib
         <div className="mt-auto flex items-center gap-2 pt-4">
           {item.status === 'verified' ? (
             <>
-              <button type="button" className={`rounded-lg border border-[#001a43] bg-[#001a43] px-4 py-2 text-xs font-bold text-[#ffffff] transition hover:bg-[#234576]`}>
+              <Link href={`/locations/place/${item.locationId}`} className="rounded-lg border border-[#001a43] bg-[#001a43] px-4 py-2 text-xs font-bold text-[#ffffff] transition hover:bg-[#234576] hover:text-white">
                 View Live Post
-              </button>
-              <button type="button" className={outlineButton}>
-                Edit Details
-              </button>
-            </>
-          ) : null}
-
-          {item.status === 'pending' ? (
-            <>
-              <button type="button" className={`rounded-lg border border-[#001a43] bg-[#001a43] px-4 py-2 text-xs font-bold text-[#ffffff] transition hover:bg-[#234576]`}>
-                View Submission
+              </Link>
+              <button type="button" onClick={() => setViewOpen(true)} className={outlineButton}>
+                View Details
               </button>
             </>
-          ) : null}
-
-          {item.status === 'draft' ? (
-            <>
-              <button type="button" className={`rounded-lg border border-[#001a43] bg-[#001a43] px-4 py-2 text-xs font-bold text-[#ffffff] transition hover:bg-[#234576]`}>
-                Continue Editing
-              </button>
-              <button type="button" className={outlineButton}>
-                Preview
-              </button>
-            </>
-          ) : null}
+          ) : (
+            <button type="button" onClick={() => setViewOpen(true)} className="rounded-lg border border-[#001a43] bg-[#001a43] px-4 py-2 text-xs font-bold text-[#ffffff] transition hover:bg-[#234576]">
+              {item.status === 'pending' ? 'View Submission' : item.status === 'draft' ? 'View Draft' : 'View Details'}
+            </button>
+          )}
 
           {item.status !== 'pending' ? (
             <div ref={menuRef} className="relative ml-auto">
@@ -235,6 +242,8 @@ export default function ContributionCard({ item, onWithdraw, onDelete }: Contrib
         </div>
       </div>
 
+      {viewOpen ? <ContributionViewModal location={item.location} statusLabel={item.statusLabel} onClose={() => setViewOpen(false)} /> : null}
+
       {confirmOpen ? (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-[#001a43]/50 p-4 backdrop-blur-sm"
@@ -247,7 +256,7 @@ export default function ContributionCard({ item, onWithdraw, onDelete }: Contrib
             <p className="mt-2 text-sm text-[#566277]">
               {item.status === 'verified'
                 ? 'This live location will be removed from EVOLANKA. This action cannot be undone.'
-                : 'This draft will be permanently removed. This action cannot be undone.'}
+                : 'This contribution will be permanently removed. This action cannot be undone.'}
             </p>
             <div className="mt-6 flex justify-end gap-3">
               <button

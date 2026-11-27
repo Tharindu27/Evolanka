@@ -10,7 +10,7 @@ type ProfileState =
   | { status: 'ready'; profile: AuthProfile };
 
 // Loads the signed-in account's registration details; a session of the other role counts as signed out.
-export function useProfile(role: AuthRole): ProfileState {
+export function useProfile(role: AuthRole): ProfileState & { setProfile: (profile: AuthProfile) => void } {
   const [state, setState] = useState<ProfileState>({ status: 'loading' });
 
   useEffect(() => {
@@ -33,5 +33,5 @@ export function useProfile(role: AuthRole): ProfileState {
     };
   }, [role]);
 
-  return state;
+  return { ...state, setProfile: (profile) => setState({ status: 'ready', profile }) };
 }
