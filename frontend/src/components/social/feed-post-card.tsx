@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { getFeedAuthor, type FeedPost } from '@/data/social-feed-data';
+import { getFeedAuthor, type FeedAuthor, type FeedPost } from '@/data/social-feed-data';
 
 import FeedAvatar from './feed-avatar';
 
@@ -16,10 +16,16 @@ const iconProps = {
   'aria-hidden': true,
 };
 
-export default function FeedPostCard({ post }: { post: FeedPost }) {
-  const author = getFeedAuthor(post.authorId);
+type FeedPostCardProps = {
+  post: FeedPost;
+  author?: FeedAuthor;
+  saved: boolean;
+  onToggleSave: (postId: string) => void;
+};
+
+export default function FeedPostCard({ post, author: authorOverride, saved, onToggleSave }: FeedPostCardProps) {
+  const author = authorOverride ?? getFeedAuthor(post.authorId);
   const [liked, setLiked] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [slide, setSlide] = useState(0);
 
   if (!author) return null;
@@ -40,7 +46,7 @@ export default function FeedPostCard({ post }: { post: FeedPost }) {
                 isProvider ? 'bg-[#fbf3d9] text-[#8a6d0f]' : 'bg-[#edf4ff] text-[#0f3d9c]',
               ].join(' ')}
             >
-              {isProvider ? author.providerType : 'Tourist'}
+              {isProvider ? author.providerType ?? 'Provider' : 'Tourist'}
             </span>
             {post.isNew ? (
               <span className="rounded-full bg-[#e6f4ea] px-2 py-0.5 text-[0.62rem] font-bold uppercase tracking-[0.12em] text-[#0f9d58]">New</span>
@@ -71,6 +77,11 @@ export default function FeedPostCard({ post }: { post: FeedPost }) {
         </div>
       </div>
 
+      {count === 0 && post.video ? (
+        <video src={post.video} controls className="aspect-[16/10] w-full bg-black object-contain" />
+      ) : null}
+
+      {count > 0 ? (
       <div className="group relative aspect-[16/10] w-full overflow-hidden bg-[#edf3ff]">
         <img src={post.images[slide]} alt={post.location} className="h-full w-full object-cover" />
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#071a34]/35 to-transparent" />
@@ -105,6 +116,7 @@ export default function FeedPostCard({ post }: { post: FeedPost }) {
           </>
         ) : null}
       </div>
+      ) : null}
 
       <footer className="flex items-center justify-between px-5 py-3.5 text-xs text-[#4f586e]">
         <div className="flex items-center gap-6">
@@ -140,7 +152,7 @@ export default function FeedPostCard({ post }: { post: FeedPost }) {
 
         <button
           type="button"
-          onClick={() => setSaved((value) => !value)}
+          onClick={() => onToggleSave(post.id)}
           aria-pressed={saved}
           aria-label={saved ? 'Remove bookmark' : 'Bookmark post'}
           className="transition hover:text-[#001a43]"

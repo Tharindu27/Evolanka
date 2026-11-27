@@ -5,10 +5,8 @@ import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import {
   postCategoryTags,
   postLocationSuggestions,
-  postServiceOptions,
   postVisibilityOptions,
   type PostDraft,
-  type PostServiceType,
 } from '@/data/customer-post-data';
 
 type AddPostModalProps = {
@@ -29,8 +27,6 @@ const iconProps = {
   'aria-hidden': true,
 };
 
-const serviceTypes = Object.keys(postServiceOptions) as PostServiceType[];
-
 const fieldClass =
   'w-full rounded-xl border border-[#dfe7f5] bg-white px-3.5 py-2.5 text-sm text-[#001a43] outline-none transition placeholder:text-[#9aa3b5] focus:border-[#0d4abe] focus:ring-2 focus:ring-[#0d4abe]/15';
 
@@ -43,6 +39,7 @@ export default function AddPostModal({ initialDraft, mode = 'create', onClose, o
   const [draft, setDraft] = useState<PostDraft>(initialDraft);
   const [linkOpen, setLinkOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
+  const [customTag, setCustomTag] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -99,6 +96,16 @@ export default function AddPostModal({ initialDraft, mode = 'create', onClose, o
 
   const toggleTag = (tag: string) =>
     update('tags', draft.tags.includes(tag) ? draft.tags.filter((item) => item !== tag) : [...draft.tags, tag]);
+
+  const addCustomTag = () => {
+    const tag = customTag.replace(/[^\p{L}\p{N}_]/gu, '').slice(0, 30);
+    if (!tag) return;
+
+    const existing = [...postCategoryTags, ...draft.tags].find((item) => item.toLowerCase() === tag.toLowerCase());
+    if (!existing) update('tags', [...draft.tags, tag]);
+    else if (!draft.tags.includes(existing)) update('tags', [...draft.tags, existing]);
+    setCustomTag('');
+  };
 
   const imageCount = draft.media.filter((item) => item.type === 'image').length;
   const canPublish = draft.caption.trim().length > 0 || draft.media.length > 0;
@@ -279,7 +286,7 @@ export default function AddPostModal({ initialDraft, mode = 'create', onClose, o
           <section>
             <SectionTitle>Category / Tags</SectionTitle>
             <div className="flex flex-wrap gap-2">
-              {postCategoryTags.map((tag) => {
+              {[...postCategoryTags, ...draft.tags.filter((tag) => !postCategoryTags.includes(tag))].map((tag) => {
                 const active = draft.tags.includes(tag);
 
                 return (
@@ -300,34 +307,30 @@ export default function AddPostModal({ initialDraft, mode = 'create', onClose, o
                 );
               })}
             </div>
-          </section>
 
-          <section>
-            <SectionTitle>Tag Services Property / Provider </SectionTitle>
-            <div className="grid gap-3 sm:grid-cols-[180px_1fr]">
-              <select
-                value={draft.serviceType}
-                onChange={(event) => setDraft((current) => ({ ...current, serviceType: event.target.value as PostServiceType, serviceName: '' }))}
-                className={fieldClass}
-              >
-                {serviceTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
+            <div className="mt-3 flex items-center gap-2">
               <input
-                list="post-service-suggestions"
-                value={draft.serviceName}
-                onChange={(event) => update('serviceName', event.target.value)}
-                placeholder={`Featured ${draft.serviceType.toLowerCase()} (optional)`}
+                value={customTag}
+                maxLength={30}
+                onChange={(event) => setCustomTag(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                    addCustomTag();
+                  }
+                }}
+                placeholder="Add your own tag, e.g. SurfTrip"
+                aria-label="Custom tag"
                 className={fieldClass}
               />
-              <datalist id="post-service-suggestions">
-                {postServiceOptions[draft.serviceType].map((name) => (
-                  <option key={name} value={name} />
-                ))}
-              </datalist>
+              <button
+                type="button"
+                onClick={addCustomTag}
+                disabled={!customTag.trim()}
+                className="shrink-0 rounded-xl bg-[#001a43] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0d2a5e] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Add
+              </button>
             </div>
           </section>
         </div>
