@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react';
 
 import {  minPasswordLength } from '@/data/customer-settings-data';
+import { changePassword, getErrorMessage, type AuthRole } from '@/lib/api';
 
 const cardClass = 'rounded-[22px] border border-[#dfe4f2] bg-white shadow-[0_18px_45px_rgba(0,26,67,0.06)]';
 const inputClass =
@@ -99,37 +100,51 @@ function PasswordField({
   );
 }
 
-export default function SettingsContent() {
+export default function SettingsContent({ role }: { role: AuthRole }) {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<Partial<Record<'current' | 'next' | 'confirm', string>>>({});
   const [passwordUpdated, setPasswordUpdated] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const resetPasswordForm = () => {
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
     setErrors({});
+    setSubmitError('');
   };
 
-  const updatePassword = (event: FormEvent) => {
+  const updatePassword = async (event: FormEvent) => {
     event.preventDefault();
     const next: typeof errors = {};
 
     if (!currentPassword) next.current = 'Enter your current password.';
     if (newPassword.length < minPasswordLength) next.next = `Use at least ${minPasswordLength} characters.`;
+    else if (!/[A-Za-z]/.test(newPassword) || !/\d/.test(newPassword)) next.next = 'Use both letters and numbers.';
     else if (newPassword === currentPassword) next.next = 'New password must differ from the current one.';
     if (confirmPassword !== newPassword) next.confirm = 'Passwords do not match.';
 
     setErrors(next);
+    setSubmitError('');
     if (Object.keys(next).length > 0) {
       setPasswordUpdated(false);
       return;
     }
 
-    resetPasswordForm();
-    setPasswordUpdated(true);
+    setSaving(true);
+    try {
+      await changePassword(role, { currentPassword, newPassword });
+      resetPasswordForm();
+      setPasswordUpdated(true);
+    } catch (error) {
+      setPasswordUpdated(false);
+      setSubmitError(getErrorMessage(error));
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -158,6 +173,12 @@ export default function SettingsContent() {
           {passwordUpdated ? (
             <p role="status" className="mt-5 rounded-xl border border-[#bfe5cf] bg-[#effaf3] px-4 py-3 text-sm font-medium text-[#0b6b3a]">
               Password updated successfully.
+            </p>
+          ) : null}
+
+          {submitError ? (
+            <p role="alert" className="mt-5 rounded-xl border border-[#f3c6c8] bg-[#fff1f1] px-4 py-3 text-sm font-medium text-[#c4161c]">
+              {submitError}
             </p>
           ) : null}
 
@@ -213,12 +234,13 @@ export default function SettingsContent() {
             </button>
             <button
               type="submit"
-              className="btn-primary inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-[0_12px_25px_rgba(13,74,190,0.28)] transition hover:text-white"
+              disabled={saving}
+              className="btn-primary inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-[0_12px_25px_rgba(13,74,190,0.28)] transition hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
             >
               <svg {...iconProps} className="h-4 w-4 stroke-white">
                 <path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v4h-4" />
               </svg>
-              Update Password
+              {saving ? 'Updating…' : 'Update Password'}
             </button>
           </div>
         </form>

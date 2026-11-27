@@ -13,7 +13,7 @@ export default function ProviderSettingsPage() {
             Manage your account preferences, personal details, security, and data privacy.
           </p>
 
-          <SettingsContent />
+          <SettingsContent role="provider" />
         </div>
       </div>
     </main>

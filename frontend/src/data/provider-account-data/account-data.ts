@@ -26,6 +26,7 @@ export const navigationItems: NavigationItem[] = [
   { label: 'Services', href: '/provider/profile/services', icon: 'services' },
   { label: 'Listings', href: '/provider/profile/listings', icon: 'listings' },
   { label: 'My Post', href: '/provider/profile/post', icon: 'post' },
+  { label: 'My Contributions', href: '/provider/profile/contributions', icon: 'contribution' },
   { label: 'Settings', href: '/provider/profile/settings', icon: 'settings' },
 ];
 

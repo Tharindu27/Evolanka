@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import type { Place } from '@/data/location-data/location-mock-data';
+import type { Place } from '@/lib/places';
 
 type PlaceCardProps = {
   place: Place;
@@ -34,6 +34,18 @@ export default function PlaceCard({ place, backTo }: PlaceCardProps) {
         </div>
 
         <div className="bg-gradient-to-b from-white to-[#f7f9fc] p-5">
+          {place.categories.length > 0 ? (
+            <div className="mb-3 flex flex-wrap gap-2">
+              {place.categories.map((category) => (
+                <span
+                  key={category.id}
+                  className="rounded-full border border-[#c9a227]/40 bg-[#c9a227]/10 px-2.5 py-1 text-[11px] font-bold text-[#7a5f0b]"
+                >
+                  {category.name}
+                </span>
+              ))}
+            </div>
+          ) : null}
           <p className="line-clamp-3 text-sm leading-relaxed text-[#4e5568]">{place.shortDescription}</p>
           <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#003d9b] transition-transform duration-300 group-hover:translate-x-1">
             Explore details

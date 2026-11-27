@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
-import type { Category, Place, Province } from '@/data/location-data/location-mock-data';
+import type { Category, Province } from '@/data/location-data/location-taxonomy';
+import type { Place } from '@/lib/places';
 import PlaceCard from './place-card';
 
 type LocationsHomeContentProps = {
@@ -125,7 +126,7 @@ export default function LocationsHomeContent({ provinces, categories, places }: 
                         {province.districts.length} districts
                       </span>
                       <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold">
-                        {province.attractions}
+                        {places.filter((place) => place.provinceId === province.id).length} places
                       </span>
                     </div>
                   </div>

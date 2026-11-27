@@ -25,6 +25,7 @@ declare global {
           initTokenClient: (config: {
             client_id: string;
             scope: string;
+            prompt?: string;
             callback: (response: GoogleTokenResponse) => void;
             error_callback: (error: { type: string }) => void;
           }) => { requestAccessToken: () => void };
@@ -98,6 +99,8 @@ export default function SocialAuthButtons({ buttonClassName, iconClassName, onSu
     const client = window.google.accounts.oauth2.initTokenClient({
       client_id: GOOGLE_CLIENT_ID,
       scope: 'openid email profile',
+      // Always show the account chooser so another Google account can be picked after an error.
+      prompt: 'select_account',
       callback: (response) => {
         if (!response.access_token) {
           setBusy(null);

@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { ProfileService } from './profile.service';
+import { MediaModule } from '../media/media.module';
 
 @Module({
   imports: [
+    MediaModule,
+    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
     JwtModule.registerAsync({
       useFactory: () => {
         const secret = process.env.JWT_SECRET;
@@ -14,6 +19,7 @@ import { AuthService } from './auth.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, ProfileService],
+  exports: [JwtModule],
 })
 export class AuthModule {}

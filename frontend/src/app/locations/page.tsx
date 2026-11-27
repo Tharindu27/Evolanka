@@ -1,9 +1,12 @@
 import Footer from '@/components/common/footer';
 import Navbar from '@/components/common/navbar';
 import LocationsHomeContent from '@/components/locations/locations-home-content';
-import { categories, places, provinces } from '@/data/location-data/location-mock-data';
+import { categories, provinces } from '@/data/location-data/location-taxonomy';
+import { fetchPlaces } from '@/lib/places';
 
-export default function LocationsPage() {
+export default async function LocationsPage() {
+  const places = await fetchPlaces();
+
   return (
     <div className="bg-white text-[#001a43]">
       <Navbar />

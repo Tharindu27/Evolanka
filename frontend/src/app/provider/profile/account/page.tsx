@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import Sidebar from '@/components/provider/common/sidebar';
+import AvatarUploader from '@/components/common/account/avatar-uploader';
+import PersonalInfoEditor from '@/components/common/account/personal-info-editor';
+import { updateProfile } from '@/lib/api';
 import { useProfile } from '@/lib/use-profile';
 
 export default function ProviderAccountPage() {
@@ -35,12 +38,7 @@ export default function ProviderAccountPage() {
     );
   }
 
-  const { profile } = state;
-  const profileDetails = [
-    { label: 'Full Name', value: profile.name },
-    { label: 'Email Address', value: profile.email },
-    { label: 'Mobile Number', value: profile.mobileNumber, tag: 'Primary' },
-  ];
+  const { profile, setProfile } = state;
 
   return (
     <main className="h-screen overflow-hidden bg-[#edf1f5] text-[#001a43]">
@@ -56,9 +54,14 @@ export default function ProviderAccountPage() {
           <section className="mt-8 rounded-[1.5rem] border border-[#dfe8f4] bg-white px-6 py-5 shadow-[0_18px_50px_rgba(0,26,67,0.06)]">
             <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#d8a669] text-2xl font-bold text-white shadow-[0_10px_28px_rgba(0,26,67,0.12)]">
-                  {profile.name.charAt(0).toUpperCase()}
-                </div>
+                <AvatarUploader
+                  role="provider"
+                  name={profile.name}
+                  picture={profile.profilePicture}
+                  onUploaded={setProfile}
+                  className="h-16 w-16"
+                  fallbackClassName="bg-[#d8a669] text-white"
+                />
 
                 <div>
                   <div className="flex items-center gap-3">
@@ -85,46 +88,16 @@ export default function ProviderAccountPage() {
             </div>
           </section>
 
-          <section className="mt-8 rounded-[1.5rem] border border-[#dfe8f4] bg-white px-6 py-6 shadow-[0_18px_50px_rgba(0,26,67,0.05)]">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <h3 className="text-[2rem] font-black tracking-[-0.06em] text-[#001a43]">Personal Information</h3>
-                <p className="mt-1 text-[0.96rem] text-[#4f5d76]">Primary personal information and contact details for the provider.</p>
-              </div>
-
-              <button
-                type="button"
-                className="inline-flex items-center justify-center rounded-full bg-[#001a43] px-6 py-2.5 text-sm font-bold text-white shadow-[0_12px_24px_rgba(0,26,67,0.18)] transition hover:-translate-y-0.5"
-              >
-                Edit
-              </button>
-            </div>
-
-            <div className="mt-8 space-y-0">
-              {profileDetails.map((item) => (
-                <div
-                  key={item.label}
-                  className="flex flex-col gap-2 border-t border-[#edf1f5] py-4 md:flex-row md:items-center md:justify-between"
-                >
-                  <div className="min-w-[220px] text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#67748d]">
-                    {item.label}
-                  </div>
-
-                  <div className="flex flex-1 items-center justify-start gap-3 text-base font-medium text-[#001a43] md:justify-between">
-                    <span className="flex items-center gap-2">
-                      {item.value}
-                    </span>
-
-                    {item.tag ? (
-                      <span className="inline-flex items-center rounded-md border border-[#d8e2ff] bg-[#edf4ff] px-2.5 py-1 text-[11px] font-semibold text-[#1d4f9f]">
-                        {item.tag}
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+          <PersonalInfoEditor
+            variant="provider"
+            subtitle="Primary personal information and contact details for the provider."
+            onSave={async (changes) => setProfile(await updateProfile('provider', changes))}
+            fields={[
+              { key: 'name', label: 'Full Name', value: profile.name, required: true, maxLength: 100 },
+              { key: 'email', label: 'Email Address', value: profile.email, locked: true },
+              { key: 'mobileNumber', label: 'Mobile Number', value: profile.mobileNumber, tag: 'Primary', required: true, maxLength: 20 },
+            ]}
+          />
         </div>
       </div>
     </main>

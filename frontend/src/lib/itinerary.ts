@@ -2,7 +2,7 @@
 
 import { useMemo, useSyncExternalStore } from 'react';
 
-import { getPlaceById, type Place } from '@/data/location-data/location-mock-data';
+import type { Place } from '@/lib/places';
 
 export type Timing = 'exact' | 'flexible';
 
@@ -47,13 +47,14 @@ const distanceKm = (a: { lat: number; lng: number }, b: { lat: number; lng: numb
 };
 
 // Visit nearest-first from the start point, then split into clusters where the hop to the next stop is long.
-export function buildClusters(placeIds: string[], inSriLanka: boolean): string[][] {
+export function buildClusters(places: Place[], placeIds: string[], inSriLanka: boolean): string[][] {
+  // Places without map coordinates cannot be routed.
   const remaining = placeIds.flatMap((id) => {
-    const place = getPlaceById(id);
-    return place ? [place] : [];
+    const place = places.find((item) => item.id === id);
+    return place?.coordinates ? [place as Place & { coordinates: { lat: number; lng: number } }] : [];
   });
 
-  const ordered: Place[] = [];
+  const ordered: (Place & { coordinates: { lat: number; lng: number } })[] = [];
   let current: { lat: number; lng: number } = getStartPoint(inSriLanka);
 
   while (remaining.length > 0) {
@@ -68,7 +69,7 @@ export function buildClusters(placeIds: string[], inSriLanka: boolean): string[]
     current = next.coordinates;
   }
 
-  const clusters: Place[][] = [];
+  const clusters: (typeof ordered)[] = [];
   ordered.forEach((place) => {
     const last = clusters[clusters.length - 1];
     if (last && distanceKm(last[last.length - 1].coordinates, place.coordinates) <= CLUSTER_RADIUS_KM) {
@@ -81,12 +82,12 @@ export function buildClusters(placeIds: string[], inSriLanka: boolean): string[]
   return clusters.map((cluster) => cluster.map((place) => place.id));
 }
 
-export function getClusterHotels(placeIds: string[]): ClusterHotel[] {
+export function getClusterHotels(places: Place[], placeIds: string[]): ClusterHotel[] {
   const seen = new Set<string>();
   const hotels: ClusterHotel[] = [];
 
   placeIds.forEach((id) => {
-    const place = getPlaceById(id);
+    const place = places.find((item) => item.id === id);
     place?.nearbyHotels.forEach((hotel) => {
       if (seen.has(hotel.name)) return;
       seen.add(hotel.name);

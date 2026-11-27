@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import RouteClusters from '@/components/trip-plan/route-clusters';
-import { getCategoryById, getPlaceById, getProvinceById, places, type Place } from '@/data/location-data/location-mock-data';
+import { getProvinceById } from '@/data/location-data/location-taxonomy';
 import { buildClusters, getItinerary, getStartPoint, saveItinerary, type Itinerary } from '@/lib/itinerary';
+import type { Place } from '@/lib/places';
+import { usePlaces } from '@/lib/use-places';
 
 type Stop = {
   key: number;
@@ -20,19 +22,21 @@ const inputClass =
   'w-full rounded-xl border border-[#dfe7f5] bg-[#f3f6fc] px-4 py-3 text-sm text-[#001a43] outline-none transition placeholder:text-[#9aa3b5] focus:border-[#001a43]/30 focus:bg-white focus:ring-4 focus:ring-[#001a43]/5';
 const labelClass = 'mb-1.5 block text-[0.72rem] font-bold uppercase tracking-[0.06em] text-[#4e5568]';
 
-const areaOf = (place: Place) => `${place.city} · ${getProvinceById(place.provinceId)?.name ?? place.district}`;
+const areaOf = (place: Place) =>
+  [place.city, (place.provinceId && getProvinceById(place.provinceId)?.name) || place.district].filter(Boolean).join(' · ');
 
-const searchPlaces = (term: string) => {
+const searchPlaces = (places: Place[], term: string) => {
   const needle = term.trim().toLowerCase();
   if (!needle) return [];
-  return places.filter((place) => {
+  // Only places with map coordinates can be routed.
+  return places.filter((place) => place.coordinates).filter((place) => {
     const haystack = [
       place.name,
       place.city,
       place.district,
       place.shortDescription,
-      getProvinceById(place.provinceId)?.name,
-      getCategoryById(place.categoryId)?.name,
+      place.provinceId ? getProvinceById(place.provinceId)?.name : '',
+      ...place.categories.map((item) => item.name),
     ]
       .join(' ')
       .toLowerCase();
@@ -49,7 +53,7 @@ function StepBadge({ n, last }: { n: number; last?: boolean }) {
   );
 }
 
-export default function TripPlanner({ editId }: { editId?: string }) {
+function TripPlannerForm({ editId, places }: { editId?: string; places: Place[] }) {
   const router = useRouter();
   const [existing] = useState<Itinerary | null>(() => (editId ? (getItinerary(editId) ?? null) : null));
 
@@ -60,7 +64,7 @@ export default function TripPlanner({ editId }: { editId?: string }) {
   const [inSriLanka, setInSriLanka] = useState(existing?.inSriLanka ?? true);
   const [stops, setStops] = useState<Stop[]>(() => {
     const savedPlaces = (existing?.clusters.flat() ?? []).flatMap((id) => {
-      const place = getPlaceById(id);
+      const place = places.find((item) => item.id === id);
       return place ? [place] : [];
     });
     return savedPlaces.length > 0
@@ -99,7 +103,7 @@ export default function TripPlanner({ editId }: { editId?: string }) {
   const startPoint = getStartPoint(inSriLanka);
 
   const optimizeRoute = () => {
-    setClusters(buildClusters(chosenIds, inSriLanka));
+    setClusters(buildClusters(places, chosenIds, inSriLanka));
     setView('route');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -288,7 +292,7 @@ export default function TripPlanner({ editId }: { editId?: string }) {
         <div className="min-w-0 flex-1 space-y-5">
           {stops.map((stop, index) => {
             const searched = stop.submitted.trim().length > 0;
-            const results = searchPlaces(stop.submitted);
+            const results = searchPlaces(places, stop.submitted);
             const isLast = index === stops.length - 1;
 
             return (
@@ -381,7 +385,7 @@ export default function TripPlanner({ editId }: { editId?: string }) {
                                 <div className="flex flex-wrap items-center gap-2">
                                   <h3 className="text-sm font-black text-[#001a43]">{place.name}</h3>
                                   <span className="rounded-full bg-[#fbf3d9] px-2 py-0.5 text-[0.62rem] font-bold uppercase text-[#8a6d0f]">
-                                    {getCategoryById(place.categoryId)?.name}
+                                    {place.categories.map((item) => item.name).join(', ')}
                                   </span>
                                 </div>
                                 <p className="mt-0.5 text-xs text-[#6d7280]">{areaOf(place)}</p>
@@ -437,4 +441,12 @@ export default function TripPlanner({ editId }: { editId?: string }) {
       </div>
     </div>
   );
+}
+
+export default function TripPlanner({ editId }: { editId?: string }) {
+  const { places, failed } = usePlaces();
+
+  if (failed) return <p className="py-20 text-center text-sm text-[#6d7280]">Could not load locations. Please try again shortly.</p>;
+  if (!places) return <p className="py-20 text-center text-sm text-[#6d7280]">Loading planner…</p>;
+  return <TripPlannerForm editId={editId} places={places} />;
 }

@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import Footer from '@/components/common/footer';
 import Navbar from '@/components/common/navbar';
 import ProvinceContent from '@/components/locations/province-content';
-import { getProvinceById, places } from '@/data/location-data/location-mock-data';
+import { getProvinceById } from '@/data/location-data/location-taxonomy';
+import { fetchPlaces } from '@/lib/places';
 
 type ProvincePageProps = {
   params: Promise<{ provinceId: string }>;
@@ -17,7 +18,7 @@ export default async function ProvincePage({ params }: ProvincePageProps) {
     notFound();
   }
 
-  const provincePlaces = places.filter((place) => place.provinceId === province.id);
+  const provincePlaces = (await fetchPlaces()).filter((place) => place.provinceId === province.id);
 
   return (
     <div className="bg-white text-[#001a43]">

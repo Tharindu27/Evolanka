@@ -7,7 +7,7 @@ export default function SocialFeedPage() {
     <div className="bg-[#f9f9ff] text-[#001a43]">
       <Navbar />
 
-      <main className="mx-auto max-w-[760px] px-6 pb-24 pt-32 md:px-8">
+      <main className="mx-auto max-w-[1360px] px-6 pb-24 pt-32 md:px-8">
         <SocialFeed />
       </main>
 

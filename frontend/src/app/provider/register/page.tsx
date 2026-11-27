@@ -25,7 +25,7 @@ function ProviderRegisterContent() {
     setSubmitting(true);
     try {
       await registerProvider({ name: name.trim(), email: email.trim(), mobileNumber: mobileNumber.trim(), password });
-      router.push('/provider/main-page/home');
+      router.push('/provider/login');
     } catch (err) {
       setError(getErrorMessage(err));
       setSubmitting(false);

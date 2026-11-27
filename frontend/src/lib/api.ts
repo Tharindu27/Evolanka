@@ -14,6 +14,8 @@ export type AuthUser = {
   name: string;
   email: string;
   role: AuthRole;
+  // Undefined until the profile has been fetched once; null means no picture.
+  profilePicture?: string | null;
 };
 
 type AuthResponse = { token: string; user: AuthUser };
@@ -87,11 +89,14 @@ export type ProviderRegisterInput = {
 
 export type LoginInput = { email: string; password: string };
 
-export const registerTourist = async (input: TouristRegisterInput) =>
-  saveSession((await api.post<AuthResponse>('/auth/tourist/register', input)).data);
+// Registration does not start a session; the user signs in afterwards.
+export const registerTourist = async (input: TouristRegisterInput) => {
+  await api.post<AuthResponse>('/auth/tourist/register', input);
+};
 
-export const registerProvider = async (input: ProviderRegisterInput) =>
-  saveSession((await api.post<AuthResponse>('/auth/provider/register', input)).data);
+export const registerProvider = async (input: ProviderRegisterInput) => {
+  await api.post<AuthResponse>('/auth/provider/register', input);
+};
 
 export const loginTourist = async (input: LoginInput) =>
   saveSession((await api.post<AuthResponse>('/auth/tourist/login', input)).data);
@@ -105,5 +110,51 @@ export const loginTouristWithGoogle = async (accessToken: string) =>
 export const loginTouristWithApple = async (input: { idToken: string; name?: string }) =>
   saveSession((await api.post<AuthResponse>('/auth/tourist/apple', input)).data);
 
-export const fetchMe = async (role: AuthRole) =>
-  (await api.get<AuthProfile>('/auth/me', { headers: { Authorization: `Bearer ${getToken(role)}` } })).data;
+// Keeps the cached name and picture (used by navbars) in step with the saved profile.
+const syncStoredUser = (role: AuthRole, profile: AuthProfile) => {
+  const stored = getStoredUser(role);
+  if (!stored || (stored.name === profile.name && stored.profilePicture === profile.profilePicture)) return;
+  localStorage.setItem(
+    userKey(role),
+    JSON.stringify({ ...stored, name: profile.name, profilePicture: profile.profilePicture }),
+  );
+  window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
+};
+
+export const fetchMe = async (role: AuthRole) => {
+  const { data } = await api.get<AuthProfile>('/auth/me', { headers: { Authorization: `Bearer ${getToken(role)}` } });
+  syncStoredUser(role, data);
+  return data;
+};
+
+export const changePassword = async (role: AuthRole, input: { currentPassword: string; newPassword: string }) =>
+  (await api.patch<{ message: string }>('/auth/password', input, { headers: { Authorization: `Bearer ${getToken(role)}` } })).data;
+
+// Email is intentionally missing: it cannot be changed. gender, country, passportNumber and nic are tourist-only.
+export type ProfileUpdate = Partial<{
+  name: string;
+  mobileNumber: string;
+  gender: string;
+  country: string;
+  passportNumber: string;
+  nic: string;
+}>;
+
+export const updateProfile = async (role: AuthRole, input: ProfileUpdate) => {
+  const { data } = await api.patch<AuthProfile>(`/auth/${role}/profile`, input, {
+    headers: { Authorization: `Bearer ${getToken(role)}` },
+  });
+  syncStoredUser(role, data);
+  return data;
+};
+
+// The backend stores the image on Cloudinary and saves its URL as the profile picture.
+export const uploadProfilePicture = async (role: AuthRole, file: File) => {
+  const body = new FormData();
+  body.append('file', file);
+  const { data } = await api.post<AuthProfile>('/auth/profile/picture', body, {
+    headers: { Authorization: `Bearer ${getToken(role)}`, 'Content-Type': 'multipart/form-data' },
+  });
+  syncStoredUser(role, data);
+  return data;
+};

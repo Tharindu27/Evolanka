@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
-import type { Category, Place } from '@/data/location-data/location-mock-data';
+import type { Category } from '@/data/location-data/location-taxonomy';
+import type { Place } from '@/lib/places';
 import PlaceCard from './place-card';
 
 type CategoryContentProps = {

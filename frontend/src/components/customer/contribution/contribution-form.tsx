@@ -3,10 +3,12 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type DragEvent, type ReactNode } from 'react';
 
-import { categories, provinces } from '@/data/location-data/location-mock-data';
-import { maxGalleryPhotos, suggestedHotels, weekDays } from '@/data/customer-contribution-data';
+import { categories, provinces } from '@/data/location-data/location-taxonomy';
+import { maxGalleryPhotos, weekDays } from '@/data/customer-contribution-data';
+import { getErrorMessage, type AuthRole } from '@/lib/api';
+import { submitLocation, type LocationInput } from '@/lib/locations-api';
 
-type Photo = { id: string; name: string; url: string };
+type Photo = { id: string; name: string; url: string; file: File };
 type Tip = { id: string; type: string; text: string };
 type Errors = Partial<Record<'name' | 'provinceId' | 'district' | 'city' | 'summary' | 'coverPhoto' | 'coordinates', string>>;
 
@@ -64,7 +66,13 @@ function newId() {
   return Math.random().toString(36).slice(2, 10);
 }
 
-export default function ContributionForm() {
+export default function ContributionForm({
+  contributionsHref = '/customer/profile/contributions',
+  role = 'tourist',
+}: {
+  contributionsHref?: string;
+  role?: AuthRole;
+}) {
   const [name, setName] = useState('');
   const [provinceId, setProvinceId] = useState('');
   const [district, setDistrict] = useState('');
@@ -89,10 +97,6 @@ export default function ContributionForm() {
   const [locating, setLocating] = useState(false);
   const [locateError, setLocateError] = useState('');
 
-  const [linkedHotels, setLinkedHotels] = useState<string[]>([]);
-  const [customHotelInput, setCustomHotelInput] = useState('');
-  const [customHotels, setCustomHotels] = useState<string[]>([]);
-
   const [tips, setTips] = useState<Tip[]>([]);
   const [composerOpen, setComposerOpen] = useState(true);
   const [tipType, setTipType] = useState(tipTypes[0]);
@@ -105,6 +109,8 @@ export default function ContributionForm() {
 
   const [errors, setErrors] = useState<Errors>({});
   const [submitted, setSubmitted] = useState<'draft' | 'review' | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const topRef = useRef<HTMLDivElement>(null);
   const urlsRef = useRef<string[]>([]);
@@ -145,13 +151,6 @@ export default function ContributionForm() {
     setHighlightInput('');
   };
 
-  const addCustomHotel = () => {
-    const value = customHotelInput.trim();
-    if (!value || customHotels.includes(value)) return;
-    setCustomHotels((current) => [...current, value]);
-    setCustomHotelInput('');
-  };
-
   const saveTip = () => {
     const text = tipDraft.trim();
     if (!text) return;
@@ -175,7 +174,7 @@ export default function ContributionForm() {
       }
       const url = URL.createObjectURL(file);
       urlsRef.current.push(url);
-      accepted.push({ id: newId(), name: file.name, url });
+      accepted.push({ id: newId(), name: file.name, url, file });
     });
 
     setPhotoError(message);
@@ -239,13 +238,47 @@ export default function ContributionForm() {
     return Object.keys(next).length === 0;
   };
 
-  const submit = (kind: 'draft' | 'review') => {
+  const submit = async (kind: 'draft' | 'review') => {
+    setSubmitError('');
     if (!validate(kind)) {
       setSubmitted(null);
       return;
     }
-    setSubmitted(kind);
-    topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    const input: LocationInput = {
+      name: name.trim(),
+      province: province?.name,
+      district: district || undefined,
+      nearestTown: city.trim() || undefined,
+      categories: categories.filter((item) => categoryIds.includes(item.id)).map((item) => item.name),
+      description: summary.trim() || undefined,
+      highlights,
+      bestTime: season.trim() || undefined,
+      openingDays: [days.length === weekDays.length ? 'Open all days' : days.join(', '), hours.trim()].filter(Boolean).join(' · ') || undefined,
+      freeEntry,
+      localAdultPrice: prices.localAdults.trim() || undefined,
+      localChildPrice: prices.localChildren.trim() || undefined,
+      foreignAdultPrice: prices.foreignAdults.trim() || undefined,
+      foreignChildPrice: prices.foreignChildren.trim() || undefined,
+      ticketNote: ticketNote.trim() || undefined,
+      address: address.trim() || undefined,
+      latitude: hasCoordinates ? latNum : undefined,
+      longitude: hasCoordinates ? lngNum : undefined,
+      travelTips: tips.map((tip) => `${tip.type}: ${tip.text}`),
+      draft: kind === 'draft',
+    };
+
+    setSubmitting(true);
+    try {
+      await submitLocation(role, input, cover?.file ?? null, gallery.map((photo) => photo.file));
+      setSubmitted(kind);
+    } catch (error) {
+      setSubmitted(null);
+      setSubmitError(getErrorMessage(error));
+    } finally {
+      setSubmitting(false);
+      topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const photoCount = gallery.length;
@@ -253,7 +286,7 @@ export default function ContributionForm() {
   return (
     <div ref={topRef} className="scroll-mt-28">
       <Link
-        href="/customer/profile/contributions"
+        href={contributionsHref}
         className="inline-flex items-center gap-2 text-sm font-semibold text-[#4e5568] transition hover:text-[#001a43]"
       >
         <svg {...iconProps} className="h-4 w-4 stroke-[#001a43]">
@@ -282,12 +315,18 @@ export default function ContributionForm() {
         >
           <span>
             {submitted === 'draft'
-              ? 'Draft saved. You can continue editing it from My Contributions.'
+              ? 'Draft saved. It stays in My Contributions until you submit it.'
               : 'Submitted for review. Our editorial team will respond within 24-48 hours.'}
           </span>
-          <Link href="/customer/profile/contributions" className="font-bold underline underline-offset-4">
+          <Link href={contributionsHref} className="font-bold underline underline-offset-4">
             Go to My Contributions
           </Link>
+        </div>
+      ) : null}
+
+      {submitError ? (
+        <div role="alert" className="mt-6 rounded-2xl border border-[#f1b8bb] bg-[#fff1f1] px-5 py-4 text-sm font-medium text-[#c4161c]">
+          {submitError}
         </div>
       ) : null}
 
@@ -295,7 +334,7 @@ export default function ContributionForm() {
         noValidate
         onSubmit={(event) => {
           event.preventDefault();
-          submit('review');
+          void submit('review');
         }}
         className="mt-7 space-y-6"
       >
@@ -651,84 +690,6 @@ export default function ContributionForm() {
 
         <SectionCard
           step={4}
-          title="Connect Nearby Hotels & Stays"
-          subtitle="Automated radius association with verified boutique properties and eco-villas."
-          icon={
-            <svg {...iconProps}>
-              <path d="M3 20V8l9-5 9 5v12M3 20h18M9 20v-6h6v6" />
-            </svg>
-          }
-        >
-          <div className="flex items-start gap-3 rounded-xl bg-[#ffffff] px-4 py-3 text-xs font-medium leading-relaxed text-[#b08115]">
-            <svg {...iconProps} className="mt-0.5 h-4 w-4 shrink-0 stroke-[#001a43]">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 8v5M12 16.5v.01" />
-            </svg>
-            Selecting this location will automatically filter and link nearby verified stays from EVOLANKA Hotels within a 15km radius. Explorers browsing this
-            destination will see recommended stays directly on the public listing.
-          </div>
-
-          <div className="mt-4 grid gap-4 md:grid-cols-3">
-            {suggestedHotels.map((hotel) => {
-              const linked = linkedHotels.includes(hotel.id);
-              return (
-                <div
-                  key={hotel.id}
-                  className={['overflow-hidden rounded-2xl border bg-white', linked ? 'border-[#0d4abe]' : 'border-[#e3eaf6]'].join(' ')}
-                >
-                  <div className="flex items-start gap-3 p-3">
-                    <img src={hotel.image} alt={hotel.name} className="h-14 w-14 shrink-0 rounded-lg object-cover" />
-                    <div className="min-w-0">
-                      <h3 className="truncate text-sm font-black text-[#001a43]">{hotel.name}</h3>
-                      <p className="mt-0.5 text-[0.72rem] text-[#6d7280]">
-                        {hotel.rating} ({hotel.reviews} reviews) &middot; {hotel.distance}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between border-t border-[#eef2f9] px-3 py-2.5">
-                    <span className="text-[0.72rem] text-[#6d7280]">
-                      From <strong className="text-sm font-black text-[#001a43]">{hotel.price}</strong>/night
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setLinkedHotels((current) => toggle(current, hotel.id))}
-                      className={['text-xs font-bold transition', linked ? 'text-[#c4161c]' : 'text-[#001a43] hover:underline'].join(' ')}
-                    >
-                      {linked ? 'Remove' : '+ Link Hotel'}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {customHotels.length > 0 ? (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {customHotels.map((id) => (
-                <span key={id} className="flex items-center gap-1.5 rounded-full bg-[#eef3ff] px-3 py-1.5 text-xs font-semibold text-[#0d4abe]">
-                  {id}
-                  <button
-                    type="button"
-                    aria-label={`Remove ${id}`}
-                    onClick={() => setCustomHotels((current) => current.filter((value) => value !== id))}
-                    className="text-[#0d4abe]/70 transition hover:text-[#c4161c]"
-                  >
-                    &times;
-                  </button>
-                </span>
-              ))}
-            </div>
-          ) : null}
-
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-            <Link href="/hotels" className="text-sm font-bold text-[#001a43] hover:underline">
-              Browse all nearby hotels &rarr;
-            </Link>
-          </div>
-        </SectionCard>
-
-        <SectionCard
-          step={5}
           title="Travel Tips & Essential Advice"
           subtitle="Equip travelers with safety, footwear, temple etiquette, and wildlife notes."
           icon={
@@ -798,7 +759,7 @@ export default function ContributionForm() {
         </SectionCard>
 
         <SectionCard
-          step={6}
+          step={5}
           title="Media & Photography"
           subtitle="Upload high-resolution photography capturing true atmospheric splendor."
           icon={
@@ -913,14 +874,15 @@ export default function ContributionForm() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button type="button" onClick={() => submit('draft')} className={`${outlineButton} px-5 py-3 text-sm`}>
+            <button type="button" onClick={() => void submit('draft')} disabled={submitting || submitted !== null} className={`${outlineButton} px-5 py-3 text-sm disabled:opacity-60`}>
               Save Draft
             </button>
             <button
               type="submit"
-              className="btn-primary rounded-xl px-5 py-3 text-sm font-semibold shadow-[0_12px_25px_rgba(13,74,190,0.28)] transition"
+              disabled={submitting || submitted !== null}
+              className="btn-primary rounded-xl px-5 py-3 text-sm font-semibold shadow-[0_12px_25px_rgba(13,74,190,0.28)] transition disabled:opacity-60"
             >
-              Submit for Review
+              {submitting ? 'Submitting…' : 'Submit for Review'}
             </button>
           </div>
         </section>

@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
-import type { Place, Province } from '@/data/location-data/location-mock-data';
+import type { Province } from '@/data/location-data/location-taxonomy';
+import type { Place } from '@/lib/places';
 import PlaceCard from './place-card';
 
 type ProvinceContentProps = {
@@ -60,7 +61,7 @@ export default function ProvinceContent({ province, places }: ProvinceContentPro
               {province.districts.length} districts
             </span>
             <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur">
-              {province.attractions}
+              {places.length} {places.length === 1 ? 'place' : 'places'}
             </span>
           </div>
         </div>

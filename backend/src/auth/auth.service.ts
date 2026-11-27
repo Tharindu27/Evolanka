@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   ServiceUnavailableException,
@@ -10,6 +11,7 @@ import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { PrismaService } from '../prisma/prisma.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterProviderDto } from './dto/register-provider.dto';
 import { RegisterTouristDto } from './dto/register-tourist.dto';
@@ -170,6 +172,29 @@ export class AuthService {
     };
   }
 
+  async changePassword(id: number, role: AuthRole, dto: ChangePasswordDto) {
+    const account =
+      role === 'tourist'
+        ? await this.prisma.tourist.findUnique({ where: { touristId: id }, select: { password: true } })
+        : await this.prisma.provider.findUnique({ where: { providerId: id }, select: { password: true } });
+    if (!account) throw new UnauthorizedException('Account no longer exists');
+
+    if (!(await bcrypt.compare(dto.currentPassword, account.password))) {
+      throw new BadRequestException('Current password is incorrect');
+    }
+    if (dto.currentPassword === dto.newPassword) {
+      throw new BadRequestException('New password must be different from your current password');
+    }
+
+    const password = await bcrypt.hash(dto.newPassword, SALT_ROUNDS);
+    if (role === 'tourist') {
+      await this.prisma.tourist.update({ where: { touristId: id }, data: { password } });
+    } else {
+      await this.prisma.provider.update({ where: { providerId: id }, data: { password } });
+    }
+    return { message: 'Password updated' };
+  }
+
   // Tourist and provider live in separate tables, so cross-table uniqueness is enforced here.
   private async assertEmailNotUsedByProvider(email: string) {
     if (await this.prisma.provider.findUnique({ where: { email }, select: { providerId: true } })) {
@@ -188,7 +213,11 @@ export class AuthService {
     const email = profile.email.toLowerCase();
     let tourist = await this.prisma.tourist.findUnique({ where: { email } });
     if (!tourist) {
-      await this.assertEmailNotUsedByProvider(email);
+      if (await this.prisma.provider.findUnique({ where: { email }, select: { providerId: true } })) {
+        throw new ConflictException(
+          'This Google email is already registered as a provider account. Please choose a different Google account.',
+        );
+      }
       try {
         tourist = await this.prisma.tourist.create({
           data: {
