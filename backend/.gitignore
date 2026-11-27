@@ -56,3 +56,8 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 /generated/prisma
+
+# iCloud/node_modules workaround
+/node_modules.nosync
+/.node-modules.nosync
+/.old-node-modules-delete-me

@@ -1,0 +1,6 @@
+# iCloud workaround folders
+frontend/node_modules.nosync/
+frontend/.next.nosync/
+backend/node_modules.nosync/
+backend/.node-modules.nosync/
+backend/.old-node-modules-delete-me/
